@@ -135,34 +135,15 @@
             border-radius: 0 4px 4px 0;
             font-size: 14px;
         }
-        #admin-panel {
+        .success-message {
             display: none;
-            margin-top: 40px;
-            padding: 20px;
-            border: 1px solid #eee;
-            border-radius: 10px;
-        }
-        .pending-message {
-            background: #f8f9fa;
-            padding: 15px;
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            margin: 15px 0;
             border-radius: 8px;
-            margin-bottom: 15px;
-            border-left: 3px solid #ff6b6b;
-        }
-        .pending-message p {
-            margin: 0 0 10px 0;
-        }
-        .pending-message button {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            margin-right: 5px;
-            cursor: pointer;
-        }
-        .pending-message button.reject-btn {
-            background: #dc3545;
+            text-align: center;
+            font-weight: 500;
         }
     </style>
 </head>
@@ -172,8 +153,8 @@
         <p class="description">Từ những người xa lạ, cùng chung mong muốn sẻ chia với các em ở Viện Huyết học Truyền máu Trung ương.</p>
     </header>
     
-    <div class="note">
-        ⚠️ Lưu ý: Đây là bản demo với hệ thống quản lý admin hoàn chỉnh. Lời nhắn sẽ được lưu trữ và quản lý qua Firebase.
+    <div class="success-message" id="success-message">
+        ✅ Cảm ơn bạn đã gửi lời nhắn! Lời nhắn sẽ được duyệt bởi admin và xuất hiện trên trang trong vài phút.
     </div>
     
     <div class="message-form">
@@ -185,21 +166,6 @@
         <!-- Lời nhắn sẽ được tự động thêm vào đây -->
     </div>
 
-    <div id="admin-panel">
-        <h2>Admin Dashboard</h2>
-        <h3>Lời nhắn chờ duyệt</h3>
-        <div id="pending-messages">
-            <p>Đang tải lời nhắn chờ duyệt...</p>
-        </div>
-    </div>
-
-    <div style="margin-top:40px; padding:20px; background:#f8f9fa; border-radius:10px;">
-        <h2>Đăng nhập quản trị</h2>
-        <input type="email" id="admin-email" placeholder="Email admin" style="padding:8px; margin-right:10px;">
-        <input type="password" id="admin-password" placeholder="Mật khẩu" style="padding:8px; margin-right:10px;">
-        <button id="login-btn" style="padding:8px 15px; background:#007bff; color:white; border:none; border-radius:4px;">Đăng nhập</button>
-    </div>
-
     <footer>
         Trang web được tạo bằng HTML/CSS/JavaScript với Firebase
     </footer>
@@ -207,37 +173,25 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
     <script>
-        // =============== THAY ĐỔI ĐOẠN NÀY ===============
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+        
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
+// =============== ĐÃ THAY ĐỔI ===============
 const firebaseConfig = {
   apiKey: "AIzaSyCKysT8eZ3LJqyi7vCjoqQGIpjgTyt7HYg",
   authDomain: "loiyeuthuong-5bfab.firebaseapp.com",
   projectId: "loiyeuthuong-5bfab",
   storageBucket: "loiyeuthuong-5bfab.firebasestorage.app",
   messagingSenderId: "544284022045",
-  appId: "1:544284022045:web:22f2eef2ed918d93707df4",
-  measurementId: "G-2CPHYQLB2K"
+  appId: "1:544284022045:web:22f2eef2ed918d93707df4"
 };
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-        // =============== THAY ĐỔI ĐOẠN NÀY ===============
+// =============== ĐÃ THAY ĐỔI ===============
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        const auth = firebase.auth();
 
         // Xử lý gửi lời nhắn
         document.getElementById('send-btn').addEventListener('click', async () => {
@@ -252,7 +206,13 @@ const analytics = getAnalytics(app);
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 document.getElementById('message-input').value = '';
-                alert('Đã gửi! Lời nhắn sẽ được duyệt bởi admin');
+                
+                // Hiển thị thông báo thành công
+                const successMsg = document.getElementById('success-message');
+                successMsg.style.display = 'block';
+                setTimeout(() => {
+                    successMsg.style.display = 'none';
+                }, 5000);
             } catch (e) {
                 alert('Lỗi: ' + e.message);
             }
@@ -283,56 +243,8 @@ const analytics = getAnalytics(app);
                 });
         }
 
-        // Xử lý đăng nhập admin
-        document.getElementById('login-btn').addEventListener('click', () => {
-            const email = document.getElementById('admin-email').value;
-            const password = document.getElementById('admin-password').value;
-            
-            auth.signInWithEmailAndPassword(email, password)
-                .then(() => {
-                    document.getElementById('admin-panel').style.display = 'block';
-                    loadPendingMessages();
-                })
-                .catch(e => alert('Sai email/mật khẩu: ' + e.message));
-        });
-
-        // Hiển thị lời nhắn chờ duyệt
-        function loadPendingMessages() {
-            db.collection('messages')
-                .where('status', '==', 'pending')
-                .orderBy('timestamp', 'asc')
-                .onSnapshot(snapshot => {
-                    const pendingDiv = document.getElementById('pending-messages');
-                    pendingDiv.innerHTML = '';
-                    
-                    snapshot.forEach(doc => {
-                        const data = doc.data();
-                        const pendingEl = document.createElement('div');
-                        pendingEl.className = 'pending-message';
-                        pendingEl.innerHTML = `
-                            <p>${data.text}</p>
-                            <div>
-                                <button class="approve-btn" data-id="${doc.id}">Duyệt</button>
-                                <button class="reject-btn" data-id="${doc.id}">Xóa</button>
-                            </div>
-                        `;
-                        pendingDiv.appendChild(pendingEl);
-                    });
-                });
-        }
-
-        // Duyệt lời nhắn
+        // Xử lý like
         document.addEventListener('click', e => {
-            if (e.target.classList.contains('approve-btn')) {
-                const id = e.target.getAttribute('data-id');
-                db.collection('messages').doc(id).update({ status: 'approved' });
-            }
-            
-            if (e.target.classList.contains('reject-btn')) {
-                const id = e.target.getAttribute('data-id');
-                db.collection('messages').doc(id).delete();
-            }
-            
             if (e.target.classList.contains('heart')) {
                 const id = e.target.getAttribute('data-id');
                 db.collection('messages').doc(id).update({

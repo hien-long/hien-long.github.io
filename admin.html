@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Nhắn gửi lời yêu thương</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        .description {
+            font-size: 1.1em;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+        .login-box {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        button {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(106, 17, 203, 0.3);
+            width: 100%;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(106, 17, 203, 0.4);
+        }
+        .dashboard {
+            display: none;
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        .pending-message {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 3px solid #ff6b6b;
+            position: relative;
+        }
+        .pending-message p {
+            margin: 0 0 10px 0;
+            line-height: 1.5;
+        }
+        .pending-message button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-right: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .pending-message button.reject-btn {
+            background: #dc3545;
+        }
+        .status-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-pending {
+            background: #ffc107;
+            color: #856404;
+        }
+        .status-approved {
+            background: #28a745;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard - Nhắn gửi lời yêu thương</h1>
+        <p class="description">Quản lý lời nhắn từ người dùng và duyệt chúng để hiển thị trên trang công khai</p>
+    </header>
+    
+    <div class="login-box" id="login-box">
+        <h2>Đăng nhập quản trị</h2>
+        <input type="email" id="admin-email" placeholder="Email admin" required>
+        <input type="password" id="admin-password" placeholder="Mật khẩu" required>
+        <button id="login-btn">Đăng nhập</button>
+        <p style="text-align: center; margin-top: 15px; color: #666; font-size: 0.9em;">
+            Email admin: admin@loiythuong.com<br>
+            Mật khẩu: LoiYeuThuong123!
+        </p>
+    </div>
+
+    <div class="dashboard" id="dashboard">
+        <h2>Lời nhắn chờ duyệt</h2>
+        <div id="pending-messages">
+            <p>Đang tải lời nhắn chờ duyệt...</p>
+        </div>
+        
+        <h2 style="margin-top: 30px;">Lời nhắn đã duyệt</h2>
+        <div id="approved-messages">
+            <p>Đang tải lời nhắn đã duyệt...</p>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+    <script>
+        // =============== ĐÃ THAY ĐỔI ===============
+const firebaseConfig = {
+  apiKey: "AIzaSyCKysT8eZ3LJqyi7vCjoqQGIpjgTyt7HYg",
+  authDomain: "loiyeuthuong-5bfab.firebaseapp.com",
+  projectId: "loiyeuthuong-5bfab",
+  storageBucket: "loiyeuthuong-5bfab.firebasestorage.app",
+  messagingSenderId: "544284022045",
+  appId: "1:544284022045:web:22f2eef2ed918d93707df4"
+};
+// =============== ĐÃ THAY ĐỔI ===============
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // Xử lý đăng nhập admin
+        document.getElementById('login-btn').addEventListener('click', () => {
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    document.getElementById('login-box').style.display = 'none';
+                    document.getElementById('dashboard').style.display = 'block';
+                    loadPendingMessages();
+                    loadApprovedMessages();
+                })
+                .catch(e => alert('Sai email/mật khẩu: ' + e.message));
+        });
+
+        // Hiển thị lời nhắn chờ duyệt
+        function loadPendingMessages() {
+            db.collection('messages')
+                .where('status', '==', 'pending')
+                .orderBy('timestamp', 'desc')
+                .onSnapshot(snapshot => {
+                    const pendingDiv = document.getElementById('pending-messages');
+                    pendingDiv.innerHTML = '';
+                    
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        const pendingEl = document.createElement('div');
+                        pendingEl.className = 'pending-message';
+                        pendingEl.innerHTML = `
+                            <span class="status-badge status-pending">Chờ duyệt</span>
+                            <p>${data.text}</p>
+                            <div>
+                                <button class="approve-btn" data-id="${doc.id}">Duyệt</button>
+                                <button class="reject-btn" data-id="${doc.id}">Xóa</button>
+                            </div>
+                        `;
+                        pendingDiv.appendChild(pendingEl);
+                    });
+                    
+                    if (snapshot.empty) {
+                        pendingDiv.innerHTML = '<p>Không có lời nhắn chờ duyệt</p>';
+                    }
+                });
+        }
+
+        // Hiển thị lời nhắn đã duyệt
+        function loadApprovedMessages() {
+            db.collection('messages')
+                .where('status', '==', 'approved')
+                .orderBy('timestamp', 'desc')
+                .onSnapshot(snapshot => {
+                    const approvedDiv = document.getElementById('approved-messages');
+                    approvedDiv.innerHTML = '';
+                    
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        const approvedEl = document.createElement('div');
+                        approvedEl.className = 'pending-message';
+                        approvedEl.innerHTML = `
+                            <span class="status-badge status-approved">Đã duyệt</span>
+                            <p>${data.text}</p>
+                            <div>
+                                <button class="reject-btn" data-id="${doc.id}">Xóa</button>
+                            </div>
+                        `;
+                        approvedDiv.appendChild(approvedEl);
+                    });
+                    
+                    if (snapshot.empty) {
+                        approvedDiv.innerHTML = '<p>Chưa có lời nhắn nào được duyệt</p>';
+                    }
+                });
+        }
+
+        // Duyệt lời nhắn
+        document.addEventListener('click', e => {
+            if (e.target.classList.contains('approve-btn')) {
+                const id = e.target.getAttribute('data-id');
+                db.collection('messages').doc(id).update({ status: 'approved' });
+            }
+            
+            if (e.target.classList.contains('reject-btn')) {
+                const id = e.target.getAttribute('data-id');
+                db.collection('messages').doc(id).delete();
+            }
+        });
+    </script>
+</body>
+</html>
