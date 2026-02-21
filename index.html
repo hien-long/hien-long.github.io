@@ -5,87 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nhắn gửi lời yêu thương</title>
     <style>
-        /* Thêm CSS cho hiệu ứng trái tim */
-        .heart-float {
+        /* Hiệu ứng trái tim bay lơ lửng khắp trang */
+        .heart {
             position: fixed;
-            top: -50px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 32px;
-            color: #e74c3c;
-            animation: float 3s ease-out forwards;
-            z-index: 9999;
+            z-index: -1;
             pointer-events: none;
+            opacity: 0;
+            animation: floatHeart 15s linear forwards;
         }
         
-        @keyframes float {
+        @keyframes floatHeart {
             0% {
-                transform: translateX(-50%) translateY(0);
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
                 opacity: 1;
             }
             100% {
-                transform: translateX(-50%) translateY(-100vh);
+                transform: translate(var(--tx), var(--ty));
                 opacity: 0;
             }
         }
         
-        /* Thêm CSS cho popup */
-        .popup {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-            color: white;
-            padding: 18px 28px;
-            border-radius: 15px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-            z-index: 1000;
-            transform: translateY(-100%);
-            transition: transform 0.4s ease;
-            font-size: 1.1em;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .popup.show {
-            transform: translateY(0);
-        }
-        
-        .popup i {
-            font-size: 1.5em;
-        }
-        
-        /* Cải thiện theme gradient */
+        /* Background gradient có chuyển động */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             max-width: 900px;
             margin: 0 auto;
             padding: 20px;
-            background: linear-gradient(135deg, #fffaf0 0%, #f9e7e7 100%);
             color: #333;
             position: relative;
             overflow-x: hidden;
             min-height: 100vh;
+            animation: gradientBG 15s ease infinite;
         }
         
-        /* Thêm hiệu ứng cho trang web */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         
-        body {
-            animation: fadeIn 0.6s ease-in;
+        /* Social menu ở góc trái */
+        .social-fixed {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1000;
         }
         
-        header, .social-menu, .message-form, .messages, footer {
-            animation: fadeIn 0.8s ease-out;
+        .social-fixed a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            border-radius: 50px;
+            background: white;
+            color: #333;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+            font-size: 0.95em;
+            width: 150px;
         }
         
-        .message {
-            animation: fadeIn 0.5s ease-out;
+        .social-fixed a:hover {
+            transform: translateX(5px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            color: white;
+        }
+        
+        /* Popup thông báo đã sửa lỗi */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: -400px;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            color: white;
+            padding: 18px 28px;
+            border-radius: 15px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.2);
+            z-index: 2000;
+            transition: right 0.4s ease;
+            font-size: 1.1em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 400px;
+        }
+        
+        .notification.show {
+            right: 20px;
         }
         
         /* Header mới */
@@ -93,12 +114,13 @@
             text-align: center;
             margin-bottom: 35px;
             padding: 30px;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            background: rgba(255, 255, 255, 0.85);
             border-radius: 25px;
             box-shadow: 0 6px 25px rgba(0,0,0,0.15);
             position: relative;
             overflow: hidden;
             border: 1px solid rgba(255, 107, 107, 0.2);
+            backdrop-filter: blur(10px);
         }
         
         h1 {
@@ -118,51 +140,16 @@
             font-weight: 500;
         }
         
-        /* Social menu */
-        .social-menu {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-        
-        .social-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 25px;
-            border-radius: 50px;
-            background: white;
-            color: #333;
-            text-decoration: none;
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            border: 1px solid #f0f0f0;
-            font-size: 1.05em;
-        }
-        
-        .social-link:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 7px 20px rgba(0,0,0,0.15);
-            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-            color: white;
-        }
-        
-        .social-link i {
-            font-size: 1.3em;
-        }
-        
         /* Message form */
         .message-form {
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.85);
             padding: 35px;
             border-radius: 25px;
             box-shadow: 0 6px 25px rgba(0,0,0,0.1);
             margin-bottom: 40px;
-            border: 1px solid #f0f0f0;
+            border: 1px solid rgba(255, 107, 107, 0.1);
             transition: all 0.3s;
+            backdrop-filter: blur(10px);
         }
         
         .message-form:hover {
@@ -223,15 +210,16 @@
         }
         
         .message {
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.85);
             padding: 28px;
             border-radius: 22px;
             box-shadow: 0 5px 18px rgba(0,0,0,0.08);
             transition: transform 0.3s;
             position: relative;
             overflow: hidden;
-            border: 1px solid #f0f0f0;
+            border: 1px solid rgba(255, 107, 107, 0.1);
             transform: translateZ(0);
+            backdrop-filter: blur(5px);
         }
         
         .message:hover {
@@ -272,7 +260,7 @@
             align-items: center;
         }
         
-        .heart {
+        .heart-icon {
             cursor: pointer;
             transition: all 0.2s;
             display: flex;
@@ -281,7 +269,7 @@
             font-weight: 500;
         }
         
-        .heart:hover {
+        .heart-icon:hover {
             color: #ff6b6b;
             transform: scale(1.15);
         }
@@ -293,14 +281,14 @@
             color: #777;
             font-size: 1.05em;
             padding-top: 30px;
-            border-top: 1px solid #eee;
+            border-top: 1px solid rgba(200, 200, 200, 0.3);
             font-weight: 500;
             letter-spacing: 0.5px;
         }
         
         /* Note */
         .note {
-            background-color: #fff9db;
+            background-color: rgba(255, 255, 220, 0.6);
             border-left: 7px solid #ffd43b;
             padding: 18px 25px;
             margin: 28px 0;
@@ -308,35 +296,45 @@
             font-size: 16px;
             line-height: 1.6;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            backdrop-filter: blur(5px);
         }
         
-        /* Success message */
-        .success-message {
-            display: none;
-            background: #d4edda;
-            color: #155724;
-            padding: 18px;
-            margin: 22px 0;
-            border-radius: 15px;
-            text-align: center;
-            font-weight: 500;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            font-size: 1.1em;
-        }
-        
-        /* Tạo hiệu ứng cho trái tim */
-        .heart-icon {
-            font-size: 1.4em;
-            margin-right: 4px;
+        /* Responsive */
+        @media (max-width: 768px) {
+            .social-fixed {
+                left: 10px;
+                top: 10px;
+            }
+            
+            .social-fixed a {
+                width: 130px;
+                font-size: 0.9em;
+                padding: 8px 12px;
+            }
+            
+            body {
+                padding: 15px;
+            }
+            
+            header {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Tạo trái tim đầu trang -->
-    <div id="heart-float" class="heart-float">❤</div>
+    <!-- Social menu ở góc trái -->
+    <div class="social-fixed">
+        <a href="https://www.facebook.com/theblouse.prj" target="_blank">
+            <span>📘</span> Facebook
+        </a>
+        <a href="https://www.instagram.com/blouse_thantien/" target="_blank">
+            <span>📸</span> Instagram
+        </a>
+    </div>
     
     <!-- Popup thông báo -->
-    <div id="popup" class="popup">
+    <div id="notification" class="notification">
         <span>✅</span> Cảm ơn bạn đã gửi lời nhắn! Lời nhắn sẽ được duyệt bởi admin và xuất hiện trên trang trong vài phút.
     </div>
     
@@ -344,16 +342,6 @@
         <h1>Nhắn gửi lời yêu thương</h1>
         <p class="description">Từ những người xa lạ, cùng chung mong muốn sẻ chia với các em ở Viện Huyết học Truyền máu Trung ương.</p>
     </header>
-    
-    <!-- Social menu -->
-    <div class="social-menu">
-        <a href="https://facebook.com" target="_blank" class="social-link">
-            <span>📘</span> Facebook Page
-        </a>
-        <a href="https://instagram.com" target="_blank" class="social-link">
-            <span>📸</span> Instagram Page
-        </a>
-    </div>
     
     <div class="note">
         ⚠️ Lưu ý: Đây là bản demo với hệ thống quản lý admin hoàn chỉnh. Lời nhắn sẽ được lưu trữ và quản lý qua Firebase. 
@@ -393,21 +381,44 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // Hiệu ứng trái tim khi trang được load
+        // Tạo hiệu ứng trái tim bay lơ lửng khắp trang web
         document.addEventListener('DOMContentLoaded', () => {
-            // Tạo trái tim
+            // Tạo 20 trái tim
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    createHeart();
+                }, i * 300);
+            }
+        });
+
+        function createHeart() {
             const heart = document.createElement('div');
-            heart.className = 'heart-float';
-            heart.textContent = '❤';
-            heart.style.left = Math.random() * 100 + '%';
+            heart.className = 'heart';
+            heart.innerHTML = '❤';
+            
+            // Random position, size, and animation
+            const size = Math.random() * 25 + 15;
+            const startX = Math.random() * window.innerWidth;
+            const startY = window.innerHeight + 50;
+            
+            // Random end position
+            const endX = startX + (Math.random() - 0.5) * 500;
+            const endY = -100 - Math.random() * 100;
+            
+            // Set CSS variables for animation
+            heart.style.setProperty('--tx', `${endX - startX}px`);
+            heart.style.setProperty('--ty', `${endY - startY}px`);
+            heart.style.fontSize = `${size}px`;
+            heart.style.left = `${startX}px`;
+            heart.style.top = `${startY}px`;
             
             document.body.appendChild(heart);
             
-            // Xóa trái tim sau 3 giây
+            // Xóa trái tim sau khi animation kết thúc
             setTimeout(() => {
                 heart.remove();
-            }, 3000);
-        });
+            }, 15000);
+        }
 
         // Xử lý gửi lời nhắn
         document.getElementById('send-btn').addEventListener('click', async () => {
@@ -423,20 +434,13 @@
                 });
                 document.getElementById('message-input').value = '';
                 
-                // Hiển thị popup
-                const popup = document.getElementById('popup');
-                popup.classList.add('show');
+                // Hiển thị notification
+                const notification = document.getElementById('notification');
+                notification.classList.add('show');
                 
-                // Tự ẩn popup sau 5 giây
+                // Tự ẩn notification sau 5 giây
                 setTimeout(() => {
-                    popup.classList.remove('show');
-                }, 5000);
-                
-                // Hiển thị thông báo thành công
-                const successMsg = document.getElementById('success-message');
-                successMsg.style.display = 'block';
-                setTimeout(() => {
-                    successMsg.style.display = 'none';
+                    notification.classList.remove('show');
                 }, 5000);
             } catch (e) {
                 alert('Lỗi: ' + e.message);
@@ -459,7 +463,7 @@
                         messageEl.innerHTML = `
                             <div class="message-text">${data.text}</div>
                             <div class="message-actions">
-                                <span class="heart" data-id="${doc.id}">${data.likes} <span class="heart-icon">❤</span></span>
+                                <span class="heart-icon" data-id="${doc.id}">${data.likes} ❤</span>
                                 <span>0 Bình luận</span>
                             </div>
                         `;
@@ -470,7 +474,7 @@
 
         // Xử lý like
         document.addEventListener('click', e => {
-            if (e.target.classList.contains('heart')) {
+            if (e.target.classList.contains('heart-icon')) {
                 const id = e.target.getAttribute('data-id');
                 db.collection('messages').doc(id).update({
                     likes: firebase.firestore.FieldValue.increment(1)
