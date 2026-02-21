@@ -31,7 +31,7 @@
             }
         }
         
-        /* Background gradient có chuyển động */
+        /* Background gradient có chuyển động (MÀU XANH NGỌC NHẠT) */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             max-width: 900px;
@@ -41,7 +41,7 @@
             position: relative;
             overflow-x: hidden;
             min-height: 100vh;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            background: linear-gradient(135deg, #e0f7fa 0%, #f5f5f5 100%);
             background-size: 200% 200%;
             animation: gradientBG 15s ease infinite;
         }
@@ -52,46 +52,59 @@
             100% { background-position: 0% 50%; }
         }
         
-        /* Social menu ở góc trái */
-        .social-fixed {
-            position: fixed;
-            top: 20px;
-            left: 20px;
+        /* Header menu mới (thay thế social-fixed) */
+        .header-menu {
             display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 1000;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
         }
         
-        .social-fixed a {
+        .menu-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .menu-links a {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 10px 15px;
+            padding: 8px 15px;
             border-radius: 50px;
             background: white;
             color: #333;
             text-decoration: none;
             font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
             border: 1px solid #f0f0f0;
             font-size: 0.95em;
-            width: 150px;
         }
         
-        .social-fixed a:hover {
-            transform: translateX(5px) scale(1.05);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        .menu-links a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
             color: white;
         }
         
-        /* Popup thông báo đã sửa lỗi */
+        .menu-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #e74c3c;
+            text-align: center;
+        }
+        
+        /* Popup thông báo (MÀU PINK) */
         .notification {
             position: fixed;
             top: 20px;
-            right: -400px;
+            right: -1400px;
             background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
             color: white;
             padding: 18px 28px;
@@ -142,7 +155,7 @@
             font-weight: 500;
         }
         
-        /* Message form */
+        /* Message form (SỬA CĂN LỆNH) */
         .message-form {
             background-color: rgba(255, 255, 255, 0.85);
             padding: 35px;
@@ -152,6 +165,7 @@
             border: 1px solid rgba(255, 107, 107, 0.1);
             transition: all 0.3s;
             backdrop-filter: blur(10px);
+            text-align: center; /* CĂN GIỮA NỘI DUNG */
         }
         
         .message-form:hover {
@@ -171,6 +185,7 @@
             transition: all 0.3s;
             font-family: inherit;
             line-height: 1.6;
+            text-align: left; /* CĂN TRÁI NỘI DUNG */
         }
         
         textarea:focus {
@@ -204,16 +219,16 @@
             transform: translateY(0);
         }
         
-        /* Messages */
+        /* Messages (SỬA KÍCH THƯỚC) */
         .messages {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 35px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
         }
         
         .message {
             background-color: rgba(255, 255, 255, 0.85);
-            padding: 28px;
+            padding: 22px;
             border-radius: 22px;
             box-shadow: 0 5px 18px rgba(0,0,0,0.08);
             transition: transform 0.3s;
@@ -222,6 +237,7 @@
             border: 1px solid rgba(255, 107, 107, 0.1);
             transform: translateZ(0);
             backdrop-filter: blur(5px);
+            min-height: 100px; /* TỰ ĐỘNG GIÃN THEO NỘI DUNG */
         }
         
         .message:hover {
@@ -239,15 +255,15 @@
             background: linear-gradient(to bottom, #ff6b6b, #ffd166);
         }
         
-        /* SỬA LỖI: Box tin nhắn không bị cắt, tự co giãn theo nội dung */
         .message-text {
             margin-bottom: 22px;
             line-height: 1.7;
             color: #444;
             font-size: 18px;
             font-weight: 500;
-            white-space: pre-wrap; /* Giữ các dòng mới */
-            word-wrap: break-word; /* Tự động xuống dòng khi quá dài */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow: hidden; /* ĐỂ NỘI DUNG TỰ ĐỘNG CHIẾM KHÔNG GIAN */
         }
         
         .message-actions {
@@ -288,8 +304,8 @@
         
         /* Note */
         .note {
-            background-color: rgba(255, 255, 220, 0.6);
-            border-left: 7px solid #ffd43b;
+            background-color: rgba(245, 245, 245, 0.8);
+            border-left: 7px solid #ff6b6b;
             padding: 18px 25px;
             margin: 28px 0;
             border-radius: 0 12px 12px 0;
@@ -301,15 +317,18 @@
         
         /* Responsive */
         @media (max-width: 768px) {
-            .social-fixed {
-                left: 10px;
-                top: 10px;
+            .header-menu {
+                flex-direction: column;
+                gap: 15px;
             }
             
-            .social-fixed a {
-                width: 130px;
-                font-size: 0.9em;
-                padding: 8px 12px;
+            .menu-links {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .menu-title {
+                font-size: 1.5em;
             }
             
             body {
@@ -323,14 +342,17 @@
     </style>
 </head>
 <body>
-    <!-- Social menu ở góc trái -->
-    <div class="social-fixed">
-        <a href="https://www.facebook.com/theblouse.prj" target="_blank">
-            <span>📘</span> Facebook
-        </a>
-        <a href="https://www.instagram.com/blouse_thantien/" target="_blank">
-            <span>📸</span> Instagram
-        </a>
+    <!-- Header menu mới (thay thế social-fixed) -->
+    <div class="header-menu">
+        <div class="menu-links">
+            <a href="https://www.facebook.com/theblouse.prj" target="_blank">
+                <span>📘</span> Facebook
+            </a>
+            <a href="https://www.instagram.com/blouse_thantien/" target="_blank">
+                <span>📸</span> Instagram
+            </a>
+        </div>
+        <div class="menu-title">@TheBlouse</div>
     </div>
     
     <!-- Popup thông báo -->
@@ -344,8 +366,7 @@
     </header>
     
     <div class="note">
-        ⚠️ Lưu ý: Đây là bản demo với hệ thống quản lý admin hoàn chỉnh. Lời nhắn sẽ được lưu trữ và quản lý qua Firebase. 
-        Hãy gửi lời nhắn yêu thương của bạn để lan tỏa yêu thương đến các em nhỏ!
+        ⚠️ A message from @hienlong: Hãy gửi lời nhắn yêu thương của bạn để lan tỏa yêu thương đến các em nhỏ nhé ❤️
     </div>
     
     <div class="message-form">
@@ -397,7 +418,7 @@
             heart.innerHTML = '❤';
             
             // Random position, size, and animation
-            const size = Math.random() * 25 + 15;
+            const size = Math.random() * 50 + 30; // Tăng kích thước trái tim
             const startX = Math.random() * window.innerWidth;
             const startY = window.innerHeight + 50;
             
@@ -409,6 +430,7 @@
             heart.style.setProperty('--tx', `${endX - startX}px`);
             heart.style.setProperty('--ty', `${endY - startY}px`);
             heart.style.fontSize = `${size}px`;
+            heart.style.color = 'white'; // Trái tim màu trắng
             heart.style.left = `${startX}px`;
             heart.style.top = `${startY}px`;
             
