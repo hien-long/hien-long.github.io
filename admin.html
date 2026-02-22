@@ -3,213 +3,485 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Nhắn gửi lời yêu thương</title>
+    <title>Nhắn gửi lời yêu thương</title>
     <style>
+        /* Hiệu ứng trái tim bay lơ lửng khắp trang */
+        .heart {
+            position: fixed;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0;
+            animation: floatHeart 15s linear forwards;
+        }
+        
+        @keyframes floatHeart {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty));
+                opacity: 0;
+            }
+        }
+        
+        /* Background gradient có chuyển động (MÀU XANH NGỌC NHẠT) */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             max-width: 900px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f8f9fa;
+            color: #333;
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e0f7fa 0%, #f5f5f5 100%);
+            background-size: 200% 200%;
+            animation: gradientBG 15s ease infinite;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Header menu mới (thay thế social-fixed) */
+        .header-menu {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .menu-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .menu-links a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            border-radius: 50px;
+            background: white;
+            color: #333;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+            font-size: 0.95em;
+        }
+        
+        .menu-links a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            color: white;
+        }
+        
+        .menu-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #e74c3c;
+            text-align: center;
+        }
+        
+        /* Popup thông báo (DẠNG SUCCESS MESSAGE) */
+        .success-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 400px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .check-icon {
+            font-size: 50px;
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+        
+        .success-popup h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
             color: #333;
         }
+        
+        .success-popup p {
+            color: #666;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        /* Header mới */
         header {
             text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            border-radius: 15px;
-            color: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 35px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 25px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 107, 107, 0.2);
+            backdrop-filter: blur(10px);
         }
+        
         h1 {
-            font-size: 2.2em;
-            margin-bottom: 10px;
+            color: #e74c3c;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: 0.5px;
         }
+        
         .description {
-            font-size: 1.1em;
-            max-width: 700px;
+            font-size: 1.3em;
+            color: #555;
+            max-width: 750px;
             margin: 0 auto;
-            line-height: 1.5;
-            opacity: 0.9;
+            line-height: 1.7;
+            font-weight: 500;
         }
-        .login-box {
-            background-color: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            margin-bottom: 30px;
+        
+        /* Message form (SỬA CĂN LỆNH) */
+        .message-form {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 35px;
+            border-radius: 25px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 107, 107, 0.1);
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            text-align: center; /* CĂN GIỮA NỘI DUNG */
         }
-        input {
+        
+        .message-form:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        
+        textarea {
             width: 100%;
-            padding: 12px;
-            margin: 10px 0;
+            height: 140px;
+            padding: 20px;
+            margin-bottom: 22px;
             border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 15px;
+            font-size: 17px;
+            resize: vertical;
+            transition: all 0.3s;
+            font-family: inherit;
+            line-height: 1.6;
+            text-align: left; /* CĂN TRÁI NỘI DUNG */
         }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2);
+        }
+        
         button {
-            background: linear-gradient(to right, #6a11cb, #2575fc);
+            background: linear-gradient(to right, #ff6b6b, #ff8e8e);
             color: white;
             border: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-size: 16px;
+            padding: 16px 35px;
+            border-radius: 50px;
+            font-size: 1.1em;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 10px rgba(106, 17, 203, 0.3);
+            box-shadow: 0 5px 18px rgba(255, 107, 107, 0.35);
             width: 100%;
+            font-family: inherit;
+            letter-spacing: 0.5px;
         }
+        
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(106, 17, 203, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 7px 25px rgba(255, 107, 107, 0.4);
         }
-        .dashboard {
-            display: none;
-            background-color: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        
+        button:active {
+            transform: translateY(0);
         }
-        .pending-message {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border-left: 3px solid #ff6b6b;
+        
+        /* Messages (SỬA KÍCH THƯỚC) */
+        .messages {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .message {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 22px;
+            border-radius: 22px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
             position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 107, 107, 0.1);
+            transform: translateZ(0);
+            backdrop-filter: blur(5px);
+            min-height: 100px; /* TỰ ĐỘNG GIÃN THEO NỘI DUNG */
         }
-        .pending-message p {
-            margin: 0 0 10px 0;
-            line-height: 1.5;
+        
+        .message:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
         }
-        .pending-message button {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            margin-right: 5px;
+        
+        .message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 100%;
+            background: linear-gradient(to bottom, #ff6b6b, #ffd166);
+        }
+        
+        .message-text {
+            margin-bottom: 22px;
+            line-height: 1.7;
+            color: #444;
+            font-size: 18px;
+            font-weight: 500;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow: hidden; /* ĐỂ NỘI DUNG TỰ ĐỘNG CHIẾM KHÔNG GIAN */
+        }
+        
+        .message-actions {
+            display: flex;
+            gap: 22px;
+            color: #777;
+            font-size: 16px;
+            padding-top: 15px;
+            border-top: 1px dashed #eee;
+            align-items: center;
+        }
+        
+        .heart-icon {
             cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
             font-weight: 500;
         }
-        .pending-message button.reject-btn {
-            background: #dc3545;
+        
+        .heart-icon:hover {
+            color: #ff6b6b;
+            transform: scale(1.15);
         }
-        .status-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: bold;
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #777;
+            font-size: 1.05em;
+            padding-top: 30px;
+            border-top: 1px solid rgba(200, 200, 200, 0.3);
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
-        .status-pending {
-            background: #ffc107;
-            color: #856404;
+        
+        /* Note */
+        .note {
+            background-color: rgba(245, 245, 245, 0.8);
+            border-left: 7px solid #ff6b6b;
+            padding: 18px 25px;
+            margin: 28px 0;
+            border-radius: 0 12px 12px 0;
+            font-size: 16px;
+            line-height: 1.6;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            backdrop-filter: blur(5px);
         }
-        .status-approved {
-            background: #28a745;
-            color: white;
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-menu {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .menu-links {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .menu-title {
+                font-size: 1.5em;
+            }
+            
+            body {
+                padding: 15px;
+            }
+            
+            header {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Header menu mới (thay thế social-fixed) -->
+    <div class="header-menu">
+        <div class="menu-links">
+            <a href="https://www.facebook.com/theblouse.prj" target="_blank">
+                <span>📘</span> Facebook
+            </a>
+            <a href="https://www.instagram.com/blouse_thantien/" target="_blank">
+                <span>📸</span> Instagram
+            </a>
+        </div>
+        <div class="menu-title">Nhắn gửi lời yêu thương</div>
+    </div>
+    
+    <!-- Popup thông báo (DẠNG SUCCESS MESSAGE) -->
+    <div id="success-popup" class="success-popup">
+        <div class="check-icon">✓</div>
+        <h3>Cảm ơn bạn đã gửi lời nhắn!</h3>
+        <p>Lời nhắn sẽ được duyệt bởi admin và xuất hiện trên trang trong vài phút.</p>
+    </div>
+    
     <header>
-        <h1>Admin Dashboard - Nhắn gửi lời yêu thương</h1>
-        <p class="description">Quản lý lời nhắn từ người dùng và duyệt chúng để hiển thị trên trang công khai</p>
+        <h1>Nhắn gửi lời yêu thương</h1>
+        <p class="description">Từ những người xa lạ, cùng chung mong muốn sẻ chia với các em ở Viện Huyết học Truyền máu Trung ương.</p>
     </header>
     
-    <div class="login-box" id="login-box">
-        <h2>Đăng nhập quản trị</h2>
-        <input type="email" id="admin-email" placeholder="Email admin" required>
-        <input type="password" id="admin-password" placeholder="Mật khẩu" required>
-        <button id="login-btn">Đăng nhập</button>
-        <p style="text-align: center; margin-top: 15px; color: #666; font-size: 0.9em;">
-            Email admin: admin@loiythuong.com<br>
-            Mật khẩu: LoiYeuThuong123!
-        </p>
+    <div class="note">
+        ⚠️ Lưu ý: Đây là bản demo với hệ thống quản lý admin hoàn chỉnh. Lời nhắn sẽ được lưu trữ và quản lý qua Firebase. 
+        Hãy gửi lời nhắn yêu thương của bạn để lan tỏa yêu thương đến các em nhỏ!
+    </div>
+    
+    <div class="message-form">
+        <textarea id="message-input" placeholder="Viết lời nhắn yêu thương của bạn... (Ví dụ: Chúc em mạnh khỏe và phải giữ mãi nụ cười thật tươi nhé. Love you so much ❤)"></textarea>
+        <button id="send-btn">Gửi lời nhắn</button>
+    </div>
+    
+    <div class="messages" id="messages-container">
+        <!-- Lời nhắn sẽ được tự động thêm vào đây -->
     </div>
 
-    <div class="dashboard" id="dashboard">
-        <h2>Lời nhắn chờ duyệt</h2>
-        <div id="pending-messages">
-            <p>Đang tải lời nhắn chờ duyệt...</p>
-        </div>
-        
-        <h2 style="margin-top: 30px;">Lời nhắn đã duyệt</h2>
-        <div id="approved-messages">
-            <p>Đang tải lời nhắn đã duyệt...</p>
-        </div>
-    </div>
+    <footer>
+        Trang web được tạo bằng HTML/CSS/JavaScript với Firebase
+    </footer>
 
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
     <script>
         // =============== ĐÃ THAY ĐỔI ===============
-const firebaseConfig = {
-  apiKey: "AIzaSyCKysT8eZ3LJqyi7vCjoqQGIpjgTyt7HYg",
-  authDomain: "loiyeuthuong-5bfab.firebaseapp.com",
-  projectId: "loiyeuthuong-5bfab",
-  storageBucket: "loiyeuthuong-5bfab.firebasestorage.app",
-  messagingSenderId: "544284022045",
-  appId: "1:544284022045:web:22f2eef2ed918d93707df4"
-};
-// =============== ĐÃ THAY ĐỔI ===============
+        const firebaseConfig = {
+          apiKey: "AIzaSyCKysT8eZ3LJqyi7vCjoqQGIpjgTyt7HYg",
+          authDomain: "loiyeuthuong-5bfab.firebaseapp.com",
+          projectId: "loiyeuthuong-5bfab",
+          storageBucket: "loiyeuthuong-5bfab.firebasestorage.app",
+          messagingSenderId: "544284022045",
+          appId: "1:544284022045:web:22f2eef2ed918d93707df4"
+        };
+        // =============== ĐÃ THAY ĐỔI ===============
+
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        const auth = firebase.auth();
 
-        // Xử lý đăng nhập admin
-        document.getElementById('login-btn').addEventListener('click', () => {
-            const email = document.getElementById('admin-email').value;
-            const password = document.getElementById('admin-password').value;
-            
-            auth.signInWithEmailAndPassword(email, password)
-                .then(() => {
-                    document.getElementById('login-box').style.display = 'none';
-                    document.getElementById('dashboard').style.display = 'block';
-                    loadPendingMessages();
-                    loadApprovedMessages();
-                })
-                .catch(e => alert('Sai email/mật khẩu: ' + e.message));
+        // Tạo hiệu ứng trái tim bay lơ lửng khắp trang web
+        document.addEventListener('DOMContentLoaded', () => {
+            // Tạo 20 trái tim
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    createHeart();
+                }, i * 300);
+            }
         });
 
-        // Hiển thị lời nhắn chờ duyệt
-        function loadPendingMessages() {
-            db.collection('messages')
-                .where('status', '==', 'pending')
-                .orderBy('timestamp', 'desc')
-                .onSnapshot(snapshot => {
-                    const pendingDiv = document.getElementById('pending-messages');
-                    pendingDiv.innerHTML = '';
-                    
-                    snapshot.forEach(doc => {
-                        const data = doc.data();
-                        const pendingEl = document.createElement('div');
-                        pendingEl.className = 'pending-message';
-                        pendingEl.innerHTML = `
-                            <span class="status-badge status-pending">Chờ duyệt</span>
-                            <p>${data.text}</p>
-                            <div>
-                                <button class="approve-btn" data-id="${doc.id}">Duyệt</button>
-                                <button class="reject-btn" data-id="${doc.id}">Xóa</button>
-                            </div>
-                        `;
-                        pendingDiv.appendChild(pendingEl);
-                    });
-                    
-                    if (snapshot.empty) {
-                        pendingDiv.innerHTML = '<p>Không có lời nhắn chờ duyệt</p>';
-                    }
-                });
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤';
+            
+            // Random position, size, and animation
+            const size = Math.random() * 50 + 30; // Tăng kích thước trái tim
+            const startX = Math.random() * window.innerWidth;
+            const startY = window.innerHeight + 50;
+            
+            // Random end position
+            const endX = startX + (Math.random() - 0.5) * 500;
+            const endY = -100 - Math.random() * 100;
+            
+            // Set CSS variables for animation
+            heart.style.setProperty('--tx', `${endX - startX}px`);
+            heart.style.setProperty('--ty', `${endY - startY}px`);
+            heart.style.fontSize = `${size}px`;
+            heart.style.color = 'white'; // Trái tim màu trắng
+            heart.style.left = `${startX}px`;
+            heart.style.top = `${startY}px`;
+            
+            document.body.appendChild(heart);
+            
+            // Xóa trái tim sau khi animation kết thúc
+            setTimeout(() => {
+                heart.remove();
+            }, 15000);
         }
+
+        // Xử lý gửi lời nhắn
+        document.getElementById('send-btn').addEventListener('click', async () => {
+            const message = document.getElementById('message-input').value.trim();
+            if (!message) return alert('Vui lòng nhập lời nhắn!');
+            
+            try {
+                await db.collection('messages').add({
+                    text: message,
+                    likes: 0,
+                    status: 'pending',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                document.getElementById('message-input').value = '';
+                
+                // Hiển thị success popup
+                const successPopup = document.getElementById('success-popup');
+                successPopup.style.display = 'flex';
+                
+                // Tự ẩn popup sau 5 giây
+                setTimeout(() => {
+                    successPopup.style.display = 'none';
+                }, 5000);
+            } catch (e) {
+                alert('Lỗi: ' + e.message);
+            }
+        });
 
         // Hiển thị lời nhắn đã duyệt
         function loadApprovedMessages() {
@@ -217,41 +489,37 @@ const firebaseConfig = {
                 .where('status', '==', 'approved')
                 .orderBy('timestamp', 'desc')
                 .onSnapshot(snapshot => {
-                    const approvedDiv = document.getElementById('approved-messages');
-                    approvedDiv.innerHTML = '';
+                    const messagesDiv = document.getElementById('messages-container');
+                    messagesDiv.innerHTML = '';
                     
                     snapshot.forEach(doc => {
                         const data = doc.data();
-                        const approvedEl = document.createElement('div');
-                        approvedEl.className = 'pending-message';
-                        approvedEl.innerHTML = `
-                            <span class="status-badge status-approved">Đã duyệt</span>
-                            <p>${data.text}</p>
-                            <div>
-                                <button class="reject-btn" data-id="${doc.id}">Xóa</button>
+                        const messageEl = document.createElement('div');
+                        messageEl.className = 'message';
+                        messageEl.innerHTML = `
+                            <div class="message-text">${data.text}</div>
+                            <div class="message-actions">
+                                <span class="heart-icon" data-id="${doc.id}">${data.likes} ❤</span>
+                                <span>0 Bình luận</span>
                             </div>
                         `;
-                        approvedDiv.appendChild(approvedEl);
+                        messagesDiv.appendChild(messageEl);
                     });
-                    
-                    if (snapshot.empty) {
-                        approvedDiv.innerHTML = '<p>Chưa có lời nhắn nào được duyệt</p>';
-                    }
                 });
         }
 
-        // Duyệt lời nhắn
+        // Xử lý like
         document.addEventListener('click', e => {
-            if (e.target.classList.contains('approve-btn')) {
+            if (e.target.classList.contains('heart-icon')) {
                 const id = e.target.getAttribute('data-id');
-                db.collection('messages').doc(id).update({ status: 'approved' });
-            }
-            
-            if (e.target.classList.contains('reject-btn')) {
-                const id = e.target.getAttribute('data-id');
-                db.collection('messages').doc(id).delete();
+                db.collection('messages').doc(id).update({
+                    likes: firebase.firestore.FieldValue.increment(1)
+                });
             }
         });
+
+        // Khởi tạo
+        loadApprovedMessages();
     </script>
 </body>
 </html>
