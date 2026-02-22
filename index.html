@@ -100,27 +100,52 @@
             text-align: center;
         }
         
-        /* Popup thông báo (DẠNG SUCCESS MESSAGE) */
-        .success-popup {
+        /* Popup thông báo (DẠNG SUCCESS MESSAGE) - CHỈNH SỬA Ở ĐÂY */
+        .success-popup-overlay {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        
+        .success-popup {
             width: 400px;
             background: white;
             border-radius: 10px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-            z-index: 9999;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             display: none;
             flex-direction: column;
             align-items: center;
             padding: 30px;
             text-align: center;
+            transform: scale(0.8);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+        
+        .success-popup.show {
+            display: flex;
+            transform: scale(1);
+            opacity: 1;
         }
         
         .check-icon {
             font-size: 50px;
             color: #4CAF50;
             margin-bottom: 15px;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
         
         .success-popup h3 {
@@ -366,11 +391,13 @@
         <div class="menu-title">Nhắn gửi lời yêu thương</div>
     </div>
     
-    <!-- Popup thông báo (DẠNG SUCCESS MESSAGE) -->
-    <div id="success-popup" class="success-popup">
-        <div class="check-icon">✓</div>
-        <h3>Cảm ơn bạn đã gửi lời nhắn!</h3>
-        <p>Lời nhắn sẽ được duyệt bởi admin và xuất hiện trên trang trong vài phút.</p>
+    <!-- Popup thông báo (DẠNG SUCCESS MESSAGE) - CHỈNH SỬA Ở ĐÂY -->
+    <div id="success-popup-overlay" class="success-popup-overlay">
+        <div id="success-popup" class="success-popup">
+            <div class="check-icon">✓</div>
+            <h3>Cảm ơn bạn đã gửi lời nhắn!</h3>
+            <p>Lời nhắn sẽ được duyệt bởi admin và xuất hiện trên trang trong vài phút.</p>
+        </div>
     </div>
     
     <header>
@@ -471,12 +498,17 @@
                 document.getElementById('message-input').value = '';
                 
                 // Hiển thị success popup
+                const successPopupOverlay = document.getElementById('success-popup-overlay');
                 const successPopup = document.getElementById('success-popup');
-                successPopup.style.display = 'flex';
+                successPopupOverlay.style.display = 'flex';
+                successPopup.classList.add('show');
                 
                 // Tự ẩn popup sau 5 giây
                 setTimeout(() => {
-                    successPopup.style.display = 'none';
+                    successPopup.classList.remove('show');
+                    setTimeout(() => {
+                        successPopupOverlay.style.display = 'none';
+                    }, 400); // Đợi hiệu ứng ẩn hoàn thành trước khi ẩn overlay
                 }, 5000);
             } catch (e) {
                 alert('Lỗi: ' + e.message);
