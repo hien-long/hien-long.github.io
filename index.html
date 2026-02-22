@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To @TheBlouse &lt;3</title>
-    <link rel="icon" type="image/png" href="https://i.ibb.co/0jqsMq0Z/your-image.png">
-    <link rel="apple-touch-icon" href="https://i.ibb.co/0jqsMq0Z/your-image.png">
+    <link rel="icon" type="image/png" href="https://i.ibb.co/0jqsMq0Z/your-image.png    ">
+    <link rel="apple-touch-icon" href="https://i.ibb.co/0jqsMq0Z/your-image.png    ">
     <style>
         /* ===== LOADING BAR ===== */
         #loading-bar {
@@ -116,11 +116,14 @@
             box-sizing: border-box;
         }
 
-        /* ===== GALLERY SECTION ===== */
+        /* ===== GALLERY SECTION - ĐÃ BỎ VIỀN BOX TRẮNG ===== */
         .gallery-section {
-            margin: 20px 0; padding: 30px;
-            background: rgba(255, 255, 255, 0.85); border-radius: 25px;
-            box-shadow: 0 6px 25px rgba(0,0,0,0.15); backdrop-filter: blur(10px);
+            margin: 20px 0; 
+            padding: 20px 0;
+            background: transparent;
+            border-radius: 0;
+            box-shadow: none;
+            backdrop-filter: none;
         }
         .gallery-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
         .gallery-header h2 { color: #e74c3c; font-size: 24px; font-weight: 700; margin: 0; }
@@ -215,7 +218,7 @@
             .menu-title { font-size: 1.5em; }
             .content-wrapper { max-width: 100%; padding: 0 10px; }
             .note, footer { margin: 15px 0; }
-            .gallery-section { margin: 15px 0; padding: 20px; }
+            .gallery-section { margin: 15px 0; padding: 15px 0; }
             .gallery-header { flex-direction: column; gap: 15px; text-align: center; }
             .gallery-header h2 { font-size: 20px; }
             .gallery-card { flex: 0 0 280px; }
@@ -238,11 +241,11 @@
     <div class="header-menu">
         <div class="menu-links">
             <a href="#" id="open-message-popup"><span>+</span> Gửi lời nhắn</a>
-            <a href="https://www.facebook.com/theblouse.prj" target="_blank">
-                <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" class="social-icon"> FB
+            <a href="https://www.facebook.com/theblouse.prj    " target="_blank">
+                <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png    " alt="Facebook" class="social-icon"> FB
             </a>
-            <a href="https://www.instagram.com/blouse_thantien/" target="_blank">
-                <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" class="social-icon"> IG
+            <a href="https://www.instagram.com/blouse_thantien/    " target="_blank">
+                <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png    " alt="Instagram" class="social-icon"> IG
             </a>
         </div>
         <div class="menu-title">@TheBlouse</div>
@@ -310,8 +313,8 @@
     <footer>Trang web được tạo bằng HTML/CSS/JavaScript với Firebase</footer>
 
     <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js    "></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js    "></script>
 
     <script>
         const firebaseConfig = {
