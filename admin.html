@@ -4,155 +4,576 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Nhắn gửi lời yêu thương</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/0jqsMq0Z/your-image.png">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; min-height: 100vh; padding: 20px; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        h1, h2, h3 { color: #333; margin-bottom: 20px; }
-        
-        /* ===== LOGIN FORM ===== */
-        #login-section { max-width: 400px; margin: 100px auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-        #login-section h2 { text-align: center; color: #e74c3c; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
-        .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 14px; }
-        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #e74c3c; }
-        .btn { width: 100%; padding: 12px; border: none; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
-        .btn-primary { background: linear-gradient(135deg, #e74c3c, #ff6b6b); color: white; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4); }
-        .btn-danger { background: #e74c3c; color: white; }
-        .btn-success { background: #4CAF50; color: white; }
-        .btn-warning { background: #ff9800; color: white; }
-        .btn-info { background: #2196F3; color: white; }
-        .btn-small { padding: 8px 16px; font-size: 14px; width: auto; }
-        
-        /* ===== DASHBOARD ===== */
-        #dashboard-section { display: none; }
-        .header-bar { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
-        .admin-info { display: flex; align-items: center; gap: 15px; }
-        .admin-email { font-weight: 600; color: #333; }
-        
-        /* ===== STATS ===== */
-        .stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); text-align: center; }
-        .stat-number { font-size: 36px; font-weight: 700; color: #e74c3c; margin-bottom: 10px; }
-        .stat-label { color: #666; font-size: 14px; }
-        
-        /* ===== SEARCH ===== */
-        .search-box { width: 100%; padding: 12px 20px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px; margin-bottom: 20px; }
-        .search-box:focus { outline: none; border-color: #e74c3c; }
-        
-        /* ===== MESSAGE LISTS ===== */
-        .messages-section { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 30px; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0; }
-        .section-title { font-size: 20px; font-weight: 700; color: #333; }
-        .message-count { background: #e74c3c; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
-        .message-list { display: flex; flex-direction: column; gap: 15px; }
-        .message-item { background: #f9f9f9; padding: 20px; border-radius: 8px; border-left: 4px solid #e74c3c; }
-        .message-item.approved { border-left-color: #4CAF50; }
-        .message-text { font-size: 15px; color: #333; margin-bottom: 15px; line-height: 1.6; max-height: 100px; overflow-y: auto; }
-        .sender-info { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding: 8px 12px; background: white; border-radius: 6px; border: 1px solid #ddd; }
-        .sender-name { font-weight: 600; color: #e74c3c; }
-        .anonymous-badge { background: #ff6b6b; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
-        .message-meta { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #666; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
-        .message-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-        
-        /* 🔥 EDIT LIKE COUNT */
-        .edit-like-container { display: flex; align-items: center; gap: 8px; background: white; padding: 6px 12px; border-radius: 6px; border: 1px solid #ddd; }
-        .edit-like-input { width: 80px; padding: 6px; border: 1px solid #ddd; border-radius: 4px; text-align: center; font-size: 14px; font-weight: 600; }
-        .edit-like-input:focus { outline: none; border-color: #e74c3c; }
-        .current-likes { font-weight: 600; color: #e91e63; min-width: 60px; }
-        
-        /* 🔥 GALLERY MANAGEMENT */
-        #gallery-form { display: none; background: #f9f9f9; padding: 20px; margin-bottom: 20px; border-radius: 8px; }
-        #gallery-form .form-group { margin-bottom: 15px; }
-        #gallery-form textarea { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 14px; resize: vertical; }
-        #gallery-form textarea:focus { outline: none; border-color: #e74c3c; }
-        
-        .gallery-item { display: flex; gap: 15px; align-items: start; background: #f9f9f9; padding: 15px; border-radius: 8px; }
-        .gallery-item img { width: 150px; height: 100px; object-fit: cover; border-radius: 8px; }
-        .gallery-item .info { flex: 1; }
-        .gallery-item .info h4 { margin: 0 0 10px; }
-        .gallery-item .info p { margin: 0 0 10px; color: #666; font-size: 14px; }
-        .gallery-item .info .order { margin: 0; font-size: 13px; color: #999; }
-        
-        .loading { text-align: center; padding: 40px; color: #666; }
-        .empty { text-align: center; padding: 40px; color: #999; font-style: italic; }
-        
-        /* ===== NOTIFICATIONS ===== */
-        .notification { position: fixed; top: 20px; right: 20px; padding: 15px 25px; border-radius: 8px; color: white; font-weight: 600; z-index: 10000; animation: slideIn 0.3s ease; }
-        .notification.success { background: #4CAF50; }
-        .notification.error { background: #e74c3c; }
-        .notification.info { background: #2196F3; }
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            color: #667eea;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .logout-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-card h3 {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .stat-card .number {
+            font-size: 42px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .section-header h2 {
+            color: #333;
+            font-size: 22px;
+            font-weight: 700;
+        }
+        .add-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .message-card, .gallery-item, .banner-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+        .message-card:hover, .gallery-item:hover, .banner-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .message-sender {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 16px;
+        }
+        .message-date {
+            color: #999;
+            font-size: 13px;
+        }
+        .message-text {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+        .message-actions, .gallery-actions, .banner-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .approve-btn {
+            background: #4CAF50;
+            color: white;
+        }
+        .approve-btn:hover { background: #45a049; }
+        .reject-btn {
+            background: #f44336;
+            color: white;
+        }
+        .reject-btn:hover { background: #da190b; }
+        .delete-btn {
+            background: #ff9800;
+            color: white;
+        }
+        .delete-btn:hover { background: #f57c00; }
+        .edit-btn {
+            background: #2196F3;
+            color: white;
+        }
+        .edit-btn:hover { background: #1976D2; }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        .modal {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        .modal-header h3 {
+            color: #333;
+            font-size: 22px;
+            font-weight: 700;
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.2s ease;
+        }
+        .close-modal:hover { color: #333; }
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        .save-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .cancel-btn {
+            flex: 1;
+            background: #f0f0f0;
+            color: #666;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .cancel-btn:hover {
+            background: #e0e0e0;
+        }
+        .login-container {
+            max-width: 450px;
+            margin: 100px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .login-container h2 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background: #f0f0f0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .tab-btn:hover:not(.active) {
+            background: #e0e0e0;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .gallery-item img, .banner-item img {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .gallery-info h4, .banner-info h4 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        .gallery-info p, .banner-info p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        .checkbox-group label {
+            margin: 0;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 16px;
+        }
+        @media (max-width: 768px) {
+            .header { flex-direction: column; gap: 15px; text-align: center; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .section-header { flex-direction: column; gap: 15px; text-align: center; }
+            .modal-actions { flex-direction: column; }
+            .tabs { flex-wrap: wrap; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- 🔐 LOGIN SECTION -->
-        <div id="login-section">
-            <h2>🔐 Admin Dashboard</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 30px;">Quản lý lời nhắn & gallery</p>
-            <div class="form-group"><label>Email</label><input type="email" id="admin-email" placeholder="admin@loiythuong.com"></div>
-            <div class="form-group"><label>Mật khẩu</label><input type="password" id="admin-password" placeholder="••••••••"></div>
-            <button class="btn btn-primary" onclick="handleLogin()">Đăng nhập</button>
-            <p style="text-align: center; margin-top: 20px; font-size: 13px; color: #999;">Email: admin@loiythuong.com<br>Mật khẩu: LoiYeuThuong123!</p>
+    <!-- Login Section -->
+    <div id="login-section" class="login-container">
+        <h2>🔐 Admin Dashboard</h2>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="login-email" placeholder="admin@loiythuong.com">
+        </div>
+        <div class="form-group">
+            <label>Mật khẩu</label>
+            <input type="password" id="login-password" placeholder="••••••••">
+        </div>
+        <button class="login-btn" onclick="login()">Đăng nhập</button>
+        <p style="text-align: center; margin-top: 20px; color: #999; font-size: 14px;">
+            Email: admin@loiythuong.com | Mật khẩu: LoiYeuThuong123!
+        </p>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboard-section" class="container" style="display: none;">
+        <div class="header">
+            <h1>📊 Admin Dashboard</h1>
+            <button class="logout-btn" onclick="logout()">Đăng xuất</button>
         </div>
 
-        <!-- 📊 DASHBOARD SECTION -->
-        <div id="dashboard-section">
-            <div class="header-bar">
-                <h1>📊 Admin Dashboard</h1>
-                <div class="admin-info">
-                    <span class="admin-email" id="admin-email-display"></span>
-                    <button class="btn btn-danger btn-small" onclick="handleLogout()">Đăng xuất</button>
-                </div>
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Tổng lời nhắn</h3>
+                <div class="number" id="total-messages">0</div>
             </div>
-
-            <!-- 📈 STATS -->
-            <div class="stats-container">
-                <div class="stat-card"><div class="stat-number" id="stat-total">0</div><div class="stat-label">Tổng lời nhắn</div></div>
-                <div class="stat-card"><div class="stat-number" id="stat-pending" style="color: #ff9800;">0</div><div class="stat-label">Chờ duyệt</div></div>
-                <div class="stat-card"><div class="stat-number" id="stat-approved" style="color: #4CAF50;">0</div><div class="stat-label">Đã duyệt</div></div>
-                <div class="stat-card"><div class="stat-number" id="stat-total-likes" style="color: #e91e63;">0</div><div class="stat-label">Tổng lượt tim</div></div>
+            <div class="stat-card">
+                <h3>Chờ duyệt</h3>
+                <div class="number" id="pending-messages">0</div>
             </div>
-
-            <!-- 🔍 SEARCH -->
-            <input type="text" class="search-box" id="search-box" placeholder="🔍 Tìm kiếm lời nhắn..." oninput="filterMessages()">
-
-            <!-- ⏳ PENDING MESSAGES -->
-            <div class="messages-section">
-                <div class="section-header"><span class="section-title">⏳ Lời nhắn chờ duyệt</span><span class="message-count" id="pending-count">0</span></div>
-                <div class="message-list" id="pending-list"><div class="loading">Đang tải...</div></div>
+            <div class="stat-card">
+                <h3>Đã duyệt</h3>
+                <div class="number" id="approved-messages">0</div>
             </div>
-
-            <!-- ✅ APPROVED MESSAGES -->
-            <div class="messages-section">
-                <div class="section-header"><span class="section-title">✅ Lời nhắn đã duyệt</span><span class="message-count" id="approved-count">0</span></div>
-                <div class="message-list" id="approved-list"><div class="loading">Đang tải...</div></div>
+            <div class="stat-card">
+                <h3>Tổng lượt tim</h3>
+                <div class="number" id="total-likes">0</div>
             </div>
+        </div>
 
-            <!-- 🔥 GALLERY MANAGEMENT -->
-            <div class="messages-section">
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('messages')">💌 Lời nhắn</button>
+            <button class="tab-btn" onclick="switchTab('gallery')">🖼️ Gallery</button>
+            <button class="tab-btn" onclick="switchTab('banners')">🎨 Banner</button>
+        </div>
+
+        <!-- Messages Section -->
+        <div id="messages-tab" class="tab-content active">
+            <div class="section">
                 <div class="section-header">
-                    <span class="section-title">🖼️ Quản lý Gallery</span>
-                    <button class="btn btn-success btn-small" onclick="showAddGalleryForm()">+ Thêm ảnh</button>
+                    <h2>⏳ Lời nhắn chờ duyệt</h2>
                 </div>
-                
-                <!-- Add/Edit Form -->
-                <div id="gallery-form">
-                    <h3 id="form-title">Thêm ảnh mới</h3>
-                    <div class="form-group"><label>Link ảnh/URL</label><input type="text" id="gallery-image" placeholder="gallery/activity-1.jpg hoặc https://..."></div>
-                    <div class="form-group"><label>Tiêu đề</label><input type="text" id="gallery-title" placeholder="Tên hoạt động"></div>
-                    <div class="form-group"><label>Mô tả</label><textarea id="gallery-description" rows="3" placeholder="Mô tả ngắn"></textarea></div>
-                    <div class="form-group"><label>Thứ tự hiển thị</label><input type="number" id="gallery-order" value="1" min="1"></div>
-                    <input type="hidden" id="gallery-id">
-                    <button class="btn btn-primary" onclick="saveGallery()">💾 Lưu</button>
-                    <button class="btn btn-warning" onclick="hideGalleryForm()">❌ Hủy</button>
+                <div id="pending-messages-list">
+                    <div class="loading">Đang tải...</div>
                 </div>
-                
-                <!-- Gallery List -->
-                <div class="message-list" id="gallery-list"><div class="loading">Đang tải gallery...</div></div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2>✅ Lời nhắn đã duyệt</h2>
+                </div>
+                <div id="approved-messages-list">
+                    <div class="loading">Đang tải...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery Section -->
+        <div id="gallery-tab" class="tab-content">
+            <div class="section">
+                <div class="section-header">
+                    <h2>🖼️ Quản lý Gallery</h2>
+                    <button class="add-btn" onclick="openGalleryModal()">+ Thêm ảnh</button>
+                </div>
+                <div id="gallery-list">
+                    <div class="loading">Đang tải gallery...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Banners Section -->
+        <div id="banners-tab" class="tab-content">
+            <div class="section">
+                <div class="section-header">
+                    <h2>🎨 Quản lý Banner</h2>
+                    <button class="add-btn" onclick="openBannerModal()">+ Thêm banner</button>
+                </div>
+                <div id="banners-list">
+                    <div class="loading">Đang tải banners...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Modal -->
+    <div id="gallery-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="gallery-modal-title">Thêm ảnh mới</h3>
+                <button class="close-modal" onclick="closeGalleryModal()">&times;</button>
+            </div>
+            <div class="form-group">
+                <label>Link ảnh/URL</label>
+                <input type="url" id="gallery-image" placeholder="https://example.com/image.jpg">
+            </div>
+            <div class="form-group">
+                <label>Tiêu đề</label>
+                <input type="text" id="gallery-title" placeholder="Tiêu đề ảnh">
+            </div>
+            <div class="form-group">
+                <label>Mô tả</label>
+                <textarea id="gallery-description" placeholder="Mô tả ngắn về ảnh"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Thứ tự hiển thị</label>
+                <input type="number" id="gallery-order" value="1" min="1">
+            </div>
+            <div class="modal-actions">
+                <button class="save-btn" onclick="saveGallery()">💾 Lưu</button>
+                <button class="cancel-btn" onclick="closeGalleryModal()">❌ Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner Modal -->
+    <div id="banner-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="banner-modal-title">Thêm banner mới</h3>
+                <button class="close-modal" onclick="closeBannerModal()">&times;</button>
+            </div>
+            <div class="form-group">
+                <label>Link ảnh/URL</label>
+                <input type="url" id="banner-image" placeholder="https://example.com/banner.jpg">
+            </div>
+            <div class="form-group">
+                <label>Tiêu đề (optional)</label>
+                <input type="text" id="banner-title" placeholder="Tiêu đề banner">
+            </div>
+            <div class="form-group">
+                <label>Link khi click (optional)</label>
+                <input type="url" id="banner-link" placeholder="https://example.com">
+            </div>
+            <div class="form-group">
+                <label>Thứ tự hiển thị</label>
+                <input type="number" id="banner-order" value="1" min="1">
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="banner-active" checked>
+                <label for="banner-active">Hiển thị banner</label>
+            </div>
+            <div class="modal-actions">
+                <button class="save-btn" onclick="saveBanner()">💾 Lưu</button>
+                <button class="cancel-btn" onclick="closeBannerModal()">❌ Hủy</button>
             </div>
         </div>
     </div>
@@ -175,187 +596,321 @@
         const db = firebase.firestore();
         const auth = firebase.auth();
 
-        let allMessages = [], filteredMessages = [];
         let editingGalleryId = null;
+        let editingBannerId = null;
 
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                document.getElementById('login-section').style.display = 'none';
-                document.getElementById('dashboard-section').style.display = 'block';
-                document.getElementById('admin-email-display').textContent = user.email;
-                loadMessages();
-                loadAdminGallery();
+        // ===== AUTH =====
+        function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (email === 'admin@loiythuong.com' && password === 'LoiYeuThuong123!') {
+                localStorage.setItem('isAdmin', 'true');
+                showDashboard();
             } else {
-                document.getElementById('login-section').style.display = 'block';
-                document.getElementById('dashboard-section').style.display = 'none';
+                alert('Email hoặc mật khẩu không đúng!');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('isAdmin');
+            location.reload();
+        }
+
+        function showDashboard() {
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('dashboard-section').style.display = 'block';
+            loadMessages();
+            loadGallery();
+            loadBanners();
+            updateStats();
+        }
+
+        // Check login on load
+        window.addEventListener('load', () => {
+            if (localStorage.getItem('isAdmin') === 'true') {
+                showDashboard();
             }
         });
 
-        async function handleLogin() {
-            const email = document.getElementById('admin-email').value;
-            const password = document.getElementById('admin-password').value;
-            if (!email || !password) { showNotification('Vui lòng nhập email và mật khẩu!', 'error'); return; }
-            try {
-                await auth.signInWithEmailAndPassword(email, password);
-                showNotification('Đăng nhập thành công!', 'success');
-            } catch (e) { showNotification('Đăng nhập thất bại: ' + e.message, 'error'); }
+        // ===== TABS =====
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
         }
 
-        async function handleLogout() {
-            try { await auth.signOut(); showNotification('Đã đăng xuất!', 'success'); }
-            catch (e) { showNotification('Lỗi: ' + e.message, 'error'); }
-        }
-
+        // ===== MESSAGES =====
         function loadMessages() {
             db.collection('messages').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
-                allMessages = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), timestamp: doc.data().timestamp?.toDate() || new Date() }));
-                filterMessages(); updateStats();
-            }, error => { showNotification('Lỗi tải dữ liệu: ' + error.message, 'error'); });
+                const pendingList = document.getElementById('pending-messages-list');
+                const approvedList = document.getElementById('approved-messages-list');
+                
+                let pendingHTML = '';
+                let approvedHTML = '';
+                let totalLikes = 0;
+                
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    totalLikes += (data.likes || 0);
+                    
+                    const messageHTML = `
+                        <div class="message-card">
+                            <div class="message-header">
+                                <span class="message-sender">${data.senderName || 'Ẩn danh'}</span>
+                                <span class="message-date">${formatDate(data.timestamp)}</span>
+                            </div>
+                            <div class="message-text">${escapeHtml(data.text)}</div>
+                            <div class="message-actions">
+                                ${data.status === 'pending' ? `
+                                    <button class="action-btn approve-btn" onclick="updateMessageStatus('${doc.id}', 'approved')">✓ Duyệt</button>
+                                    <button class="action-btn reject-btn" onclick="updateMessageStatus('${doc.id}', 'rejected')">✗ Từ chối</button>
+                                ` : ''}
+                                <button class="action-btn delete-btn" onclick="deleteMessage('${doc.id}')">🗑️ Xóa</button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    if (data.status === 'pending') {
+                        pendingHTML += messageHTML;
+                    } else if (data.status === 'approved') {
+                        approvedHTML += messageHTML;
+                    }
+                });
+                
+                pendingList.innerHTML = pendingHTML || '<div class="loading">Không có lời nhắn chờ duyệt</div>';
+                approvedList.innerHTML = approvedHTML || '<div class="loading">Không có lời nhắn đã duyệt</div>';
+                
+                document.getElementById('total-messages').textContent = snapshot.size;
+                document.getElementById('pending-messages').textContent = snapshot.docs.filter(d => d.data().status === 'pending').length;
+                document.getElementById('approved-messages').textContent = snapshot.docs.filter(d => d.data().status === 'approved').length;
+                document.getElementById('total-likes').textContent = totalLikes;
+            });
         }
 
-        function filterMessages() {
-            const searchTerm = document.getElementById('search-box').value.toLowerCase();
-            filteredMessages = allMessages.filter(msg => msg.text.toLowerCase().includes(searchTerm) || (msg.senderName && msg.senderName.toLowerCase().includes(searchTerm)));
-            renderPendingMessages(); renderApprovedMessages();
+        function updateMessageStatus(id, status) {
+            db.collection('messages').doc(id).update({ status }).then(() => {
+                alert(`Đã ${status === 'approved' ? 'duyệt' : 'từ chối'} lời nhắn!`);
+            }).catch(err => alert('Lỗi: ' + err.message));
         }
 
-        function updateStats() {
-            const total = allMessages.length;
-            const pending = allMessages.filter(m => m.status === 'pending').length;
-            const approved = allMessages.filter(m => m.status === 'approved').length;
-            const totalLikes = allMessages.reduce((sum, m) => sum + (m.likes || 0), 0);
-            document.getElementById('stat-total').textContent = total;
-            document.getElementById('stat-pending').textContent = pending;
-            document.getElementById('stat-approved').textContent = approved;
-            document.getElementById('stat-total-likes').textContent = totalLikes;
-            document.getElementById('pending-count').textContent = pending;
-            document.getElementById('approved-count').textContent = approved;
+        function deleteMessage(id) {
+            if (confirm('Bạn có chắc muốn xóa lời nhắn này?')) {
+                db.collection('messages').doc(id).delete().then(() => {
+                    alert('Đã xóa lời nhắn!');
+                }).catch(err => alert('Lỗi: ' + err.message));
+            }
         }
 
-        async function updateLikeCount(messageId, newCount) {
-            const count = parseInt(newCount);
-            if (isNaN(count) || count < 0) { showNotification('Số tim không hợp lệ!', 'error'); return; }
-            try {
-                await db.collection('messages').doc(messageId).update({ likes: count });
-                showNotification(`Đã cập nhật số tim thành ${count}!`, 'success');
-            } catch (e) { showNotification('Lỗi cập nhật: ' + e.message, 'error'); }
+        // ===== GALLERY =====
+        function loadGallery() {
+            db.collection('gallery').orderBy('order', 'asc').onSnapshot(snapshot => {
+                const galleryList = document.getElementById('gallery-list');
+                
+                if (snapshot.empty) {
+                    galleryList.innerHTML = '<div class="loading">Chưa có ảnh nào</div>';
+                    return;
+                }
+                
+                let html = '';
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    html += `
+                        <div class="gallery-item">
+                            <img src="${data.image}" alt="${data.title}">
+                            <div class="gallery-info">
+                                <h4>${data.title}</h4>
+                                <p>${data.description || ''}</p>
+                                <p><strong>Thứ tự:</strong> ${data.order}</p>
+                            </div>
+                            <div class="gallery-actions">
+                                <button class="action-btn edit-btn" onclick="editGallery('${doc.id}')">✏️ Sửa</button>
+                                <button class="action-btn delete-btn" onclick="deleteGallery('${doc.id}')">🗑️ Xóa</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                galleryList.innerHTML = html;
+            });
         }
 
-        function renderPendingMessages() {
-            const container = document.getElementById('pending-list');
-            const pending = filteredMessages.filter(m => m.status === 'pending');
-            if (pending.length === 0) { container.innerHTML = '<div class="empty">Không có lời nhắn chờ duyệt</div>'; return; }
-            container.innerHTML = pending.map(msg => `
-                <div class="message-item">
-                    <div class="sender-info"><span class="sender-name">✍️ ${escapeHtml(msg.senderName || 'Không rõ')}</span>${msg.isAnonymous ? '<span class="anonymous-badge">👤 Ẩn danh</span>' : ''}</div>
-                    <div class="message-text">${escapeHtml(msg.text)}</div>
-                    <div class="message-meta"><span>📅 ${formatDate(msg.timestamp)}</span><span>❤️ ${msg.likes || 0} lượt tim</span></div>
-                    <div class="message-actions">
-                        <button class="btn btn-success btn-small" onclick="approveMessage('${msg.id}')">✅ Duyệt</button>
-                        <button class="btn btn-danger btn-small" onclick="rejectMessage('${msg.id}')">❌ Từ chối</button>
-                        <div class="edit-like-container"><span class="current-likes">❤️ ${msg.likes || 0}</span><input type="number" class="edit-like-input" id="edit-like-${msg.id}" placeholder="Số tim mới" min="0"><button class="btn btn-info btn-small" onclick="updateLikeCount('${msg.id}', document.getElementById('edit-like-${msg.id}').value)">💾 Cập nhật</button></div>
-                    </div>
-                </div>`).join('');
-        }
-
-        function renderApprovedMessages() {
-            const container = document.getElementById('approved-list');
-            const approved = filteredMessages.filter(m => m.status === 'approved');
-            if (approved.length === 0) { container.innerHTML = '<div class="empty">Không có lời nhắn đã duyệt</div>'; return; }
-            container.innerHTML = approved.map(msg => `
-                <div class="message-item approved">
-                    <div class="sender-info"><span class="sender-name">✍️ ${escapeHtml(msg.senderName || 'Không rõ')}</span>${msg.isAnonymous ? '<span class="anonymous-badge">👤 Ẩn danh</span>' : ''}</div>
-                    <div class="message-text">${escapeHtml(msg.text)}</div>
-                    <div class="message-meta"><span>📅 ${formatDate(msg.timestamp)}</span><span>❤️ ${msg.likes || 0} lượt tim</span></div>
-                    <div class="message-actions">
-                        <button class="btn btn-warning btn-small" onclick="unapproveMessage('${msg.id}')">↩️ Hủy duyệt</button>
-                        <button class="btn btn-danger btn-small" onclick="deleteMessage('${msg.id}')">🗑️ Xóa</button>
-                        <div class="edit-like-container"><span class="current-likes">❤️ ${msg.likes || 0}</span><input type="number" class="edit-like-input" id="edit-like-approved-${msg.id}" placeholder="Số tim mới" min="0"><button class="btn btn-info btn-small" onclick="updateLikeCount('${msg.id}', document.getElementById('edit-like-approved-${msg.id}').value)">💾 Cập nhật</button></div>
-                    </div>
-                </div>`).join('');
-        }
-
-        async function approveMessage(id) { try { await db.collection('messages').doc(id).update({ status: 'approved' }); showNotification('Đã duyệt lời nhắn!', 'success'); } catch (e) { showNotification('Lỗi: ' + e.message, 'error'); } }
-        async function rejectMessage(id) { try { await db.collection('messages').doc(id).update({ status: 'rejected' }); showNotification('Đã từ chối lời nhắn!', 'success'); } catch (e) { showNotification('Lỗi: ' + e.message, 'error'); } }
-        async function unapproveMessage(id) { try { await db.collection('messages').doc(id).update({ status: 'pending' }); showNotification('Đã hủy duyệt lời nhắn!', 'success'); } catch (e) { showNotification('Lỗi: ' + e.message, 'error'); } }
-        async function deleteMessage(id) { if (!confirm('Bạn có chắc muốn xóa lời nhắn này không?')) return; try { await db.collection('messages').doc(id).delete(); showNotification('Đã xóa lời nhắn!', 'success'); } catch (e) { showNotification('Lỗi: ' + e.message, 'error'); } }
-
-        // 🔥 GALLERY FUNCTIONS
-        function showAddGalleryForm() {
-            document.getElementById('gallery-form').style.display = 'block';
-            document.getElementById('form-title').textContent = 'Thêm ảnh mới';
+        function openGalleryModal() {
+            editingGalleryId = null;
+            document.getElementById('gallery-modal-title').textContent = 'Thêm ảnh mới';
             document.getElementById('gallery-image').value = '';
             document.getElementById('gallery-title').value = '';
             document.getElementById('gallery-description').value = '';
             document.getElementById('gallery-order').value = '1';
-            document.getElementById('gallery-id').value = '';
-            editingGalleryId = null;
-        }
-        function hideGalleryForm() { document.getElementById('gallery-form').style.display = 'none'; }
-
-        async function saveGallery() {
-            const image = document.getElementById('gallery-image').value.trim();
-            const title = document.getElementById('gallery-title').value.trim();
-            const description = document.getElementById('gallery-description').value.trim();
-            const order = parseInt(document.getElementById('gallery-order').value) || 1;
-            if (!image || !title) { showNotification('Vui lòng nhập ít nhất link ảnh và tiêu đề!', 'error'); return; }
-            const galleryData = { image, title, description, order, updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
-            try {
-                if (editingGalleryId) {
-                    await db.collection('gallery').doc(editingGalleryId).update(galleryData);
-                    showNotification('Đã cập nhật ảnh!', 'success');
-                } else {
-                    galleryData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-                    await db.collection('gallery').add(galleryData);
-                    showNotification('Đã thêm ảnh mới!', 'success');
-                }
-                hideGalleryForm(); loadAdminGallery();
-            } catch (e) { showNotification('Lỗi: ' + e.message, 'error'); }
+            document.getElementById('gallery-modal').style.display = 'flex';
         }
 
-        async function editGallery(id) {
-            const doc = await db.collection('gallery').doc(id).get();
-            if (doc.exists) {
+        function closeGalleryModal() {
+            document.getElementById('gallery-modal').style.display = 'none';
+        }
+
+        function editGallery(id) {
+            editingGalleryId = id;
+            db.collection('gallery').doc(id).get().then(doc => {
                 const data = doc.data();
-                document.getElementById('gallery-form').style.display = 'block';
-                document.getElementById('form-title').textContent = 'Chỉnh sửa ảnh';
-                document.getElementById('gallery-image').value = data.image || '';
-                document.getElementById('gallery-title').value = data.title || '';
+                document.getElementById('gallery-modal-title').textContent = 'Sửa ảnh';
+                document.getElementById('gallery-image').value = data.image;
+                document.getElementById('gallery-title').value = data.title;
                 document.getElementById('gallery-description').value = data.description || '';
-                document.getElementById('gallery-order').value = data.order || 1;
-                document.getElementById('gallery-id').value = id;
-                editingGalleryId = id;
-            }
-        }
-
-        async function deleteGallery(id) {
-            if (!confirm('Bạn có chắc muốn xóa ảnh này?')) return;
-            try { await db.collection('gallery').doc(id).delete(); showNotification('Đã xóa ảnh!', 'success'); loadAdminGallery(); }
-            catch (e) { showNotification('Lỗi: ' + e.message, 'error'); }
-        }
-
-        function loadAdminGallery() {
-            db.collection('gallery').orderBy('order', 'asc').onSnapshot(snapshot => {
-                const container = document.getElementById('gallery-list');
-                if (snapshot.empty) { container.innerHTML = '<div class="empty">Chưa có ảnh nào trong gallery</div>'; return; }
-                container.innerHTML = snapshot.docs.map(doc => {
-                    const data = doc.data();
-                    return `<div class="gallery-item"><img src="${data.image}" alt="${data.title}"><div class="info"><h4>${data.title}</h4><p>${data.description || 'Không có mô tả'}</p><p class="order">Thứ tự: ${data.order}</p></div><div style="display:flex; gap:10px;"><button class="btn btn-warning btn-small" onclick="editGallery('${doc.id}')">✏️ Sửa</button><button class="btn btn-danger btn-small" onclick="deleteGallery('${doc.id}')">🗑️ Xóa</button></div></div>`;
-                }).join('');
+                document.getElementById('gallery-order').value = data.order;
+                document.getElementById('gallery-modal').style.display = 'flex';
             });
         }
 
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            setTimeout(() => notification.remove(), 3000);
+        function saveGallery() {
+            const image = document.getElementById('gallery-image').value;
+            const title = document.getElementById('gallery-title').value;
+            const description = document.getElementById('gallery-description').value;
+            const order = parseInt(document.getElementById('gallery-order').value);
+            
+            if (!image || !title) {
+                alert('Vui lòng nhập link ảnh và tiêu đề!');
+                return;
+            }
+            
+            const data = { image, title, description, order };
+            
+            if (editingGalleryId) {
+                db.collection('gallery').doc(editingGalleryId).update(data).then(() => {
+                    alert('Đã cập nhật ảnh!');
+                    closeGalleryModal();
+                });
+            } else {
+                db.collection('gallery').add(data).then(() => {
+                    alert('Đã thêm ảnh mới!');
+                    closeGalleryModal();
+                });
+            }
         }
 
-        function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
-        function formatDate(date) { if (!date) return 'N/A'; return date.toLocaleString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
-        document.addEventListener('keypress', e => { if (e.key === 'Enter' && e.target.tagName === 'INPUT') handleLogin(); });
+        function deleteGallery(id) {
+            if (confirm('Bạn có chắc muốn xóa ảnh này?')) {
+                db.collection('gallery').doc(id).delete().then(() => {
+                    alert('Đã xóa ảnh!');
+                });
+            }
+        }
+
+        // ===== BANNERS =====
+        function loadBanners() {
+            db.collection('banners').orderBy('order', 'asc').onSnapshot(snapshot => {
+                const bannersList = document.getElementById('banners-list');
+                
+                if (snapshot.empty) {
+                    bannersList.innerHTML = '<div class="loading">Chưa có banner nào</div>';
+                    return;
+                }
+                
+                let html = '';
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    html += `
+                        <div class="banner-item">
+                            <img src="${data.image}" alt="${data.title || 'Banner'}">
+                            <div class="banner-info">
+                                <h4>${data.title || 'Không có tiêu đề'} ${data.active ? '<span class="status-badge status-approved">Hiển thị</span>' : '<span class="status-badge status-pending">Ẩn</span>'}</h4>
+                                <p><strong>Thứ tự:</strong> ${data.order}</p>
+                                ${data.link ? `<p><strong>Link:</strong> <a href="${data.link}" target="_blank">${data.link}</a></p>` : ''}
+                            </div>
+                            <div class="banner-actions">
+                                <button class="action-btn edit-btn" onclick="editBanner('${doc.id}')">✏️ Sửa</button>
+                                <button class="action-btn delete-btn" onclick="deleteBanner('${doc.id}')">🗑️ Xóa</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                bannersList.innerHTML = html;
+            });
+        }
+
+        function openBannerModal() {
+            editingBannerId = null;
+            document.getElementById('banner-modal-title').textContent = 'Thêm banner mới';
+            document.getElementById('banner-image').value = '';
+            document.getElementById('banner-title').value = '';
+            document.getElementById('banner-link').value = '';
+            document.getElementById('banner-order').value = '1';
+            document.getElementById('banner-active').checked = true;
+            document.getElementById('banner-modal').style.display = 'flex';
+        }
+
+        function closeBannerModal() {
+            document.getElementById('banner-modal').style.display = 'none';
+        }
+
+        function editBanner(id) {
+            editingBannerId = id;
+            db.collection('banners').doc(id).get().then(doc => {
+                const data = doc.data();
+                document.getElementById('banner-modal-title').textContent = 'Sửa banner';
+                document.getElementById('banner-image').value = data.image;
+                document.getElementById('banner-title').value = data.title || '';
+                document.getElementById('banner-link').value = data.link || '';
+                document.getElementById('banner-order').value = data.order;
+                document.getElementById('banner-active').checked = data.active;
+                document.getElementById('banner-modal').style.display = 'flex';
+            });
+        }
+
+        function saveBanner() {
+            const image = document.getElementById('banner-image').value;
+            const title = document.getElementById('banner-title').value;
+            const link = document.getElementById('banner-link').value;
+            const order = parseInt(document.getElementById('banner-order').value);
+            const active = document.getElementById('banner-active').checked;
+            
+            if (!image) {
+                alert('Vui lòng nhập link ảnh banner!');
+                return;
+            }
+            
+            const data = { image, title, link, order, active };
+            
+            if (editingBannerId) {
+                db.collection('banners').doc(editingBannerId).update(data).then(() => {
+                    alert('Đã cập nhật banner!');
+                    closeBannerModal();
+                });
+            } else {
+                db.collection('banners').add(data).then(() => {
+                    alert('Đã thêm banner mới!');
+                    closeBannerModal();
+                });
+            }
+        }
+
+        function deleteBanner(id) {
+            if (confirm('Bạn có chắc muốn xóa banner này?')) {
+                db.collection('banners').doc(id).delete().then(() => {
+                    alert('Đã xóa banner!');
+                });
+            }
+        }
+
+        // ===== UTILS =====
+        function updateStats() {
+            // Stats are updated in loadMessages()
+        }
+
+        function formatDate(timestamp) {
+            if (!timestamp) return '';
+            const date = timestamp.toDate();
+            return date.toLocaleDateString('vi-VN') + ' ' + date.toLocaleTimeString('vi-VN');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
     </script>
 </body>
 </html>
