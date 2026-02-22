@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To @TheBlouse &lt;3</title>
-    
-    <!-- 🔥 FAVICON -->
     <link rel="icon" type="image/png" href="https://i.ibb.co/0jqsMq0Z/your-image.png">
     <link rel="apple-touch-icon" href="https://i.ibb.co/0jqsMq0Z/your-image.png">
-    
     <style>
         /* ===== LOADING BAR ===== */
         #loading-bar {
@@ -20,450 +17,203 @@
             transform: translateX(-100%);
             animation: loading 2s ease-in-out;
         }
-        @keyframes loading {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(0); }
-        }
-        .loading-complete {
-            animation: loadingComplete 0.5s ease-out forwards !important;
-        }
-        @keyframes loadingComplete {
-            0% { transform: translateX(0); opacity: 1; }
-            100% { transform: translateX(100%); opacity: 0; }
-        }
+        @keyframes loading { 0% { transform: translateX(-100%); } 100% { transform: translateX(0); } }
+        .loading-complete { animation: loadingComplete 0.5s ease-out forwards !important; }
+        @keyframes loadingComplete { 0% { transform: translateX(0); opacity: 1; } 100% { transform: translateX(100%); opacity: 0; } }
 
         /* ===== HEART FLOATING EFFECT ===== */
         .heart {
-            position: fixed; z-index: 9999;
-            pointer-events: none; opacity: 0;
+            position: fixed; z-index: 9999; pointer-events: none; opacity: 0;
             animation: floatHeart 3s linear forwards;
         }
-        @keyframes floatHeart {
-            0%, 100% { opacity: 0; }
-            10%, 90% { opacity: 1; }
-            100% { transform: translate(var(--tx), var(--ty)); }
-        }
+        @keyframes floatHeart { 0%, 100% { opacity: 0; } 10%, 90% { opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)); } }
 
         /* ===== BASE STYLES ===== */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0; padding: 0; color: #333;
-            min-height: 100vh;
+            margin: 0; padding: 0; color: #333; min-height: 100vh;
             background: linear-gradient(135deg, #e0f7fa 0%, #f5f5f5 100%);
-            background-size: 200% 200%;
-            animation: gradientBG 15s ease infinite;
+            background-size: 200% 200%; animation: gradientBG 15s ease infinite;
         }
-        @keyframes gradientBG {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
+        @keyframes gradientBG { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 
         /* ===== HEADER MENU ===== */
         .header-menu {
             display: flex; justify-content: space-between; align-items: center;
             padding: 10px 40px; margin: 20px;
-            background: rgba(255, 255, 255, 0.85);
-            border-radius: 18px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.85); border-radius: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); backdrop-filter: blur(10px);
         }
         .menu-links { display: flex; gap: 15px; }
         .menu-links a {
-            display: flex; align-items: center; gap: 8px;
-            padding: 8px 15px; border-radius: 50px;
-            background: white; color: #333;
+            display: flex; align-items: center; gap: 8px; padding: 8px 15px;
+            border-radius: 50px; background: white; color: #333;
             text-decoration: none; font-weight: 600;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s ease;
             border: 1px solid #f0f0f0; font-size: 0.95em;
         }
         .menu-links a:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-            color: white;
+            transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4); color: white;
         }
-        .social-icon {
-            width: 20px; height: 20px;
-            object-fit: contain; vertical-align: middle;
-        }
-        .menu-title {
-            font-size: 1.8em; font-weight: 700; color: #e74c3c;
-        }
+        .social-icon { width: 20px; height: 20px; object-fit: contain; vertical-align: middle; }
+        .menu-title { font-size: 1.8em; font-weight: 700; color: #e74c3c; }
 
         /* ===== POPUPS ===== */
         .popup-overlay {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: none; justify-content: center;
-            align-items: center; z-index: 10000;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5); display: none;
+            justify-content: center; align-items: center; z-index: 10000;
         }
         .popup {
             background: white; border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             width: 90%; max-width: 600px; padding: 30px;
-            position: relative; transform: scale(0.8);
-            opacity: 0; transition: all 0.4s ease;
+            position: relative; transform: scale(0.8); opacity: 0;
+            transition: all 0.4s ease;
         }
-        .popup.show {
-            display: flex; flex-direction: column;
-            transform: scale(1); opacity: 1;
-        }
-        .popup h3 {
-            text-align: center; margin: 0 0 25px;
-            color: #e74c3c; font-size: 32px !important;
-            font-weight: 700 !important;
-        }
-        .close-btn {
-            position: absolute; top: 15px; right: 15px;
-            font-size: 28px; cursor: pointer; color: #aaa;
-            transition: all 0.2s; font-weight: bold;
-        }
-        .close-btn:hover {
-            color: #e74c3c; transform: rotate(90deg);
-        }
+        .popup.show { display: flex; flex-direction: column; transform: scale(1); opacity: 1; }
+        .popup h3 { text-align: center; margin: 0 0 25px; color: #e74c3c; font-size: 32px !important; font-weight: 700 !important; }
+        .close-btn { position: absolute; top: 15px; right: 15px; font-size: 28px; cursor: pointer; color: #aaa; transition: all 0.2s; font-weight: bold; }
+        .close-btn:hover { color: #e74c3c; transform: rotate(90deg); }
         #popup-message-input {
-            width: 100%; min-height: 150px; padding: 18px;
-            border: 2px solid #ddd; border-radius: 10px;
-            margin-bottom: 15px; font-size: 20px !important;
-            line-height: 1.6 !important; font-family: inherit;
-            resize: vertical;
+            width: 100%; min-height: 150px; padding: 18px; border: 2px solid #ddd;
+            border-radius: 10px; margin-bottom: 15px; font-size: 20px !important;
+            line-height: 1.6 !important; font-family: inherit; resize: vertical;
         }
-        #popup-message-input:focus {
-            outline: none; border-color: #ff6b6b;
-            box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2);
-        }
-        #popup-message-input::placeholder {
-            font-size: 18px; color: #999;
-        }
-        
-        /* 🔥 SENDER NAME INPUT */
+        #popup-message-input:focus { outline: none; border-color: #ff6b6b; box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2); }
+        #popup-message-input::placeholder { font-size: 18px; color: #999; }
         #popup-sender-name {
-            width: 100%; padding: 14px;
-            border: 2px solid #ddd; border-radius: 10px;
-            margin-bottom: 15px; font-size: 18px;
-            font-family: inherit;
+            width: 100%; padding: 14px; border: 2px solid #ddd; border-radius: 10px;
+            margin-bottom: 15px; font-size: 18px; font-family: inherit;
         }
-        #popup-sender-name:focus {
-            outline: none; border-color: #ff6b6b;
-            box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2);
-        }
-        
-        /* 🔥 ANONYMOUS CHECKBOX */
+        #popup-sender-name:focus { outline: none; border-color: #ff6b6b; box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2); }
         .anonymous-checkbox {
-            display: flex; align-items: center; gap: 10px;
-            margin-bottom: 20px; padding: 12px;
-            background: #f9f9f9; border-radius: 8px;
+            display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+            padding: 12px; background: #f9f9f9; border-radius: 8px;
             cursor: pointer; user-select: none;
         }
-        .anonymous-checkbox input[type="checkbox"] {
-            width: 20px; height: 20px;
-            cursor: pointer;
-        }
-        .anonymous-checkbox label {
-            font-size: 16px; color: #333;
-            cursor: pointer; font-weight: 500;
-        }
-        .anonymous-checkbox:hover {
-            background: #f0f0f0;
-        }
-        
+        .anonymous-checkbox input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; }
+        .anonymous-checkbox label { font-size: 16px; color: #333; cursor: pointer; font-weight: 500; }
+        .anonymous-checkbox:hover { background: #f0f0f0; }
         #popup-send-btn {
-            width: 100%; padding: 16px;
-            background: linear-gradient(to right, #ff6b6b, #ff8e8e);
+            width: 100%; padding: 16px; background: linear-gradient(to right, #ff6b6b, #ff8e8e);
             color: white; border: none; border-radius: 10px;
             font-size: 22px !important; font-weight: 600 !important;
             cursor: pointer; transition: all 0.3s;
         }
-        #popup-send-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
-        }
-        .success-popup {
-            width: 400px; text-align: center; padding: 30px;
-        }
-        .check-icon {
-            font-size: 50px; color: #4CAF50;
-            margin-bottom: 15px; animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
+        #popup-send-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4); }
+        .success-popup { width: 400px; text-align: center; padding: 30px; }
+        .check-icon { font-size: 50px; color: #4CAF50; margin-bottom: 15px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
         /* ===== GALLERY SECTION ===== */
         .gallery-section {
-            margin: 20px;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.85);
-            border-radius: 25px;
-            box-shadow: 0 6px 25px rgba(0,0,0,0.15);
-            backdrop-filter: blur(10px);
+            margin: 20px; padding: 30px;
+            background: rgba(255, 255, 255, 0.85); border-radius: 25px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.15); backdrop-filter: blur(10px);
         }
-        .gallery-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-        .gallery-header h2 {
-            color: #e74c3c;
-            font-size: 24px;
-            font-weight: 700;
-            margin: 0;
-        }
-        .gallery-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .gallery-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .gallery-header h2 { color: #e74c3c; font-size: 24px; font-weight: 700; margin: 0; }
+        .gallery-container { position: relative; display: flex; align-items: center; gap: 10px; }
         .gallery-scroll {
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            padding: 10px 5px;
-            flex: 1;
+            display: flex; gap: 20px; overflow-x: auto; scroll-behavior: smooth;
+            scrollbar-width: none; -ms-overflow-style: none; padding: 10px 5px; flex: 1;
         }
-        .gallery-scroll::-webkit-scrollbar {
-            display: none;
-        }
+        .gallery-scroll::-webkit-scrollbar { display: none; }
         .gallery-card {
-            flex: 0 0 350px;
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            flex: 0 0 350px; background: white; border-radius: 15px;
+            overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             transition: transform 0.3s, box-shadow 0.3s;
         }
-        .gallery-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-        .gallery-card img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            display: block;
-        }
-        .card-content {
-            padding: 20px;
-        }
-        .card-content h3 {
-            font-size: 16px;
-            color: #333;
-            margin: 0 0 10px;
-            line-height: 1.4;
-            font-weight: 600;
-        }
-        .card-content p {
-            font-size: 14px;
-            color: #666;
-            margin: 5px 0;
-            line-height: 1.5;
-        }
+        .gallery-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        .gallery-card img { width: 100%; height: 220px; object-fit: cover; display: block; }
+        .card-content { padding: 20px; }
+        .card-content h3 { font-size: 16px; color: #333; margin: 0 0 10px; line-height: 1.4; font-weight: 600; }
+        .card-content p { font-size: 14px; color: #666; margin: 5px 0; line-height: 1.5; }
         .gallery-nav {
-            background: rgba(231, 76, 60, 0.9);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 18px;
-            color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: rgba(231, 76, 60, 0.9); border: none; width: 40px; height: 40px;
+            border-radius: 50%; cursor: pointer; font-size: 18px; color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: all 0.3s;
+            flex-shrink: 0; display: flex; align-items: center; justify-content: center;
         }
-        .gallery-nav:hover {
-            background: #e74c3c;
-            transform: scale(1.1);
-        }
+        .gallery-nav:hover { background: #e74c3c; transform: scale(1.1); }
 
         /* ===== NOTE BOX ===== */
         .note {
-            background: rgba(245, 245, 245, 0.8);
-            padding: 18px 25px; margin: 28px 20px;
-            border-radius: 12px; font-size: 16px;
-            line-height: 1.6;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            backdrop-filter: blur(5px);
+            background: rgba(245, 245, 245, 0.8); padding: 18px 25px; margin: 28px 20px;
+            border-radius: 12px; font-size: 16px; line-height: 1.6;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); backdrop-filter: blur(5px);
             position: relative; overflow: hidden;
         }
         .note::before {
-            content: ''; position: absolute; top: 0; left: 0;
-            width: 7px; height: 100%;
-            background: linear-gradient(to bottom, #ff6b6b, #ffd166);
-            border-radius: 12px 0 0 12px;
+            content: ''; position: absolute; top: 0; left: 0; width: 7px; height: 100%;
+            background: linear-gradient(to bottom, #ff6b6b, #ffd166); border-radius: 12px 0 0 12px;
         }
 
         /* ===== MASONRY MESSAGES ===== */
-        .messages {
-            position: relative; margin: 20px;
-            box-sizing: border-box;
-        }
+        .messages { position: relative; margin: 20px; box-sizing: border-box; }
         .message {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 22px; border-radius: 22px;
-            box-shadow: 0 5px 18px rgba(0,0,0,0.08);
-            border: 1px solid rgba(255, 107, 107, 0.1);
-            backdrop-filter: blur(5px);
-            position: absolute; top: 0; left: 0;
-            box-sizing: border-box; opacity: 0;
-            animation: fadeIn 0.5s ease forwards;
-            transition: transform 0.3s, box-shadow 0.3s;
-            overflow: hidden;
+            background: rgba(255, 255, 255, 0.85); padding: 22px; border-radius: 22px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.08); border: 1px solid rgba(255, 107, 107, 0.1);
+            backdrop-filter: blur(5px); position: absolute; top: 0; left: 0;
+            box-sizing: border-box; opacity: 0; animation: fadeIn 0.5s ease forwards;
+            transition: transform 0.3s, box-shadow 0.3s; overflow: hidden;
         }
         @keyframes fadeIn { to { opacity: 1; } }
-        .message:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            z-index: 10;
-        }
+        .message:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 8px 25px rgba(0,0,0,0.15); z-index: 10; }
         .message::before {
-            content: ''; position: absolute; top: 0; left: 0;
-            width: 8px; height: 100%;
-            background: linear-gradient(to bottom, #ff6b6b, #ffd166);
-            border-radius: 22px 0 0 22px;
+            content: ''; position: absolute; top: 0; left: 0; width: 8px; height: 100%;
+            background: linear-gradient(to bottom, #ff6b6b, #ffd166); border-radius: 22px 0 0 22px;
         }
-        .message-sender {
-            font-size: 16px; font-weight: 600;
-            color: #e74c3c; margin-bottom: 10px;
-            display: flex; align-items: center; gap: 6px;
-        }
-        .message-sender .anonymous-badge {
-            background: #ff6b6b; color: white;
-            padding: 2px 8px; border-radius: 12px;
-            font-size: 12px; font-weight: 600;
-        }
-        .message-text {
-            margin: 0 0 22px; line-height: 1.7;
-            color: #444; font-size: 18px; font-weight: 500;
-            white-space: pre-wrap; word-wrap: break-word;
-        }
-        .message-actions {
-            display: flex; gap: 22px; color: #777;
-            font-size: 16px; padding-top: 15px;
-            border-top: 1px dashed #eee; align-items: center;
-        }
-
-        /* 🔥 LIKE BUTTON STYLES */
-        .heart-icon {
-            cursor: pointer;
-            display: flex; align-items: center; gap: 6px;
-            font-weight: 500; transition: all 0.2s;
-            user-select: none;
-        }
-        .heart-icon.liked {
-            color: #ff4757;
-            animation: heartPop 0.3s ease;
-        }
-        .heart-icon:hover {
-            transform: scale(1.15);
-        }
-        .heart-icon .heart-symbol {
-            font-size: 1.1em;
-            transition: transform 0.2s;
-        }
-        .heart-icon.liked .heart-symbol {
-            transform: scale(1.2);
-        }
-        @keyframes heartPop {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.4); }
-            100% { transform: scale(1); }
-        }
+        .message-sender { font-size: 16px; font-weight: 600; color: #e74c3c; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+        .message-sender .anonymous-badge { background: #ff6b6b; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+        .message-text { margin: 0 0 22px; line-height: 1.7; color: #444; font-size: 18px; font-weight: 500; white-space: pre-wrap; word-wrap: break-word; }
+        .message-actions { display: flex; gap: 22px; color: #777; font-size: 16px; padding-top: 15px; border-top: 1px dashed #eee; align-items: center; }
+        .heart-icon { cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 500; transition: all 0.2s; user-select: none; }
+        .heart-icon.liked { color: #ff4757; animation: heartPop 0.3s ease; }
+        .heart-icon:hover { transform: scale(1.15); }
+        .heart-icon .heart-symbol { font-size: 1.1em; transition: transform 0.2s; }
+        .heart-icon.liked .heart-symbol { transform: scale(1.2); }
+        @keyframes heartPop { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
 
         /* ===== LOAD MORE BUTTON ===== */
-        .load-more-container {
-            text-align: center; margin: 30px 20px 50px; padding: 0 20px;
-        }
+        .load-more-container { text-align: center; margin: 30px 20px 50px; padding: 0 20px; }
         .load-more-btn {
-            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
-            color: white; border: none;
-            padding: 14px 40px; border-radius: 50px;
-            font-size: 16px; font-weight: 600;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e); color: white; border: none;
+            padding: 14px 40px; border-radius: 50px; font-size: 16px; font-weight: 600;
             cursor: pointer; transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
             display: inline-flex; align-items: center; gap: 10px;
         }
-        .load-more-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 25px rgba(255, 107, 107, 0.5);
-        }
-        .load-more-btn:disabled {
-            background: #ccc; cursor: not-allowed;
-            transform: none; box-shadow: none;
-        }
+        .load-more-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 25px rgba(255, 107, 107, 0.5); }
+        .load-more-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
         .load-more-btn .spinner {
-            display: none; width: 18px; height: 18px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top-color: white; border-radius: 50%;
-            animation: spin 1s linear infinite;
+            display: none; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite;
         }
         .load-more-btn.loading .spinner { display: inline-block; }
         .load-more-btn.loading .btn-text { display: none; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
         /* ===== FOOTER ===== */
-        footer {
-            text-align: center; margin: 30px 20px 50px;
-            color: #777; font-size: 1.05em;
-            padding-top: 30px;
-            border-top: 1px solid rgba(200, 200, 200, 0.3);
-        }
+        footer { text-align: center; margin: 30px 20px 50px; color: #777; font-size: 1.05em; padding-top: 30px; border-top: 1px solid rgba(200, 200, 200, 0.3); }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .header-menu {
-                flex-direction: column; gap: 15px;
-                margin: 10px; padding: 10px 20px;
-            }
-            .menu-links {
-                width: 100%; justify-content: center; flex-wrap: wrap;
-            }
+            .header-menu { flex-direction: column; gap: 15px; margin: 10px; padding: 10px 20px; }
+            .menu-links { width: 100%; justify-content: center; flex-wrap: wrap; }
             .menu-title { font-size: 1.5em; }
             .note, footer { margin: 15px 10px; }
-            
-            .gallery-section {
-                margin: 15px 10px;
-                padding: 20px;
-            }
-            .gallery-header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            .gallery-header h2 {
-                font-size: 20px;
-            }
-            .gallery-card {
-                flex: 0 0 280px;
-            }
-            .gallery-nav {
-                width: 35px;
-                height: 35px;
-                font-size: 16px;
-            }
-            
+            .gallery-section { margin: 15px 10px; padding: 20px; }
+            .gallery-header { flex-direction: column; gap: 15px; text-align: center; }
+            .gallery-header h2 { font-size: 20px; }
+            .gallery-card { flex: 0 0 280px; }
+            .gallery-nav { width: 35px; height: 35px; font-size: 16px; }
             .messages { margin: 10px; }
-            .message {
-                position: relative !important;
-                width: 100% !important;
-                margin-bottom: 20px;
-                left: 0 !important; top: 0 !important;
-            }
+            .message { position: relative !important; width: 100% !important; margin-bottom: 20px; left: 0 !important; top: 0 !important; }
             .social-icon { width: 18px; height: 18px; }
-            #popup-message-input {
-                min-height: 120px; font-size: 18px !important;
-            }
+            #popup-message-input { min-height: 120px; font-size: 18px !important; }
             #popup-sender-name { font-size: 16px !important; }
             .popup h3 { font-size: 26px !important; }
             #popup-send-btn { font-size: 20px !important; }
@@ -472,15 +222,12 @@
     </style>
 </head>
 <body>
-    <!-- 🔥 LOADING BAR -->
     <div id="loading-bar"></div>
 
     <!-- Header Menu -->
     <div class="header-menu">
         <div class="menu-links">
-            <a href="#" id="open-message-popup">
-                <span>+</span> Gửi lời nhắn
-            </a>
+            <a href="#" id="open-message-popup"><span>+</span> Gửi lời nhắn</a>
             <a href="https://www.facebook.com/theblouse.prj" target="_blank">
                 <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" class="social-icon"> FB
             </a>
@@ -505,68 +252,24 @@
         <div id="message-popup" class="popup">
             <span class="close-btn">&times;</span>
             <h3>Gửi lời nhắn yêu thương</h3>
-            
-            <!-- 🔥 SENDER NAME INPUT -->
             <input type="text" id="popup-sender-name" placeholder="Tên của bạn (ví dụ: Minh Anh)">
-            
-            <!-- 🔥 ANONYMOUS CHECKBOX -->
             <label class="anonymous-checkbox">
                 <input type="checkbox" id="anonymous-checkbox">
                 <span>👤 Ẩn danh (không hiển thị tên công khai)</span>
             </label>
-            
-            <textarea id="popup-message-input" placeholder="Viết lời nhắn yêu thương của bạn... (Ví dụ: Chúc em mạnh khỏe và phải giữ mãi nụ cười thật tươi nhé. Love you so much ❤)"></textarea>
+            <textarea id="popup-message-input" placeholder="Viết lời nhắn yêu thương của bạn..."></textarea>
             <button id="popup-send-btn">Gửi lời nhắn</button>
         </div>
     </div>
 
-    <!-- 🔥 GALLERY SECTION - Thay thế header cũ -->
+    <!-- Gallery Section -->
     <section class="gallery-section">
-        <div class="gallery-header">
-            <h2>🔥 Những hoạt động tại Viện Huyết học</h2>
-        </div>
-        
+        <div class="gallery-header"><h2>🔥 Những hoạt động tại Viện Huyết học</h2></div>
         <div class="gallery-container">
             <button class="gallery-nav prev" onclick="scrollGallery(-1)">❮</button>
-            
             <div class="gallery-scroll" id="gallery-scroll">
-                <!-- Card 1 -->
-                <div class="gallery-card">
-                    <img src="gallery/activity-1.jpg" alt="Hoạt động 1" loading="lazy">
-                    <div class="card-content">
-                        <h3>Chương trình "Giọt hồng yêu thương" - Tháng 1/2026</h3>
-                        <p>Các tình nguyện viên cùng giao lưu, tặng quà và động viên tinh thần các em nhỏ</p>
-                    </div>
-                </div>
-                
-                <!-- Card 2 -->
-                <div class="gallery-card">
-                    <img src="gallery/activity-2.jpg" alt="Hoạt động 2" loading="lazy">
-                    <div class="card-content">
-                        <h3>Hoạt động vui chơi Trung thu - Tháng 9/2025</h3>
-                        <p>Tổ chức đêm hội trăng rằm với nhiều tiết mục văn nghệ và trò chơi thú vị</p>
-                    </div>
-                </div>
-                
-                <!-- Card 3 -->
-                <div class="gallery-card">
-                    <img src="gallery/activity-3.jpg" alt="Hoạt động 3" loading="lazy">
-                    <div class="card-content">
-                        <h3>Chương trình "Tết yêu thương" - Tết 2026</h3>
-                        <p>Mang không khí Tết đến với các em nhỏ đang điều trị tại viện</p>
-                    </div>
-                </div>
-                
-                <!-- Card 4 -->
-                <div class="gallery-card">
-                    <img src="gallery/activity-4.jpg" alt="Hoạt động 4" loading="lazy">
-                    <div class="card-content">
-                        <h3>Hoạt động đọc truyện - Hàng tuần</h3>
-                        <p>Các tình nguyện viên đọc truyện, kể chuyện cho các em nghe</p>
-                    </div>
-                </div>
+                <div class="loading">Đang tải gallery...</div>
             </div>
-            
             <button class="gallery-nav next" onclick="scrollGallery(1)">❯</button>
         </div>
     </section>
@@ -578,12 +281,8 @@
 
     <div class="messages" id="messages-container"></div>
 
-    <!-- 🔥 LOAD MORE BUTTON -->
     <div class="load-more-container">
-        <button id="load-more-btn" class="load-more-btn">
-            <span class="btn-text">Tải thêm...</span>
-            <span class="spinner"></span>
-        </button>
+        <button id="load-more-btn" class="load-more-btn"><span class="btn-text">Tải thêm...</span><span class="spinner"></span></button>
     </div>
 
     <footer>Trang web được tạo bằng HTML/CSS/JavaScript với Firebase</footer>
@@ -593,7 +292,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <script>
-        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyCKysT8eZ3LJqyi7vCjoqQGIpjgTyt7HYg",
             authDomain: "loiyeuthuong-5bfab.firebaseapp.com",
@@ -605,13 +303,9 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // 🔥 PAGINATION CONFIG
         const MESSAGES_PER_PAGE = 20;
-        let allMessages = [];
-        let displayedCount = 0;
-        let isLoading = false;
+        let allMessages = [], displayedCount = 0, isLoading = false;
 
-        // 🔥 LOADING BAR CONTROL
         window.addEventListener('load', () => {
             const loadingBar = document.getElementById('loading-bar');
             setTimeout(() => {
@@ -620,11 +314,9 @@
             }, 500);
         });
 
-        // Heart Animation
         document.addEventListener('DOMContentLoaded', () => {
-            for (let i = 0; i < 20; i++) {
-                setTimeout(createHeart, i * 300);
-            }
+            for (let i = 0; i < 20; i++) setTimeout(createHeart, i * 300);
+            loadGallery();
         });
 
         function createHeart() {
@@ -646,22 +338,16 @@
             setTimeout(() => heart.remove(), 3000);
         }
 
-        // Send Message
         document.getElementById('popup-send-btn').addEventListener('click', async () => {
             const message = document.getElementById('popup-message-input').value.trim();
             const senderName = document.getElementById('popup-sender-name').value.trim();
             const isAnonymous = document.getElementById('anonymous-checkbox').checked;
-            
             if (!message) return alert('Vui lòng nhập lời nhắn!');
             if (!senderName && !isAnonymous) return alert('Vui lòng nhập tên hoặc chọn ẩn danh!');
-            
             try {
                 await db.collection('messages').add({
-                    text: message,
-                    senderName: isAnonymous ? 'Ẩn danh' : senderName,
-                    isAnonymous: isAnonymous,
-                    likes: 0,
-                    status: 'pending',
+                    text: message, senderName: isAnonymous ? 'Ẩn danh' : senderName,
+                    isAnonymous, likes: 0, status: 'pending',
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 document.getElementById('popup-message-input').value = '';
@@ -669,16 +355,13 @@
                 document.getElementById('anonymous-checkbox').checked = false;
                 closePopup('message-popup');
                 showSuccessPopup();
-            } catch (e) {
-                alert('Lỗi: ' + e.message);
-            }
+            } catch (e) { alert('Lỗi: ' + e.message); }
         });
 
         function showSuccessPopup() {
             const overlay = document.getElementById('success-popup-overlay');
             const popup = document.getElementById('success-popup');
-            overlay.style.display = 'flex';
-            popup.classList.add('show');
+            overlay.style.display = 'flex'; popup.classList.add('show');
             setTimeout(() => {
                 popup.classList.remove('show');
                 setTimeout(() => overlay.style.display = 'none', 400);
@@ -690,7 +373,6 @@
             setTimeout(() => document.getElementById(id + '-overlay').style.display = 'none', 400);
         }
 
-        // Popup Controls
         document.getElementById('open-message-popup').addEventListener('click', e => {
             e.preventDefault();
             document.getElementById('message-popup-overlay').style.display = 'flex';
@@ -701,28 +383,18 @@
             if (e.target === e.currentTarget) closePopup('message-popup');
         });
 
-        // 🔥 ADAPTIVE MASONRY LAYOUT
         function setupMasonry() {
             const container = document.getElementById('messages-container');
             const messages = Array.from(container.children);
-            if (window.innerWidth <= 768) {
-                container.style.height = 'auto';
-                return;
-            }
+            if (window.innerWidth <= 768) { container.style.height = 'auto'; return; }
             const gap = 25;
             const containerWidth = container.offsetWidth;
             const minCardWidth = 320;
             const numColumns = Math.max(1, Math.min(Math.floor(containerWidth / minCardWidth), 5));
             const cardWidth = (containerWidth - gap * (numColumns - 1)) / numColumns;
-            
-            messages.forEach(msg => {
-                msg.style.width = `${cardWidth}px`;
-                msg.style.position = 'absolute';
-            });
-            
+            messages.forEach(msg => { msg.style.width = `${cardWidth}px`; msg.style.position = 'absolute'; });
             const columnHeights = new Array(numColumns).fill(0);
             const columnLefts = Array.from({length: numColumns}, (_, i) => i * (cardWidth + gap));
-            
             messages.forEach((msg, index) => {
                 const shortestCol = columnHeights.indexOf(Math.min(...columnHeights));
                 msg.style.left = `${columnLefts[shortestCol]}px`;
@@ -733,181 +405,112 @@
             container.style.height = `${Math.max(...columnHeights)}px`;
         }
 
-        // 🔥 RENDER MESSAGES (PAGINATED)
         function renderMessages(startIndex, endIndex) {
             const container = document.getElementById('messages-container');
             const messagesToRender = allMessages.slice(startIndex, endIndex);
-            
-            messagesToRender.forEach((msg, index) => {
+            messagesToRender.forEach(msg => {
                 const el = document.createElement('div');
                 el.className = 'message';
-                
-                // Check if user already liked this message
                 const likedMessages = JSON.parse(localStorage.getItem('likedMessages') || '[]');
                 const isLiked = likedMessages.includes(msg.id);
-                
-                // 🔥 Display sender name or "Ẩn danh"
-                const senderDisplay = msg.isAnonymous ? 
-                    '👤 Ẩn danh' : 
-                    `✍️ ${escapeHtml(msg.senderName || 'Ẩn danh')}`;
-                
-                el.innerHTML = `
-                    <div class="message-sender">${senderDisplay}</div>
-                    <div class="message-text">${escapeHtml(msg.text)}</div>
-                    <div class="message-actions">
-                        <span class="heart-icon ${isLiked ? 'liked' : ''}" data-id="${msg.id}">
-                            <span class="heart-symbol">${isLiked ? '❤' : '🤍'}</span>
-                            <span class="like-count">${msg.likes || 0}</span>
-                        </span>
-                        <span>0 Bình luận</span>
-                    </div>`;
+                const senderDisplay = msg.isAnonymous ? '👤 Ẩn danh' : `✍️ ${escapeHtml(msg.senderName || 'Ẩn danh')}`;
+                el.innerHTML = `<div class="message-sender">${senderDisplay}</div><div class="message-text">${escapeHtml(msg.text)}</div><div class="message-actions"><span class="heart-icon ${isLiked ? 'liked' : ''}" data-id="${msg.id}"><span class="heart-symbol">${isLiked ? '❤' : '🤍'}</span><span class="like-count">${msg.likes || 0}</span></span><span>0 Bình luận</span></div>`;
                 container.appendChild(el);
             });
-            
             setTimeout(setupMasonry, 100);
         }
 
-        // 🔥 UPDATE LOAD MORE BUTTON STATE
         function updateLoadMoreButton() {
             const btn = document.getElementById('load-more-btn');
-            if (displayedCount >= allMessages.length) {
-                btn.style.display = 'none';
-            } else {
-                btn.style.display = 'inline-flex';
-                btn.disabled = isLoading;
-            }
+            if (displayedCount >= allMessages.length) { btn.style.display = 'none'; }
+            else { btn.style.display = 'inline-flex'; btn.disabled = isLoading; }
         }
 
-        // 🔥 LOAD MORE MESSAGES
         function loadMoreMessages() {
             if (isLoading || displayedCount >= allMessages.length) return;
-            
             isLoading = true;
             const btn = document.getElementById('load-more-btn');
-            btn.classList.add('loading');
-            btn.disabled = true;
-            
+            btn.classList.add('loading'); btn.disabled = true;
             setTimeout(() => {
                 const startIndex = displayedCount;
                 const endIndex = Math.min(startIndex + MESSAGES_PER_PAGE, allMessages.length);
-                
                 renderMessages(startIndex, endIndex);
                 displayedCount = endIndex;
-                
                 isLoading = false;
                 btn.classList.remove('loading');
                 updateLoadMoreButton();
             }, 300);
         }
 
-        // 🔥 LIKE/UNLIKE HANDLER
         async function toggleLike(messageId, heartIcon) {
             const likedMessages = JSON.parse(localStorage.getItem('likedMessages') || '[]');
             const isLiked = likedMessages.includes(messageId);
             const countSpan = heartIcon.querySelector('.like-count');
             const symbolSpan = heartIcon.querySelector('.heart-symbol');
             let currentCount = parseInt(countSpan.textContent) || 0;
-            
             if (isLiked) {
-                // UNLIKE
                 const index = likedMessages.indexOf(messageId);
                 if (index > -1) likedMessages.splice(index, 1);
                 localStorage.setItem('likedMessages', JSON.stringify(likedMessages));
-                
-                heartIcon.classList.remove('liked');
-                symbolSpan.textContent = '🤍';
+                heartIcon.classList.remove('liked'); symbolSpan.textContent = '🤍';
                 countSpan.textContent = Math.max(0, currentCount - 1);
-                
-                try {
-                    await db.collection('messages').doc(messageId).update({
-                        likes: firebase.firestore.FieldValue.increment(-1)
-                    });
-                } catch (e) {
-                    console.error('Unlike error:', e);
-                    countSpan.textContent = currentCount;
-                }
+                try { await db.collection('messages').doc(messageId).update({ likes: firebase.firestore.FieldValue.increment(-1) }); }
+                catch (e) { console.error('Unlike error:', e); countSpan.textContent = currentCount; }
             } else {
-                // LIKE
                 likedMessages.push(messageId);
                 localStorage.setItem('likedMessages', JSON.stringify(likedMessages));
-                
-                heartIcon.classList.add('liked');
-                symbolSpan.textContent = '❤';
+                heartIcon.classList.add('liked'); symbolSpan.textContent = '❤';
                 countSpan.textContent = currentCount + 1;
-                
-                try {
-                    await db.collection('messages').doc(messageId).update({
-                        likes: firebase.firestore.FieldValue.increment(1)
-                    });
-                } catch (e) {
-                    console.error('Like error:', e);
-                    heartIcon.classList.remove('liked');
-                    symbolSpan.textContent = '🤍';
-                    countSpan.textContent = currentCount;
-                }
+                try { await db.collection('messages').doc(messageId).update({ likes: firebase.firestore.FieldValue.increment(1) }); }
+                catch (e) { console.error('Like error:', e); heartIcon.classList.remove('liked'); symbolSpan.textContent = '🤍'; countSpan.textContent = currentCount; }
             }
         }
 
-        // Load Messages from Firebase
         function loadApprovedMessages() {
-            db.collection('messages')
-                .where('status', '==', 'approved')
-                .orderBy('timestamp', 'desc')
-                .onSnapshot(snapshot => {
-                    allMessages = snapshot.docs.map(doc => ({
-                        id: doc.id,
-                        ...doc.data()
-                    }));
-                    
-                    const container = document.getElementById('messages-container');
-                    container.innerHTML = '';
-                    displayedCount = 0;
-                    
-                    if (allMessages.length > 0) {
-                        renderMessages(0, Math.min(MESSAGES_PER_PAGE, allMessages.length));
-                        displayedCount = Math.min(MESSAGES_PER_PAGE, allMessages.length);
-                    }
-                    
-                    updateLoadMoreButton();
-                });
-        }
-
-        // Event delegation for like buttons
-        document.addEventListener('click', e => {
-            const heartIcon = e.target.closest('.heart-icon');
-            if (heartIcon) {
-                e.stopPropagation();
-                toggleLike(heartIcon.dataset.id, heartIcon);
-            }
-        });
-
-        // Load More Button Click Handler
-        document.getElementById('load-more-btn').addEventListener('click', loadMoreMessages);
-
-        // 🔥 GALLERY SCROLL FUNCTION
-        function scrollGallery(direction) {
-            const scrollContainer = document.getElementById('gallery-scroll');
-            const scrollAmount = 370; // Width of card + gap
-            scrollContainer.scrollBy({
-                left: direction * scrollAmount,
-                behavior: 'smooth'
+            db.collection('messages').where('status', '==', 'approved').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+                allMessages = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                const container = document.getElementById('messages-container');
+                container.innerHTML = ''; displayedCount = 0;
+                if (allMessages.length > 0) {
+                    renderMessages(0, Math.min(MESSAGES_PER_PAGE, allMessages.length));
+                    displayedCount = Math.min(MESSAGES_PER_PAGE, allMessages.length);
+                }
+                updateLoadMoreButton();
             });
         }
 
-        // Init & Resize
-        loadApprovedMessages();
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(setupMasonry, 250);
+        document.addEventListener('click', e => {
+            const heartIcon = e.target.closest('.heart-icon');
+            if (heartIcon) { e.stopPropagation(); toggleLike(heartIcon.dataset.id, heartIcon); }
         });
 
-        // 🔥 ESCAPE HTML
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+        document.getElementById('load-more-btn').addEventListener('click', loadMoreMessages);
+
+        function loadGallery() {
+            db.collection('gallery').orderBy('order', 'asc').onSnapshot(snapshot => {
+                const galleryScroll = document.getElementById('gallery-scroll');
+                galleryScroll.innerHTML = '';
+                if (snapshot.empty) { galleryScroll.innerHTML = '<p style="color:#999;text-align:center;width:100%;">Chưa có hoạt động nào</p>'; return; }
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const card = document.createElement('div');
+                    card.className = 'gallery-card';
+                    card.innerHTML = `<img src="${data.image}" alt="${data.title}" loading="lazy"><div class="card-content"><h3>${data.title}</h3><p>${data.description || ''}</p></div>`;
+                    galleryScroll.appendChild(card);
+                });
+            });
         }
+
+        function scrollGallery(direction) {
+            const scrollContainer = document.getElementById('gallery-scroll');
+            scrollContainer.scrollBy({ left: direction * 370, behavior: 'smooth' });
+        }
+
+        loadApprovedMessages();
+        let resizeTimer;
+        window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(setupMasonry, 250); });
+
+        function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
     </script>
 </body>
 </html>
