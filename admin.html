@@ -59,6 +59,7 @@
         .btn-danger { background: #e74c3c; color: white; }
         .btn-success { background: #4CAF50; color: white; }
         .btn-warning { background: #ff9800; color: white; }
+        .btn-info { background: #2196F3; color: white; }
         .btn-small { padding: 8px 16px; font-size: 14px; width: auto; }
         
         /* ===== DASHBOARD ===== */
@@ -151,8 +152,39 @@
             font-size: 13px;
             color: #666;
             margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        .message-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .message-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        
+        /* 🔥 EDIT LIKE COUNT STYLES */
+        .edit-like-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+        .edit-like-input {
+            width: 80px;
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .edit-like-input:focus {
+            outline: none;
+            border-color: #e74c3c;
+        }
+        .current-likes {
+            font-weight: 600;
+            color: #e91e63;
+            min-width: 60px;
+        }
         
         .loading { text-align: center; padding: 40px; color: #666; }
         .empty { text-align: center; padding: 40px; color: #999; font-style: italic; }
@@ -171,6 +203,7 @@
         }
         .notification.success { background: #4CAF50; }
         .notification.error { background: #e74c3c; }
+        .notification.info { background: #2196F3; }
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
@@ -364,6 +397,26 @@
             document.getElementById('approved-count').textContent = approved;
         }
 
+        // 🔥 UPDATE LIKE COUNT
+        async function updateLikeCount(messageId, newCount) {
+            const count = parseInt(newCount);
+            
+            if (isNaN(count) || count < 0) {
+                showNotification('Số tim không hợp lệ!', 'error');
+                return;
+            }
+            
+            try {
+                await db.collection('messages').doc(messageId).update({ 
+                    likes: count 
+                });
+                showNotification(`Đã cập nhật số tim thành ${count}!`, 'success');
+            } catch (e) {
+                console.error('Update like error:', e);
+                showNotification('Lỗi cập nhật: ' + e.message, 'error');
+            }
+        }
+
         // ⏳ RENDER PENDING MESSAGES
         function renderPendingMessages() {
             const container = document.getElementById('pending-list');
@@ -384,6 +437,18 @@
                     <div class="message-actions">
                         <button class="btn btn-success btn-small" onclick="approveMessage('${msg.id}')">✅ Duyệt</button>
                         <button class="btn btn-danger btn-small" onclick="rejectMessage('${msg.id}')">❌ Từ chối</button>
+                        <div class="edit-like-container">
+                            <span class="current-likes">❤️ ${msg.likes || 0}</span>
+                            <input type="number" 
+                                   class="edit-like-input" 
+                                   id="edit-like-${msg.id}" 
+                                   placeholder="Số tim mới"
+                                   min="0">
+                            <button class="btn btn-info btn-small" 
+                                    onclick="updateLikeCount('${msg.id}', document.getElementById('edit-like-${msg.id}').value)">
+                                💾 Cập nhật
+                            </button>
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -409,6 +474,18 @@
                     <div class="message-actions">
                         <button class="btn btn-warning btn-small" onclick="unapproveMessage('${msg.id}')">↩️ Hủy duyệt</button>
                         <button class="btn btn-danger btn-small" onclick="deleteMessage('${msg.id}')">🗑️ Xóa</button>
+                        <div class="edit-like-container">
+                            <span class="current-likes">❤️ ${msg.likes || 0}</span>
+                            <input type="number" 
+                                   class="edit-like-input" 
+                                   id="edit-like-approved-${msg.id}" 
+                                   placeholder="Số tim mới"
+                                   min="0">
+                            <button class="btn btn-info btn-small" 
+                                    onclick="updateLikeCount('${msg.id}', document.getElementById('edit-like-approved-${msg.id}').value)">
+                                💾 Cập nhật
+                            </button>
+                        </div>
                     </div>
                 </div>
             `).join('');
