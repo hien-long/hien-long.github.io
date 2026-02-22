@@ -3,20 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To @TheBlouse &lt;3</title>  <!-- 🔥 ĐỔI TIÊU ĐỀ -->
+    <title>To @TheBlouse &lt;3</title>
     
-    <!-- 🔥 FAVICON - Thay link trực tiếp của ảnh vào đây -->
-    <link rel="icon" type="image/png" href="https://i.ibb.co/LzSNtST6/458203415-122161663568100982-4271021684596896114-n.jpg">
-    <link rel="apple-touch-icon" href="https://i.ibb.co/LzSNtST6/458203415-122161663568100982-4271021684596896114-n.jpg">
+    <!-- 🔥 FAVICON -->
+    <link rel="icon" type="image/png" href="https://i.ibb.co/0jqsMq0Z/your-image.png">
+    <link rel="apple-touch-icon" href="https://i.ibb.co/0jqsMq0Z/your-image.png">
     
     <style>
         /* ===== LOADING BAR ===== */
         #loading-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 4px;
             background: linear-gradient(90deg, #ff6b6b, #ffd166, #4CAF50);
             background-size: 200% 100%;
             z-index: 99999;
@@ -37,10 +34,8 @@
 
         /* ===== HEART FLOATING EFFECT ===== */
         .heart {
-            position: fixed;
-            z-index: 9999;
-            pointer-events: none;
-            opacity: 0;
+            position: fixed; z-index: 9999;
+            pointer-events: none; opacity: 0;
             animation: floatHeart 3s linear forwards;
         }
         @keyframes floatHeart {
@@ -52,9 +47,7 @@
         /* ===== BASE STYLES ===== */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: #333;
+            margin: 0; padding: 0; color: #333;
             min-height: 100vh;
             background: linear-gradient(135deg, #e0f7fa 0%, #f5f5f5 100%);
             background-size: 200% 200%;
@@ -67,34 +60,22 @@
 
         /* ===== HEADER MENU ===== */
         .header-menu {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 40px;
-            margin: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 40px; margin: 20px;
             background: rgba(255, 255, 255, 0.85);
             border-radius: 18px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             backdrop-filter: blur(10px);
         }
-        .menu-links {
-            display: flex;
-            gap: 15px;
-        }
+        .menu-links { display: flex; gap: 15px; }
         .menu-links a {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 15px;
-            border-radius: 50px;
-            background: white;
-            color: #333;
-            text-decoration: none;
-            font-weight: 600;
+            display: flex; align-items: center; gap: 8px;
+            padding: 8px 15px; border-radius: 50px;
+            background: white; color: #333;
+            text-decoration: none; font-weight: 600;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
-            border: 1px solid #f0f0f0;
-            font-size: 0.95em;
+            border: 1px solid #f0f0f0; font-size: 0.95em;
         }
         .menu-links a:hover {
             transform: translateY(-2px);
@@ -103,113 +84,76 @@
             color: white;
         }
         .social-icon {
-            width: 20px;
-            height: 20px;
-            object-fit: contain;
-            vertical-align: middle;
+            width: 20px; height: 20px;
+            object-fit: contain; vertical-align: middle;
         }
         .menu-title {
-            font-size: 1.8em;
-            font-weight: 700;
-            color: #e74c3c;
+            font-size: 1.8em; font-weight: 700; color: #e74c3c;
         }
 
         /* ===== POPUPS ===== */
         .popup-overlay {
-            position: fixed;
-            top: 0; left: 0;
+            position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
+            display: none; justify-content: center;
+            align-items: center; z-index: 10000;
         }
         .popup {
-            background: white;
-            border-radius: 10px;
+            background: white; border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            width: 90%;
-            max-width: 600px;
-            padding: 30px;
-            position: relative;
-            transform: scale(0.8);
-            opacity: 0;
-            transition: all 0.4s ease;
+            width: 90%; max-width: 600px; padding: 30px;
+            position: relative; transform: scale(0.8);
+            opacity: 0; transition: all 0.4s ease;
         }
         .popup.show {
-            display: flex;
-            flex-direction: column;
-            transform: scale(1);
-            opacity: 1;
+            display: flex; flex-direction: column;
+            transform: scale(1); opacity: 1;
         }
         .popup h3 {
-            text-align: center;
-            margin: 0 0 25px;
-            color: #e74c3c;
-            font-size: 32px !important;
+            text-align: center; margin: 0 0 25px;
+            color: #e74c3c; font-size: 32px !important;
             font-weight: 700 !important;
         }
         .close-btn {
-            position: absolute;
-            top: 15px; right: 15px;
-            font-size: 28px;
-            cursor: pointer;
-            color: #aaa;
-            transition: all 0.2s;
-            font-weight: bold;
+            position: absolute; top: 15px; right: 15px;
+            font-size: 28px; cursor: pointer; color: #aaa;
+            transition: all 0.2s; font-weight: bold;
         }
         .close-btn:hover {
-            color: #e74c3c;
-            transform: rotate(90deg);
+            color: #e74c3c; transform: rotate(90deg);
         }
         #popup-message-input {
-            width: 100%;
-            min-height: 150px;
-            padding: 18px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-size: 20px !important;
-            line-height: 1.6 !important;
-            font-family: inherit;
+            width: 100%; min-height: 150px; padding: 18px;
+            border: 2px solid #ddd; border-radius: 10px;
+            margin-bottom: 20px; font-size: 20px !important;
+            line-height: 1.6 !important; font-family: inherit;
             resize: vertical;
         }
         #popup-message-input:focus {
-            outline: none;
-            border-color: #ff6b6b;
+            outline: none; border-color: #ff6b6b;
             box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2);
         }
         #popup-message-input::placeholder {
-            font-size: 18px;
-            color: #999;
+            font-size: 18px; color: #999;
         }
         #popup-send-btn {
-            width: 100%;
-            padding: 16px;
+            width: 100%; padding: 16px;
             background: linear-gradient(to right, #ff6b6b, #ff8e8e);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 22px !important;
-            font-weight: 600 !important;
-            cursor: pointer;
-            transition: all 0.3s;
+            color: white; border: none; border-radius: 10px;
+            font-size: 22px !important; font-weight: 600 !important;
+            cursor: pointer; transition: all 0.3s;
         }
         #popup-send-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
         }
         .success-popup {
-            width: 400px;
-            text-align: center;
-            padding: 30px;
+            width: 400px; text-align: center; padding: 30px;
         }
         .check-icon {
-            font-size: 50px;
-            color: #4CAF50;
-            margin-bottom: 15px;
-            animation: pulse 1.5s infinite;
+            font-size: 50px; color: #4CAF50;
+            margin-bottom: 15px; animation: pulse 1.5s infinite;
         }
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
@@ -218,45 +162,33 @@
 
         /* ===== MAIN CONTENT ===== */
         header {
-            text-align: center;
-            margin: 20px;
-            padding: 30px;
+            text-align: center; margin: 20px; padding: 30px;
             background: rgba(255, 255, 255, 0.85);
             border-radius: 25px;
             box-shadow: 0 6px 25px rgba(0,0,0,0.15);
             backdrop-filter: blur(10px);
         }
         h1 {
-            color: #e74c3c;
-            font-size: 2.8em;
-            margin: 0 0 15px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            color: #e74c3c; font-size: 2.8em;
+            margin: 0 0 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .description {
-            font-size: 1.3em;
-            color: #555;
-            max-width: 900px;
-            margin: 0 auto;
-            line-height: 1.7;
+            font-size: 1.3em; color: #555;
+            max-width: 900px; margin: 0 auto; line-height: 1.7;
         }
 
         /* ===== NOTE BOX ===== */
         .note {
             background: rgba(245, 245, 245, 0.8);
-            padding: 18px 25px;
-            margin: 28px 20px;
-            border-radius: 12px;
-            font-size: 16px;
+            padding: 18px 25px; margin: 28px 20px;
+            border-radius: 12px; font-size: 16px;
             line-height: 1.6;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             backdrop-filter: blur(5px);
-            position: relative;
-            overflow: hidden;
+            position: relative; overflow: hidden;
         }
         .note::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
+            content: ''; position: absolute; top: 0; left: 0;
             width: 7px; height: 100%;
             background: linear-gradient(to bottom, #ff6b6b, #ffd166);
             border-radius: 12px 0 0 12px;
@@ -264,21 +196,17 @@
 
         /* ===== MASONRY MESSAGES ===== */
         .messages {
-            position: relative;
-            margin: 20px;
+            position: relative; margin: 20px;
             box-sizing: border-box;
         }
         .message {
             background: rgba(255, 255, 255, 0.85);
-            padding: 22px;
-            border-radius: 22px;
+            padding: 22px; border-radius: 22px;
             box-shadow: 0 5px 18px rgba(0,0,0,0.08);
             border: 1px solid rgba(255, 107, 107, 0.1);
             backdrop-filter: blur(5px);
-            position: absolute;
-            top: 0; left: 0;
-            box-sizing: border-box;
-            opacity: 0;
+            position: absolute; top: 0; left: 0;
+            box-sizing: border-box; opacity: 0;
             animation: fadeIn 0.5s ease forwards;
             transition: transform 0.3s, box-shadow 0.3s;
             overflow: hidden;
@@ -290,50 +218,84 @@
             z-index: 10;
         }
         .message::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
+            content: ''; position: absolute; top: 0; left: 0;
             width: 8px; height: 100%;
             background: linear-gradient(to bottom, #ff6b6b, #ffd166);
             border-radius: 22px 0 0 22px;
         }
         .message-text {
-            margin: 0 0 22px;
-            line-height: 1.7;
-            color: #444;
-            font-size: 18px;
-            font-weight: 500;
-            white-space: pre-wrap;
-            word-wrap: break-word;
+            margin: 0 0 22px; line-height: 1.7;
+            color: #444; font-size: 18px; font-weight: 500;
+            white-space: pre-wrap; word-wrap: break-word;
         }
         .message-actions {
-            display: flex;
-            gap: 22px;
-            color: #777;
-            font-size: 16px;
-            padding-top: 15px;
-            border-top: 1px dashed #eee;
-            align-items: center;
+            display: flex; gap: 22px; color: #777;
+            font-size: 16px; padding-top: 15px;
+            border-top: 1px dashed #eee; align-items: center;
         }
+
+        /* 🔥 LIKE BUTTON STYLES ===== */
         .heart-icon {
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-weight: 500;
-            transition: all 0.2s;
+            display: flex; align-items: center; gap: 6px;
+            font-weight: 500; transition: all 0.2s;
+            user-select: none;
+        }
+        .heart-icon.liked {
+            color: #ff4757;
+            animation: heartPop 0.3s ease;
         }
         .heart-icon:hover {
-            color: #ff6b6b;
             transform: scale(1.15);
         }
+        .heart-icon .heart-symbol {
+            font-size: 1.1em;
+            transition: transform 0.2s;
+        }
+        .heart-icon.liked .heart-symbol {
+            transform: scale(1.2);
+        }
+        @keyframes heartPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1); }
+        }
+
+        /* ===== LOAD MORE BUTTON ===== */
+        .load-more-container {
+            text-align: center; margin: 30px 20px 50px; padding: 0 20px;
+        }
+        .load-more-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            color: white; border: none;
+            padding: 14px 40px; border-radius: 50px;
+            font-size: 16px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+        .load-more-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(255, 107, 107, 0.5);
+        }
+        .load-more-btn:disabled {
+            background: #ccc; cursor: not-allowed;
+            transform: none; box-shadow: none;
+        }
+        .load-more-btn .spinner {
+            display: none; width: 18px; height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white; border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .load-more-btn.loading .spinner { display: inline-block; }
+        .load-more-btn.loading .btn-text { display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         /* ===== FOOTER ===== */
         footer {
-            text-align: center;
-            margin: 30px 20px 50px;
-            color: #777;
-            font-size: 1.05em;
+            text-align: center; margin: 30px 20px 50px;
+            color: #777; font-size: 1.05em;
             padding-top: 30px;
             border-top: 1px solid rgba(200, 200, 200, 0.3);
         }
@@ -341,15 +303,11 @@
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .header-menu {
-                flex-direction: column;
-                gap: 15px;
-                margin: 10px;
-                padding: 10px 20px;
+                flex-direction: column; gap: 15px;
+                margin: 10px; padding: 10px 20px;
             }
             .menu-links {
-                width: 100%;
-                justify-content: center;
-                flex-wrap: wrap;
+                width: 100%; justify-content: center; flex-wrap: wrap;
             }
             .menu-title { font-size: 1.5em; }
             header, .note, footer { margin: 15px 10px; }
@@ -360,13 +318,15 @@
                 position: relative !important;
                 width: 100% !important;
                 margin-bottom: 20px;
-                left: 0 !important;
-                top: 0 !important;
+                left: 0 !important; top: 0 !important;
             }
             .social-icon { width: 18px; height: 18px; }
-            #popup-message-input { min-height: 120px; font-size: 18px !important; }
+            #popup-message-input {
+                min-height: 120px; font-size: 18px !important;
+            }
             .popup h3 { font-size: 26px !important; }
             #popup-send-btn { font-size: 20px !important; }
+            .load-more-btn { width: 100%; padding: 12px 30px; }
         }
     </style>
 </head>
@@ -422,6 +382,14 @@
 
     <div class="messages" id="messages-container"></div>
 
+    <!-- 🔥 LOAD MORE BUTTON -->
+    <div class="load-more-container">
+        <button id="load-more-btn" class="load-more-btn">
+            <span class="btn-text">Tải thêm...</span>
+            <span class="spinner"></span>
+        </button>
+    </div>
+
     <footer>Trang web được tạo bằng HTML/CSS/JavaScript với Firebase</footer>
 
     <!-- Firebase SDKs -->
@@ -441,14 +409,18 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        // 🔥 PAGINATION CONFIG
+        const MESSAGES_PER_PAGE = 20;
+        let allMessages = [];
+        let displayedCount = 0;
+        let isLoading = false;
+
         // 🔥 LOADING BAR CONTROL
         window.addEventListener('load', () => {
             const loadingBar = document.getElementById('loading-bar');
             setTimeout(() => {
                 loadingBar.classList.add('loading-complete');
-                setTimeout(() => {
-                    loadingBar.remove();
-                }, 500);
+                setTimeout(() => loadingBar.remove(), 500);
             }, 500);
         });
 
@@ -484,9 +456,7 @@
             if (!message) return alert('Vui lòng nhập lời nhắn!');
             try {
                 await db.collection('messages').add({
-                    text: message,
-                    likes: 0,
-                    status: 'pending',
+                    text: message, likes: 0, status: 'pending',
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 document.getElementById('popup-message-input').value = '';
@@ -556,36 +526,156 @@
             container.style.height = `${Math.max(...columnHeights)}px`;
         }
 
-        // Load Messages
+        // 🔥 RENDER MESSAGES (PAGINATED)
+        function renderMessages(startIndex, endIndex) {
+            const container = document.getElementById('messages-container');
+            const messagesToRender = allMessages.slice(startIndex, endIndex);
+            
+            messagesToRender.forEach((msg, index) => {
+                const el = document.createElement('div');
+                el.className = 'message';
+                
+                // 🔥 Check if user already liked this message (from localStorage)
+                const likedMessages = JSON.parse(localStorage.getItem('likedMessages') || '[]');
+                const isLiked = likedMessages.includes(msg.id);
+                
+                el.innerHTML = `
+                    <div class="message-text">${msg.text}</div>
+                    <div class="message-actions">
+                        <span class="heart-icon ${isLiked ? 'liked' : ''}" data-id="${msg.id}">
+                            <span class="heart-symbol">${isLiked ? '❤' : '🤍'}</span>
+                            <span class="like-count">${msg.likes || 0}</span>
+                        </span>
+                        <span>0 Bình luận</span>
+                    </div>`;
+                container.appendChild(el);
+            });
+            
+            setTimeout(setupMasonry, 100);
+        }
+
+        // 🔥 UPDATE LOAD MORE BUTTON STATE
+        function updateLoadMoreButton() {
+            const btn = document.getElementById('load-more-btn');
+            if (displayedCount >= allMessages.length) {
+                btn.style.display = 'none';
+            } else {
+                btn.style.display = 'inline-flex';
+                btn.disabled = isLoading;
+            }
+        }
+
+        // 🔥 LOAD MORE MESSAGES
+        function loadMoreMessages() {
+            if (isLoading || displayedCount >= allMessages.length) return;
+            
+            isLoading = true;
+            const btn = document.getElementById('load-more-btn');
+            btn.classList.add('loading');
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                const startIndex = displayedCount;
+                const endIndex = Math.min(startIndex + MESSAGES_PER_PAGE, allMessages.length);
+                
+                renderMessages(startIndex, endIndex);
+                displayedCount = endIndex;
+                
+                isLoading = false;
+                btn.classList.remove('loading');
+                updateLoadMoreButton();
+            }, 300);
+        }
+
+        // 🔥 LIKE/UNLIKE HANDLER
+        async function toggleLike(messageId, heartIcon) {
+            const likedMessages = JSON.parse(localStorage.getItem('likedMessages') || '[]');
+            const isLiked = likedMessages.includes(messageId);
+            const countSpan = heartIcon.querySelector('.like-count');
+            const symbolSpan = heartIcon.querySelector('.heart-symbol');
+            let currentCount = parseInt(countSpan.textContent) || 0;
+            
+            if (isLiked) {
+                // 🔥 UNLIKE: Remove from localStorage, decrease count
+                const index = likedMessages.indexOf(messageId);
+                if (index > -1) likedMessages.splice(index, 1);
+                localStorage.setItem('likedMessages', JSON.stringify(likedMessages));
+                
+                // Update UI immediately
+                heartIcon.classList.remove('liked');
+                symbolSpan.textContent = '🤍';
+                countSpan.textContent = Math.max(0, currentCount - 1);
+                
+                // Update Firebase (decrement)
+                try {
+                    await db.collection('messages').doc(messageId).update({
+                        likes: firebase.firestore.FieldValue.increment(-1)
+                    });
+                } catch (e) {
+                    console.error('Unlike error:', e);
+                    // Revert UI if Firebase fails
+                    countSpan.textContent = currentCount;
+                }
+            } else {
+                // 🔥 LIKE: Add to localStorage, increase count (allow spam)
+                likedMessages.push(messageId);
+                localStorage.setItem('likedMessages', JSON.stringify(likedMessages));
+                
+                // Update UI immediately with animation
+                heartIcon.classList.add('liked');
+                symbolSpan.textContent = '❤';
+                countSpan.textContent = currentCount + 1;
+                
+                // Update Firebase (increment)
+                try {
+                    await db.collection('messages').doc(messageId).update({
+                        likes: firebase.firestore.FieldValue.increment(1)
+                    });
+                } catch (e) {
+                    console.error('Like error:', e);
+                    // Revert UI if Firebase fails
+                    heartIcon.classList.remove('liked');
+                    symbolSpan.textContent = '🤍';
+                    countSpan.textContent = currentCount;
+                }
+            }
+        }
+
+        // Load Messages from Firebase
         function loadApprovedMessages() {
-            db.collection('messages').where('status', '==', 'approved')
+            db.collection('messages')
+                .where('status', '==', 'approved')
                 .orderBy('timestamp', 'desc')
                 .onSnapshot(snapshot => {
+                    allMessages = snapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data()
+                    }));
+                    
                     const container = document.getElementById('messages-container');
                     container.innerHTML = '';
-                    snapshot.forEach(doc => {
-                        const data = doc.data();
-                        const el = document.createElement('div');
-                        el.className = 'message';
-                        el.innerHTML = `
-                            <div class="message-text">${data.text}</div>
-                            <div class="message-actions">
-                                <span class="heart-icon" data-id="${doc.id}">${data.likes} ❤</span>
-                                <span>0 Bình luận</span>
-                            </div>`;
-                        container.appendChild(el);
-                    });
-                    setTimeout(setupMasonry, 100);
+                    displayedCount = 0;
+                    
+                    if (allMessages.length > 0) {
+                        renderMessages(0, Math.min(MESSAGES_PER_PAGE, allMessages.length));
+                        displayedCount = Math.min(MESSAGES_PER_PAGE, allMessages.length);
+                    }
+                    
+                    updateLoadMoreButton();
                 });
         }
 
-        // Like Handler
+        // 🔥 Event delegation for like buttons (handles dynamically added elements)
         document.addEventListener('click', e => {
-            if (e.target.classList.contains('heart-icon')) {
-                db.collection('messages').doc(e.target.dataset.id)
-                    .update({ likes: firebase.firestore.FieldValue.increment(1) });
+            const heartIcon = e.target.closest('.heart-icon');
+            if (heartIcon) {
+                e.stopPropagation();
+                toggleLike(heartIcon.dataset.id, heartIcon);
             }
         });
+
+        // Load More Button Click Handler
+        document.getElementById('load-more-btn').addEventListener('click', loadMoreMessages);
 
         // Init & Resize
         loadApprovedMessages();
