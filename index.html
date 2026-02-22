@@ -116,7 +116,7 @@
             box-sizing: border-box;
         }
 
-        /* ===== BANNER CAROUSEL ===== */
+        /* ===== BANNER CAROUSEL - FIXED HEIGHT 🔥 ===== */
         .banner-section {
             margin: 20px 0;
             position: relative;
@@ -127,18 +127,21 @@
         .banner-carousel {
             position: relative;
             width: 100%;
+            height: 400px;  /* 🔥 CHIỀU CAO CỐ ĐỊNH */
             overflow: hidden;
             border-radius: 20px;
         }
         .banner-slide {
             display: none;
             width: 100%;
+            height: 400px;  /* 🔥 CHIỀU CAO CỐ ĐỊNH */
             position: relative;
         }
         .banner-slide.active { display: block; animation: fadeIn 0.5s ease; }
         .banner-slide img {
             width: 100%;
-            height: auto;
+            height: 100%;  /* 🔥 CHIẾM FULL CONTAINER */
+            object-fit: cover;  /* 🔥 CROP ẢNH GIỮ TỈ LỆ, KHÔNG MÉO */
             display: block;
             border-radius: 20px;
         }
@@ -313,6 +316,8 @@
             .content-wrapper { max-width: 100%; padding: 0 10px; }
             footer { margin: 15px 0; }
             .banner-section { margin: 15px 0; }
+            .banner-carousel,
+            .banner-slide { height: 250px; }  /* 🔥 GIẢM CHIỀU CAO TRÊN MOBILE */
             .banner-nav { width: 40px; height: 40px; font-size: 18px; }
             .banner-nav.prev { left: 10px; }
             .banner-nav.next { right: 10px; }
