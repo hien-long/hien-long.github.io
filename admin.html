@@ -10,6 +10,37 @@
         .container { max-width: 1200px; margin: 0 auto; }
         h1, h2, h3 { color: #333; margin-bottom: 20px; }
         
+        /* ===== MENU NAVIGATION ===== */
+        .admin-menu {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        
+        .menu-item {
+            padding: 8px 16px;
+            background: #f0f0f0;
+            border: none;
+            cursor: pointer;
+            margin-right: 5px;
+            border-radius: 4px 4px 0 0;
+        }
+        
+        .menu-item.active {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        /* ===== SECTION VISIBILITY ===== */
+        .admin-section {
+            display: none;
+        }
+        
+        .admin-section.active {
+            display: block;
+        }
+        
         /* ===== LOGIN FORM ===== */
         #login-section { max-width: 400px; margin: 100px auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
         #login-section h2 { text-align: center; color: #e74c3c; }
@@ -128,79 +159,95 @@
                 </div>
             </div>
 
-            <!-- 📈 STATS -->
-            <div class="stats-container">
-                <div class="stat-card"><div class="stat-number" id="stat-total">0</div><div class="stat-label">Tổng lời nhắn</div></div>
-                <div class="stat-card"><div class="stat-number" id="stat-pending" style="color: #ff9800;">0</div><div class="stat-label">Chờ duyệt</div></div>
-                <div class="stat-card"><div class="stat-number" id="stat-approved" style="color: #4CAF50;">0</div><div class="stat-label">Đã duyệt</div></div>
-                <div class="stat-card"><div class="stat-number" id="stat-total-likes" style="color: #e91e63;">0</div><div class="stat-label">Tổng lượt tim</div></div>
+            <!-- Thêm menu điều hướng -->
+            <div class="admin-menu">
+                <button class="menu-item active" data-target="banner-section">🎨 Banner</button>
+                <button class="menu-item" data-target="gallery-section">🖼️ Gallery</button>
+                <button class="menu-item" data-target="messages-section">✉️ Messages</button>
             </div>
 
-            <!-- 🔍 SEARCH -->
-            <input type="text" class="search-box" id="search-box" placeholder="🔍 Tìm kiếm lời nhắn..." oninput="filterMessages()">
-
-            <!-- ⏳ PENDING MESSAGES -->
-            <div class="messages-section">
-                <div class="section-header"><span class="section-title">⏳ Lời nhắn chờ duyệt</span><span class="message-count" id="pending-count">0</span></div>
-                <div class="message-list" id="pending-list"><div class="loading">Đang tải...</div></div>
-            </div>
-
-            <!-- ✅ APPROVED MESSAGES -->
-            <div class="messages-section">
-                <div class="section-header"><span class="section-title">✅ Lời nhắn đã duyệt</span><span class="message-count" id="approved-count">0</span></div>
-                <div class="message-list" id="approved-list"><div class="loading">Đang tải...</div></div>
-            </div>
-
-            <!-- 🔥 GALLERY MANAGEMENT -->
-            <div class="messages-section">
-                <div class="section-header">
-                    <span class="section-title">🖼️ Quản lý Gallery</span>
-                    <button class="btn btn-success btn-small" onclick="showAddGalleryForm()">+ Thêm ảnh</button>
+            <!-- Các section được sắp xếp theo thứ tự Banner -> Gallery -> Messages -->
+            <!-- 🎨 BANNER SECTION -->
+            <div id="banner-section" class="admin-section active">
+                <!-- 📈 STATS -->
+                <div class="stats-container">
+                    <div class="stat-card"><div class="stat-number" id="stat-total">0</div><div class="stat-label">Tổng lời nhắn</div></div>
+                    <div class="stat-card"><div class="stat-number" id="stat-pending" style="color: #ff9800;">0</div><div class="stat-label">Chờ duyệt</div></div>
+                    <div class="stat-card"><div class="stat-number" id="stat-approved" style="color: #4CAF50;">0</div><div class="stat-label">Đã duyệt</div></div>
+                    <div class="stat-card"><div class="stat-number" id="stat-total-likes" style="color: #e91e63;">0</div><div class="stat-label">Tổng lượt tim</div></div>
                 </div>
-                
-                <!-- Add/Edit Form -->
-                <div id="gallery-form">
-                    <h3 id="gallery-form-title">Thêm ảnh mới</h3>
-                    <div class="form-group"><label>Link ảnh/URL</label><input type="text" id="gallery-image" placeholder="gallery/activity-1.jpg hoặc https://..."></div>
-                    <div class="form-group"><label>Tiêu đề</label><input type="text" id="gallery-title" placeholder="Tên hoạt động"></div>
-                    <div class="form-group"><label>Mô tả</label><textarea id="gallery-description" rows="3" placeholder="Mô tả ngắn"></textarea></div>
-                    <div class="form-group"><label>Thứ tự hiển thị</label><input type="number" id="gallery-order" value="1" min="1"></div>
-                    <input type="hidden" id="gallery-id">
-                    <button class="btn btn-primary" onclick="saveGallery()">💾 Lưu</button>
-                    <button class="btn btn-warning" onclick="hideGalleryForm()">❌ Hủy</button>
-                </div>
-                
-                <!-- Gallery List -->
-                <div class="message-list" id="gallery-list"><div class="loading">Đang tải gallery...</div></div>
-            </div>
 
-            <!-- 🎨 BANNER MANAGEMENT (NEW) -->
-            <div class="messages-section">
-                <div class="section-header">
-                    <span class="section-title">🎨 Quản lý Banner</span>
-                    <button class="btn btn-success btn-small" onclick="showAddBannerForm()">+ Thêm banner</button>
-                </div>
-                
-                <!-- Add/Edit Form -->
-                <div id="banner-form">
-                    <h3 id="banner-form-title">Thêm banner mới</h3>
-                    <div class="form-group"><label>Link ảnh/URL *</label><input type="text" id="banner-image" placeholder="https://example.com/banner.jpg"></div>
-                    <div class="form-group"><label>Tiêu đề (optional)</label><input type="text" id="banner-title" placeholder="Tiêu đề banner"></div>
-                    <div class="form-group"><label>Link khi click (optional)</label><input type="text" id="banner-link" placeholder="https://example.com"></div>
-                    <div class="form-group"><label>Thứ tự hiển thị</label><input type="number" id="banner-order" value="1" min="1"></div>
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="banner-active" checked>
-                        <label for="banner-active">Hiển thị banner</label>
+                <!-- 🎨 BANNER MANAGEMENT (NEW) -->
+                <div class="messages-section">
+                    <div class="section-header">
+                        <span class="section-title">🎨 Quản lý Banner</span>
+                        <button class="btn btn-success btn-small" onclick="showAddBannerForm()">+ Thêm banner</button>
                     </div>
-                    <input type="hidden" id="banner-id">
-                    <button class="btn btn-primary" onclick="saveBanner()">💾 Lưu</button>
-                    <button class="btn btn-warning" onclick="hideBannerForm()">❌ Hủy</button>
+                    
+                    <!-- Add/Edit Form -->
+                    <div id="banner-form">
+                        <h3 id="banner-form-title">Thêm banner mới</h3>
+                        <div class="form-group"><label>Link ảnh/URL *</label><input type="text" id="banner-image" placeholder="https://example.com/banner.jpg  "></div>
+                        <div class="form-group"><label>Tiêu đề (optional)</label><input type="text" id="banner-title" placeholder="Tiêu đề banner"></div>
+                        <div class="form-group"><label>Link khi click (optional)</label><input type="text" id="banner-link" placeholder="https://example.com  "></div>
+                        <div class="form-group"><label>Thứ tự hiển thị</label><input type="number" id="banner-order" value="1" min="1"></div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="banner-active" checked>
+                            <label for="banner-active">Hiển thị banner</label>
+                        </div>
+                        <input type="hidden" id="banner-id">
+                        <button class="btn btn-primary" onclick="saveBanner()">💾 Lưu</button>
+                        <button class="btn btn-warning" onclick="hideBannerForm()">❌ Hủy</button>
+                    </div>
+                    
+                    <!-- Banner List -->
+                    <div class="message-list" id="banner-list"><div class="loading">Đang tải banners...</div></div>
                 </div>
-                
-                <!-- Banner List -->
-                <div class="message-list" id="banner-list"><div class="loading">Đang tải banners...</div></div>
             </div>
 
+            <!-- 🖼️ GALLERY SECTION -->
+            <div id="gallery-section" class="admin-section">
+                <!-- 🔍 SEARCH -->
+                <input type="text" class="search-box" id="search-box" placeholder="🔍 Tìm kiếm lời nhắn..." oninput="filterMessages()">
+
+                <!-- 🔥 GALLERY MANAGEMENT -->
+                <div class="messages-section">
+                    <div class="section-header">
+                        <span class="section-title">🖼️ Quản lý Gallery</span>
+                        <button class="btn btn-success btn-small" onclick="showAddGalleryForm()">+ Thêm ảnh</button>
+                    </div>
+                    
+                    <!-- Add/Edit Form -->
+                    <div id="gallery-form">
+                        <h3 id="gallery-form-title">Thêm ảnh mới</h3>
+                        <div class="form-group"><label>Link ảnh/URL</label><input type="text" id="gallery-image" placeholder="gallery/activity-1.jpg hoặc https://..."></div>
+                        <div class="form-group"><label>Tiêu đề</label><input type="text" id="gallery-title" placeholder="Tên hoạt động"></div>
+                        <div class="form-group"><label>Mô tả</label><textarea id="gallery-description" rows="3" placeholder="Mô tả ngắn"></textarea></div>
+                        <div class="form-group"><label>Thứ tự hiển thị</label><input type="number" id="gallery-order" value="1" min="1"></div>
+                        <input type="hidden" id="gallery-id">
+                        <button class="btn btn-primary" onclick="saveGallery()">💾 Lưu</button>
+                        <button class="btn btn-warning" onclick="hideGalleryForm()">❌ Hủy</button>
+                    </div>
+                    
+                    <!-- Gallery List -->
+                    <div class="message-list" id="gallery-list"><div class="loading">Đang tải gallery...</div></div>
+                </div>
+            </div>
+
+            <!-- ✉️ MESSAGES SECTION -->
+            <div id="messages-section" class="admin-section">
+                <!-- ⏳ PENDING MESSAGES -->
+                <div class="messages-section">
+                    <div class="section-header"><span class="section-title">⏳ Lời nhắn chờ duyệt</span><span class="message-count" id="pending-count">0</span></div>
+                    <div class="message-list" id="pending-list"><div class="loading">Đang tải...</div></div>
+                </div>
+
+                <!-- ✅ APPROVED MESSAGES -->
+                <div class="messages-section">
+                    <div class="section-header"><span class="section-title">✅ Lời nhắn đã duyệt</span><span class="message-count" id="approved-count">0</span></div>
+                    <div class="message-list" id="approved-list"><div class="loading">Đang tải...</div></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -238,6 +285,27 @@
                 document.getElementById('login-section').style.display = 'block';
                 document.getElementById('dashboard-section').style.display = 'none';
             }
+        });
+
+        // Xử lý menu điều hướng
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Xóa active ở tất cả menu item và section
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+                    
+                    // Thêm active vào item được click
+                    this.classList.add('active');
+                    
+                    // Hiển thị section tương ứng
+                    const target = document.getElementById(this.getAttribute('data-target'));
+                    if (target) {
+                        target.classList.add('active');
+                    }
+                });
+            });
         });
 
         async function handleLogin() {

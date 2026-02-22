@@ -130,6 +130,7 @@
             height: 400px;  /* 🔥 CHIỀU CAO CỐ ĐỊNH */
             overflow: hidden;
             border-radius: 20px;
+            cursor: pointer;
         }
         .banner-slide {
             display: none;
@@ -144,6 +145,44 @@
             object-fit: cover;  /* 🔥 CROP ẢNH GIỮ TỈ LỆ, KHÔNG MÉO */
             display: block;
             border-radius: 20px;
+            transition: transform 0.5s ease;
+        }
+        .banner-slide:hover img {
+            transform: scale(1.05);
+        }
+        .banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            pointer-events: none;
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .banner-content {
+            width: 100%;
+        }
+        .banner-title {
+            color: white;
+            font-size: 24px;
+            margin: 0 0 10px;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .banner-detail {
+            color: #ffd166;
+            font-size: 16px;
+            font-weight: 500;
+            text-align: right;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .banner-slide:hover .banner-detail {
+            opacity: 1;
         }
         .banner-nav {
             position: absolute;
@@ -278,7 +317,16 @@
         .message-sender { font-size: 16px; font-weight: 600; color: #e74c3c; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
         .message-sender .anonymous-badge { background: #ff6b6b; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; }
         .message-text { margin: 0 0 22px; line-height: 1.7; color: #444; font-size: 18px; font-weight: 500; white-space: pre-wrap; word-wrap: break-word; }
-        .message-actions { display: flex; gap: 22px; color: #777; font-size: 16px; padding-top: 15px; border-top: 1px dashed #eee; align-items: center; }
+        .message-actions { 
+            display: flex; 
+            justify-content: space-between; 
+            gap: 22px; 
+            color: #777; 
+            font-size: 16px; 
+            padding-top: 15px; 
+            border-top: 1px dashed #eee; 
+            align-items: center; 
+        }
         .heart-icon { cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 500; transition: all 0.2s; user-select: none; }
         .heart-icon.liked { color: #ff4757; animation: heartPop 0.3s ease; }
         .heart-icon:hover { transform: scale(1.15); }
@@ -397,7 +445,7 @@
 
         <!-- Gallery Section -->
         <section class="gallery-section">
-            <div class="gallery-header"><h2>🔥 BSUN</h2></div>
+            <div class="gallery-header"><h2>🔥 Những hoạt động tại Viện Huyết học</h2></div>
             <div class="gallery-container">
                 <button class="gallery-nav prev" onclick="scrollGallery(-1)">❮</button>
                 <div class="gallery-scroll" id="gallery-scroll">
@@ -486,6 +534,15 @@
             setTimeout(() => heart.remove(), 3000);
         }
 
+        // Hàm format ngày tháng
+        function formatDate(date) {
+            if (!date) return 'N/A';
+            if (date instanceof firebase.firestore.Timestamp) {
+                date = date.toDate();
+            }
+            return date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
+
         // ===== BANNER CAROUSEL FUNCTIONS =====
         function loadBanners() {
             db.collection('banners').where('active', '==', true).orderBy('order', 'asc').onSnapshot(snapshot => {
@@ -505,8 +562,14 @@
             }
 
             carousel.innerHTML = banners.map((banner, index) => `
-                <div class="banner-slide ${index === 0 ? 'active' : ''}" data-index="${index}">
+                <div class="banner-slide ${index === 0 ? 'active' : ''}" data-index="${index}" ${banner.link ? `onclick="window.open('${banner.link}', '_blank')"` : ''}>
                     <img src="${banner.image}" alt="${banner.title || 'Banner'}" loading="lazy">
+                    <div class="banner-overlay">
+                        <div class="banner-content">
+                            ${banner.title ? `<h3 class="banner-title">${banner.title}</h3>` : ''}
+                            ${banner.link ? '<div class="banner-detail">Ấn vào để biết thêm chi tiết</div>' : ''}
+                        </div>
+                    </div>
                 </div>
             `).join('');
 
@@ -646,7 +709,8 @@
                 const likedMessages = JSON.parse(localStorage.getItem('likedMessages') || '[]');
                 const isLiked = likedMessages.includes(msg.id);
                 const senderDisplay = msg.isAnonymous ? '👤 Ẩn danh' : `✍️ ${escapeHtml(msg.senderName || 'Ẩn danh')}`;
-                el.innerHTML = `<div class="message-sender">${senderDisplay}</div><div class="message-text">${escapeHtml(msg.text)}</div><div class="message-actions"><span class="heart-icon ${isLiked ? 'liked' : ''}" data-id="${msg.id}"><span class="heart-symbol">${isLiked ? '❤' : '🤍'}</span><span class="like-count">${msg.likes || 0}</span></span><span>0 Bình luận</span></div>`;
+                const dateDisplay = formatDate(msg.timestamp);
+                el.innerHTML = `<div class="message-sender">${senderDisplay}</div><div class="message-text">${escapeHtml(msg.text)}</div><div class="message-actions"><span class="heart-icon ${isLiked ? 'liked' : ''}" data-id="${msg.id}"><span class="heart-symbol">${isLiked ? '❤' : '🤍'}</span><span class="like-count">${msg.likes || 0}</span></span><span>${dateDisplay}</span></div>`;
                 container.appendChild(el);
             });
             setTimeout(setupMasonry, 100);
@@ -700,7 +764,7 @@
 
         function loadApprovedMessages() {
             db.collection('messages').where('status', '==', 'approved').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
-                allMessages = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                allMessages = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), timestamp: doc.data().timestamp }));
                 const container = document.getElementById('messages-container');
                 container.innerHTML = ''; displayedCount = 0;
                 if (allMessages.length > 0) {
