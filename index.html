@@ -33,10 +33,10 @@
         /* ===== HEART FLOATING EFFECT ===== */
         .heart {
             position: fixed;
-            z-index: 9999;  /* 🔥 Đẩy lên trên cùng (thay vì -1) */
+            z-index: 9999;
             pointer-events: none;
             opacity: 0;
-            animation: floatHeart 3s linear forwards;  /* 🔥 Timeout 3 giây (thay vì 15s) */
+            animation: floatHeart 3s linear forwards;
         }
         @keyframes floatHeart {
             0%, 100% { opacity: 0; }
@@ -175,6 +175,10 @@
             border-color: #ff6b6b;
             box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2);
         }
+        #popup-message-input::placeholder {
+            font-size: 18px;
+            color: #999;
+        }
         #popup-send-btn {
             width: 100%;
             padding: 16px;
@@ -230,19 +234,30 @@
             margin: 0 auto;
             line-height: 1.7;
         }
+
+        /* ===== NOTE BOX - FIX VIỀN BO GÓC ===== */
         .note {
             background: rgba(245, 245, 245, 0.8);
-            border-left: 7px solid #ff6b6b;
             padding: 18px 25px;
             margin: 28px 20px;
-            border-radius: 0 12px 12px 0;
+            border-radius: 12px;
             font-size: 16px;
             line-height: 1.6;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
+        }
+        .note::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 7px; height: 100%;
+            background: linear-gradient(to bottom, #ff6b6b, #ffd166);
+            border-radius: 12px 0 0 12px;
         }
 
-        /* ===== MASONRY MESSAGES ===== */
+        /* ===== MASONRY MESSAGES - FIX VIỀN BO GÓC ===== */
         .messages {
             position: relative;
             margin: 20px;
@@ -261,6 +276,7 @@
             opacity: 0;
             animation: fadeIn 0.5s ease forwards;
             transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;  /* 🔥 Cắt phần gradient thừa */
         }
         @keyframes fadeIn { to { opacity: 1; } }
         .message:hover {
@@ -274,7 +290,7 @@
             top: 0; left: 0;
             width: 8px; height: 100%;
             background: linear-gradient(to bottom, #ff6b6b, #ffd166);
-            border-radius: 22px 0 0 22px;
+            border-radius: 22px 0 0 22px;  /* 🔥 Bo góc trái khớp với card */
         }
         .message-text {
             margin: 0 0 22px;
@@ -350,7 +366,7 @@
     </style>
 </head>
 <body>
-    <!-- 🔥 LOADING BAR - Thêm vào đây 🔥 -->
+    <!-- 🔥 LOADING BAR -->
     <div id="loading-bar"></div>
 
     <!-- Header Menu -->
@@ -383,7 +399,7 @@
         <div id="message-popup" class="popup">
             <span class="close-btn">&times;</span>
             <h3>Gửi lời nhắn yêu thương</h3>
-            <textarea id="popup-message-input" placeholder="Viết lời nhắn yêu thương của bạn..."></textarea>
+            <textarea id="popup-message-input" placeholder="Viết lời nhắn yêu thương của bạn... (Ví dụ: Chúc em mạnh khỏe và phải giữ mãi nụ cười thật tươi nhé. Love you so much ❤)"></textarea>
             <button id="popup-send-btn">Gửi lời nhắn</button>
         </div>
     </div>
@@ -420,7 +436,7 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // 🔥 LOADING BAR CONTROL 🔥
+        // 🔥 LOADING BAR CONTROL
         window.addEventListener('load', () => {
             const loadingBar = document.getElementById('loading-bar');
             setTimeout(() => {
@@ -428,7 +444,7 @@
                 setTimeout(() => {
                     loadingBar.remove();
                 }, 500);
-            }, 500); // Đợi 500ms rồi mới ẩn loading bar
+            }, 500);
         });
 
         // Heart Animation
@@ -454,7 +470,7 @@
             heart.style.left = `${startX}px`;
             heart.style.top = `${startY}px`;
             document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 3000);  /* 🔥 Timeout 3 giây */
+            setTimeout(() => heart.remove(), 3000);
         }
 
         // Send Message
@@ -503,7 +519,7 @@
             if (e.target === e.currentTarget) closePopup('message-popup');
         });
 
-        // 🔥 ADAPTIVE MASONRY LAYOUT 🔥
+        // 🔥 ADAPTIVE MASONRY LAYOUT
         function setupMasonry() {
             const container = document.getElementById('messages-container');
             const messages = Array.from(container.children);
