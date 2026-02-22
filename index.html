@@ -100,28 +100,39 @@
             text-align: center;
         }
         
-        /* Popup thông báo (MÀU PINK) */
-        .notification {
+        /* Popup thông báo (DẠNG SUCCESS MESSAGE) */
+        .success-popup {
             position: fixed;
             top: 20px;
-            right: -1400px;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-            color: white;
-            padding: 18px 28px;
-            border-radius: 15px;
-            box-shadow: 0 6px 25px rgba(0,0,0,0.2);
+            right: 20px;
+            width: 400px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
             z-index: 9999;
-            transition: right 0.4s ease;
-            font-size: 1.1em;
-            font-weight: 600;
-            display: flex;
+            display: none;
+            flex-direction: column;
             align-items: center;
-            gap: 12px;
-            max-width: 400px;
+            padding: 30px;
+            text-align: center;
         }
         
-        .notification.show {
-            right: 20px;
+        .check-icon {
+            font-size: 50px;
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+        
+        .success-popup h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .success-popup p {
+            color: #666;
+            margin-bottom: 20px;
+            text-align: center;
         }
         
         /* Header mới */
@@ -352,12 +363,14 @@
                 <span>📸</span> Instagram
             </a>
         </div>
-        <div class="menu-title">@TheBlouse</div>
+        <div class="menu-title">Nhắn gửi lời yêu thương</div>
     </div>
     
-    <!-- Popup thông báo -->
-    <div id="notification" class="notification">
-        <span>✅</span> Cảm ơn bạn đã gửi lời nhắn! Lời nhắn sẽ được duyệt bởi admin và xuất hiện trên trang trong vài phút.
+    <!-- Popup thông báo (DẠNG SUCCESS MESSAGE) -->
+    <div id="success-popup" class="success-popup">
+        <div class="check-icon">✓</div>
+        <h3>Cảm ơn bạn đã gửi lời nhắn!</h3>
+        <p>Lời nhắn sẽ được duyệt bởi admin và xuất hiện trên trang trong vài phút.</p>
     </div>
     
     <header>
@@ -366,7 +379,8 @@
     </header>
     
     <div class="note">
-        ⚠️ A message from @hienlong: Hãy gửi lời nhắn yêu thương của bạn để lan tỏa yêu thương đến các em nhỏ nhé ❤️
+        ⚠️ Lưu ý: Đây là bản demo với hệ thống quản lý admin hoàn chỉnh. Lời nhắn sẽ được lưu trữ và quản lý qua Firebase. 
+        Hãy gửi lời nhắn yêu thương của bạn để lan tỏa yêu thương đến các em nhỏ!
     </div>
     
     <div class="message-form">
@@ -456,13 +470,13 @@
                 });
                 document.getElementById('message-input').value = '';
                 
-                // Hiển thị notification
-                const notification = document.getElementById('notification');
-                notification.classList.add('show');
+                // Hiển thị success popup
+                const successPopup = document.getElementById('success-popup');
+                successPopup.style.display = 'flex';
                 
-                // Tự ẩn notification sau 5 giây
+                // Tự ẩn popup sau 5 giây
                 setTimeout(() => {
-                    notification.classList.remove('show');
+                    successPopup.style.display = 'none';
                 }, 5000);
             } catch (e) {
                 alert('Lỗi: ' + e.message);
