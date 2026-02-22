@@ -192,21 +192,99 @@
             50% { transform: scale(1.05); }
         }
 
-        /* ===== MAIN CONTENT ===== */
-        header {
-            text-align: center; margin: 20px; padding: 30px;
+        /* ===== GALLERY SECTION ===== */
+        .gallery-section {
+            margin: 20px;
+            padding: 30px;
             background: rgba(255, 255, 255, 0.85);
             border-radius: 25px;
             box-shadow: 0 6px 25px rgba(0,0,0,0.15);
             backdrop-filter: blur(10px);
         }
-        h1 {
-            color: #e74c3c; font-size: 2.8em;
-            margin: 0 0 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        .gallery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
         }
-        .description {
-            font-size: 1.3em; color: #555;
-            max-width: 900px; margin: 0 auto; line-height: 1.7;
+        .gallery-header h2 {
+            color: #e74c3c;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+        }
+        .gallery-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .gallery-scroll {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding: 10px 5px;
+            flex: 1;
+        }
+        .gallery-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .gallery-card {
+            flex: 0 0 350px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .gallery-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .gallery-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+        }
+        .card-content {
+            padding: 20px;
+        }
+        .card-content h3 {
+            font-size: 16px;
+            color: #333;
+            margin: 0 0 10px;
+            line-height: 1.4;
+            font-weight: 600;
+        }
+        .card-content p {
+            font-size: 14px;
+            color: #666;
+            margin: 5px 0;
+            line-height: 1.5;
+        }
+        .gallery-nav {
+            background: rgba(231, 76, 60, 0.9);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .gallery-nav:hover {
+            background: #e74c3c;
+            transform: scale(1.1);
         }
 
         /* ===== NOTE BOX ===== */
@@ -352,8 +430,28 @@
                 width: 100%; justify-content: center; flex-wrap: wrap;
             }
             .menu-title { font-size: 1.5em; }
-            header, .note, footer { margin: 15px 10px; }
-            header { padding: 20px; }
+            .note, footer { margin: 15px 10px; }
+            
+            .gallery-section {
+                margin: 15px 10px;
+                padding: 20px;
+            }
+            .gallery-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .gallery-header h2 {
+                font-size: 20px;
+            }
+            .gallery-card {
+                flex: 0 0 280px;
+            }
+            .gallery-nav {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
             
             .messages { margin: 10px; }
             .message {
@@ -422,11 +520,56 @@
         </div>
     </div>
 
-    <!-- Main Content -->
-    <header>
-        <h1>Nhắn gửi lời yêu thương</h1>
-        <p class="description">Từ những người xa lạ, cùng chung mong muốn sẻ chia với các em ở Viện Huyết học Truyền máu Trung ương.</p>
-    </header>
+    <!-- 🔥 GALLERY SECTION - Thay thế header cũ -->
+    <section class="gallery-section">
+        <div class="gallery-header">
+            <h2>🔥 Những hoạt động tại Viện Huyết học</h2>
+        </div>
+        
+        <div class="gallery-container">
+            <button class="gallery-nav prev" onclick="scrollGallery(-1)">❮</button>
+            
+            <div class="gallery-scroll" id="gallery-scroll">
+                <!-- Card 1 -->
+                <div class="gallery-card">
+                    <img src="gallery/activity-1.jpg" alt="Hoạt động 1" loading="lazy">
+                    <div class="card-content">
+                        <h3>Chương trình "Giọt hồng yêu thương" - Tháng 1/2026</h3>
+                        <p>Các tình nguyện viên cùng giao lưu, tặng quà và động viên tinh thần các em nhỏ</p>
+                    </div>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="gallery-card">
+                    <img src="gallery/activity-2.jpg" alt="Hoạt động 2" loading="lazy">
+                    <div class="card-content">
+                        <h3>Hoạt động vui chơi Trung thu - Tháng 9/2025</h3>
+                        <p>Tổ chức đêm hội trăng rằm với nhiều tiết mục văn nghệ và trò chơi thú vị</p>
+                    </div>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="gallery-card">
+                    <img src="gallery/activity-3.jpg" alt="Hoạt động 3" loading="lazy">
+                    <div class="card-content">
+                        <h3>Chương trình "Tết yêu thương" - Tết 2026</h3>
+                        <p>Mang không khí Tết đến với các em nhỏ đang điều trị tại viện</p>
+                    </div>
+                </div>
+                
+                <!-- Card 4 -->
+                <div class="gallery-card">
+                    <img src="gallery/activity-4.jpg" alt="Hoạt động 4" loading="lazy">
+                    <div class="card-content">
+                        <h3>Hoạt động đọc truyện - Hàng tuần</h3>
+                        <p>Các tình nguyện viên đọc truyện, kể chuyện cho các em nghe</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="gallery-nav next" onclick="scrollGallery(1)">❯</button>
+        </div>
+    </section>
 
     <div class="note">
         ⚠️ Lưu ý: Đây là bản demo với hệ thống quản lý admin hoàn chỉnh. Lời nhắn sẽ được lưu trữ và quản lý qua Firebase. 
@@ -740,6 +883,16 @@
 
         // Load More Button Click Handler
         document.getElementById('load-more-btn').addEventListener('click', loadMoreMessages);
+
+        // 🔥 GALLERY SCROLL FUNCTION
+        function scrollGallery(direction) {
+            const scrollContainer = document.getElementById('gallery-scroll');
+            const scrollAmount = 370; // Width of card + gap
+            scrollContainer.scrollBy({
+                left: direction * scrollAmount,
+                behavior: 'smooth'
+            });
+        }
 
         // Init & Resize
         loadApprovedMessages();
