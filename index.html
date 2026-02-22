@@ -107,7 +107,7 @@
         .check-icon { font-size: 50px; color: #4CAF50; margin-bottom: 15px; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
-        /* ===== CONTENT WRAPPER - BO GIỮA PC/TABLET ===== */
+        /* ===== CONTENT WRAPPER ===== */
         .content-wrapper {
             max-width: 1200px;
             margin: 0 auto;
@@ -116,7 +116,7 @@
             box-sizing: border-box;
         }
 
-        /* ===== GALLERY SECTION - ĐÃ BỎ VIỀN BOX TRẮNG ===== */
+        /* ===== GALLERY SECTION ===== */
         .gallery-section {
             margin: 20px 0; 
             padding: 20px 0;
@@ -151,22 +151,36 @@
         }
         .gallery-nav:hover { background: #e74c3c; transform: scale(1.1); }
 
-        /* ===== NOTE BOX ===== */
-        .note {
-            background: rgba(245, 245, 245, 0.8); padding: 18px 25px; margin: 28px 0;
-            border-radius: 12px; font-size: 16px; line-height: 1.6;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); backdrop-filter: blur(5px);
-            position: relative; overflow: hidden;
+        /* ===== MESSAGES SECTION - ĐÃ BỎ VIỀN BOX TRẮNG ===== */
+        .messages-section {
+            margin: 30px 0; 
+            padding: 20px 0;
+            background: transparent;
+            border-radius: 0;
+            box-shadow: none;
+            backdrop-filter: none;
         }
-        .note::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 7px; height: 100%;
-            background: linear-gradient(to bottom, #ff6b6b, #ffd166); border-radius: 12px 0 0 12px;
+        .messages-header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 20px;
         }
+        .messages-header h2 { 
+            color: #e74c3c; font-size: 24px; font-weight: 700; margin: 0; 
+        }
+        .messages-info {
+            background: rgba(245, 245, 245, 0.9); 
+            padding: 14px 20px; 
+            margin: 0 0 25px 0;
+            border-radius: 12px; 
+            font-size: 15px; line-height: 1.6; color: #555;
+            border-left: 4px solid #ffd166;
+        }
+        .messages-info strong { color: #e74c3c; }
 
         /* ===== MASONRY MESSAGES ===== */
-        .messages { position: relative; margin: 20px 0; box-sizing: border-box; }
+        .messages { position: relative; margin: 0; box-sizing: border-box; }
         .message {
-            background: rgba(255, 255, 255, 0.85); padding: 22px; border-radius: 22px;
+            background: rgba(255, 255, 255, 0.95); padding: 22px; border-radius: 22px;
             box-shadow: 0 5px 18px rgba(0,0,0,0.08); border: 1px solid rgba(255, 107, 107, 0.1);
             backdrop-filter: blur(5px); position: absolute; top: 0; left: 0;
             box-sizing: border-box; opacity: 0; animation: fadeIn 0.5s ease forwards;
@@ -190,7 +204,7 @@
         @keyframes heartPop { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
 
         /* ===== LOAD MORE BUTTON ===== */
-        .load-more-container { text-align: center; margin: 30px 0 50px; padding: 0; }
+        .load-more-container { text-align: center; margin: 30px 0 0; padding: 0; }
         .load-more-btn {
             background: linear-gradient(135deg, #ff6b6b, #ff8e8e); color: white; border: none;
             padding: 14px 40px; border-radius: 50px; font-size: 16px; font-weight: 600;
@@ -217,13 +231,17 @@
             .menu-links { width: 100%; justify-content: center; flex-wrap: wrap; }
             .menu-title { font-size: 1.5em; }
             .content-wrapper { max-width: 100%; padding: 0 10px; }
-            .note, footer { margin: 15px 0; }
+            footer { margin: 15px 0; }
             .gallery-section { margin: 15px 0; padding: 15px 0; }
             .gallery-header { flex-direction: column; gap: 15px; text-align: center; }
             .gallery-header h2 { font-size: 20px; }
             .gallery-card { flex: 0 0 280px; }
             .gallery-nav { width: 35px; height: 35px; font-size: 16px; }
-            .messages { margin: 10px 0; }
+            .messages-section { margin: 20px 0; padding: 15px 0; }
+            .messages-header { flex-direction: column; gap: 10px; text-align: center; }
+            .messages-header h2 { font-size: 20px; }
+            .messages-info { font-size: 14px; padding: 12px 16px; }
+            .messages { margin: 0; }
             .message { position: relative !important; width: 100% !important; margin-bottom: 20px; left: 0 !important; top: 0 !important; }
             .social-icon { width: 18px; height: 18px; }
             #popup-message-input { min-height: 120px; font-size: 18px !important; }
@@ -251,7 +269,7 @@
         <div class="menu-title">@TheBlouse</div>
     </div>
 
-    <!-- 🔥 CONTENT WRAPPER - Chỉ phần này được bo giữa -->
+    <!-- 🔥 CONTENT WRAPPER -->
     <div class="content-wrapper">
 
         <!-- Success Popup -->
@@ -290,26 +308,28 @@
             </div>
         </section>
 
-        <!-- Note Box -->
-        <div class="note">
-            ⚠️ Lưu ý: Đây là bản demo với hệ thống quản lý admin hoàn chỉnh. Lời nhắn sẽ được lưu trữ và quản lý qua Firebase. 
-            Hãy gửi lời nhắn yêu thương của bạn để lan tỏa yêu thương đến các em nhỏ!
-        </div>
-
-        <!-- Messages -->
-        <div class="messages" id="messages-container"></div>
-
-        <!-- Load More Button -->
-        <div class="load-more-container">
-            <button id="load-more-btn" class="load-more-btn">
-                <span class="btn-text">Tải thêm...</span>
-                <span class="spinner"></span>
-            </button>
-        </div>
+        <!-- 🔥 MESSAGES SECTION - ĐÃ BỎ VIỀN BOX TRẮNG -->
+        <section class="messages-section">
+            <div class="messages-header">
+                <h2>💌 Lời chúc từ mọi người</h2>
+            </div>
+            <div class="messages-info">
+                <strong>⚠️ Lưu ý:</strong> Đây là bản demo với hệ thống quản lý admin hoàn chỉnh. 
+                Lời nhắn sẽ được lưu trữ và quản lý qua Firebase. 
+                Hãy gửi lời nhắn yêu thương của bạn để lan tỏa yêu thương đến các em nhỏ! 💕
+            </div>
+            <div class="messages" id="messages-container"></div>
+            <div class="load-more-container">
+                <button id="load-more-btn" class="load-more-btn">
+                    <span class="btn-text">Tải thêm...</span>
+                    <span class="spinner"></span>
+                </button>
+            </div>
+        </section>
 
     </div> <!-- 🔥 End content-wrapper -->
 
-    <!-- Footer (cũng nằm trong wrapper để bo giữa) -->
+    <!-- Footer -->
     <footer>Trang web được tạo bằng HTML/CSS/JavaScript với Firebase</footer>
 
     <!-- Firebase SDKs -->
