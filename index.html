@@ -37,7 +37,7 @@
         }
         @keyframes gradientBG { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 
-        /* ===== HEADER MENU ===== */
+        /* ===== HEADER MENU - FULL WIDTH ===== */
         .header-menu {
             display: flex; justify-content: space-between; align-items: center;
             padding: 10px 40px; margin: 20px;
@@ -107,9 +107,18 @@
         .check-icon { font-size: 50px; color: #4CAF50; margin-bottom: 15px; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
+        /* ===== CONTENT WRAPPER - BO GIỮA PC/TABLET ===== */
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
         /* ===== GALLERY SECTION ===== */
         .gallery-section {
-            margin: 20px; padding: 30px;
+            margin: 20px 0; padding: 30px;
             background: rgba(255, 255, 255, 0.85); border-radius: 25px;
             box-shadow: 0 6px 25px rgba(0,0,0,0.15); backdrop-filter: blur(10px);
         }
@@ -141,7 +150,7 @@
 
         /* ===== NOTE BOX ===== */
         .note {
-            background: rgba(245, 245, 245, 0.8); padding: 18px 25px; margin: 28px 20px;
+            background: rgba(245, 245, 245, 0.8); padding: 18px 25px; margin: 28px 0;
             border-radius: 12px; font-size: 16px; line-height: 1.6;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05); backdrop-filter: blur(5px);
             position: relative; overflow: hidden;
@@ -152,7 +161,7 @@
         }
 
         /* ===== MASONRY MESSAGES ===== */
-        .messages { position: relative; margin: 20px; box-sizing: border-box; }
+        .messages { position: relative; margin: 20px 0; box-sizing: border-box; }
         .message {
             background: rgba(255, 255, 255, 0.85); padding: 22px; border-radius: 22px;
             box-shadow: 0 5px 18px rgba(0,0,0,0.08); border: 1px solid rgba(255, 107, 107, 0.1);
@@ -178,7 +187,7 @@
         @keyframes heartPop { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
 
         /* ===== LOAD MORE BUTTON ===== */
-        .load-more-container { text-align: center; margin: 30px 20px 50px; padding: 0 20px; }
+        .load-more-container { text-align: center; margin: 30px 0 50px; padding: 0; }
         .load-more-btn {
             background: linear-gradient(135deg, #ff6b6b, #ff8e8e); color: white; border: none;
             padding: 14px 40px; border-radius: 50px; font-size: 16px; font-weight: 600;
@@ -197,20 +206,21 @@
         @keyframes spin { to { transform: rotate(360deg); } }
 
         /* ===== FOOTER ===== */
-        footer { text-align: center; margin: 30px 20px 50px; color: #777; font-size: 1.05em; padding-top: 30px; border-top: 1px solid rgba(200, 200, 200, 0.3); }
+        footer { text-align: center; margin: 30px 0 50px; color: #777; font-size: 1.05em; padding-top: 30px; border-top: 1px solid rgba(200, 200, 200, 0.3); }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .header-menu { flex-direction: column; gap: 15px; margin: 10px; padding: 10px 20px; }
             .menu-links { width: 100%; justify-content: center; flex-wrap: wrap; }
             .menu-title { font-size: 1.5em; }
-            .note, footer { margin: 15px 10px; }
-            .gallery-section { margin: 15px 10px; padding: 20px; }
+            .content-wrapper { max-width: 100%; padding: 0 10px; }
+            .note, footer { margin: 15px 0; }
+            .gallery-section { margin: 15px 0; padding: 20px; }
             .gallery-header { flex-direction: column; gap: 15px; text-align: center; }
             .gallery-header h2 { font-size: 20px; }
             .gallery-card { flex: 0 0 280px; }
             .gallery-nav { width: 35px; height: 35px; font-size: 16px; }
-            .messages { margin: 10px; }
+            .messages { margin: 10px 0; }
             .message { position: relative !important; width: 100% !important; margin-bottom: 20px; left: 0 !important; top: 0 !important; }
             .social-icon { width: 18px; height: 18px; }
             #popup-message-input { min-height: 120px; font-size: 18px !important; }
@@ -224,7 +234,7 @@
 <body>
     <div id="loading-bar"></div>
 
-    <!-- Header Menu -->
+    <!-- 🔥 HEADER MENU - FULL WIDTH (ngoài wrapper) -->
     <div class="header-menu">
         <div class="menu-links">
             <a href="#" id="open-message-popup"><span>+</span> Gửi lời nhắn</a>
@@ -238,53 +248,65 @@
         <div class="menu-title">@TheBlouse</div>
     </div>
 
-    <!-- Success Popup -->
-    <div id="success-popup-overlay" class="popup-overlay">
-        <div id="success-popup" class="popup success-popup">
-            <div class="check-icon">✓</div>
-            <h3>Cảm ơn bạn đã gửi lời nhắn!</h3>
-            <p>Lời nhắn sẽ được duyệt bởi admin và xuất hiện trên trang trong vài phút.</p>
-        </div>
-    </div>
+    <!-- 🔥 CONTENT WRAPPER - Chỉ phần này được bo giữa -->
+    <div class="content-wrapper">
 
-    <!-- Message Popup -->
-    <div id="message-popup-overlay" class="popup-overlay">
-        <div id="message-popup" class="popup">
-            <span class="close-btn">&times;</span>
-            <h3>Gửi lời nhắn yêu thương</h3>
-            <input type="text" id="popup-sender-name" placeholder="Tên của bạn (ví dụ: Minh Anh)">
-            <label class="anonymous-checkbox">
-                <input type="checkbox" id="anonymous-checkbox">
-                <span>👤 Ẩn danh (không hiển thị tên công khai)</span>
-            </label>
-            <textarea id="popup-message-input" placeholder="Viết lời nhắn yêu thương của bạn..."></textarea>
-            <button id="popup-send-btn">Gửi lời nhắn</button>
-        </div>
-    </div>
-
-    <!-- Gallery Section -->
-    <section class="gallery-section">
-        <div class="gallery-header"><h2>Những hoạt động tại Viện Huyết học</h2></div>
-        <div class="gallery-container">
-            <button class="gallery-nav prev" onclick="scrollGallery(-1)">❮</button>
-            <div class="gallery-scroll" id="gallery-scroll">
-                <div class="loading">Đang tải gallery...</div>
+        <!-- Success Popup -->
+        <div id="success-popup-overlay" class="popup-overlay">
+            <div id="success-popup" class="popup success-popup">
+                <div class="check-icon">✓</div>
+                <h3>Cảm ơn bạn đã gửi lời nhắn!</h3>
+                <p>Lời nhắn sẽ được duyệt bởi admin và xuất hiện trên trang trong vài phút.</p>
             </div>
-            <button class="gallery-nav next" onclick="scrollGallery(1)">❯</button>
         </div>
-    </section>
 
-    <div class="note">
-        ⚠️ Lưu ý: Đây là bản demo. 
-        Hãy gửi lời nhắn yêu thương của bạn để lan tỏa yêu thương đến các em nhỏ!
-    </div>
+        <!-- Message Popup -->
+        <div id="message-popup-overlay" class="popup-overlay">
+            <div id="message-popup" class="popup">
+                <span class="close-btn">&times;</span>
+                <h3>Gửi lời nhắn yêu thương</h3>
+                <input type="text" id="popup-sender-name" placeholder="Tên của bạn (ví dụ: Minh Anh)">
+                <label class="anonymous-checkbox">
+                    <input type="checkbox" id="anonymous-checkbox">
+                    <span>👤 Ẩn danh (không hiển thị tên công khai)</span>
+                </label>
+                <textarea id="popup-message-input" placeholder="Viết lời nhắn yêu thương của bạn..."></textarea>
+                <button id="popup-send-btn">Gửi lời nhắn</button>
+            </div>
+        </div>
 
-    <div class="messages" id="messages-container"></div>
+        <!-- Gallery Section -->
+        <section class="gallery-section">
+            <div class="gallery-header"><h2>🔥 Những hoạt động tại Viện Huyết học</h2></div>
+            <div class="gallery-container">
+                <button class="gallery-nav prev" onclick="scrollGallery(-1)">❮</button>
+                <div class="gallery-scroll" id="gallery-scroll">
+                    <div class="loading">Đang tải gallery...</div>
+                </div>
+                <button class="gallery-nav next" onclick="scrollGallery(1)">❯</button>
+            </div>
+        </section>
 
-    <div class="load-more-container">
-        <button id="load-more-btn" class="load-more-btn"><span class="btn-text">Tải thêm...</span><span class="spinner"></span></button>
-    </div>
+        <!-- Note Box -->
+        <div class="note">
+            ⚠️ Lưu ý: Đây là bản demo với hệ thống quản lý admin hoàn chỉnh. Lời nhắn sẽ được lưu trữ và quản lý qua Firebase. 
+            Hãy gửi lời nhắn yêu thương của bạn để lan tỏa yêu thương đến các em nhỏ!
+        </div>
 
+        <!-- Messages -->
+        <div class="messages" id="messages-container"></div>
+
+        <!-- Load More Button -->
+        <div class="load-more-container">
+            <button id="load-more-btn" class="load-more-btn">
+                <span class="btn-text">Tải thêm...</span>
+                <span class="spinner"></span>
+            </button>
+        </div>
+
+    </div> <!-- 🔥 End content-wrapper -->
+
+    <!-- Footer (cũng nằm trong wrapper để bo giữa) -->
     <footer>Trang web được tạo bằng HTML/CSS/JavaScript với Firebase</footer>
 
     <!-- Firebase SDKs -->
