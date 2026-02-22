@@ -126,7 +126,7 @@
         #popup-message-input {
             width: 100%; min-height: 150px; padding: 18px;
             border: 2px solid #ddd; border-radius: 10px;
-            margin-bottom: 20px; font-size: 20px !important;
+            margin-bottom: 15px; font-size: 20px !important;
             line-height: 1.6 !important; font-family: inherit;
             resize: vertical;
         }
@@ -137,6 +137,38 @@
         #popup-message-input::placeholder {
             font-size: 18px; color: #999;
         }
+        
+        /* 🔥 SENDER NAME INPUT */
+        #popup-sender-name {
+            width: 100%; padding: 14px;
+            border: 2px solid #ddd; border-radius: 10px;
+            margin-bottom: 15px; font-size: 18px;
+            font-family: inherit;
+        }
+        #popup-sender-name:focus {
+            outline: none; border-color: #ff6b6b;
+            box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2);
+        }
+        
+        /* 🔥 ANONYMOUS CHECKBOX */
+        .anonymous-checkbox {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 20px; padding: 12px;
+            background: #f9f9f9; border-radius: 8px;
+            cursor: pointer; user-select: none;
+        }
+        .anonymous-checkbox input[type="checkbox"] {
+            width: 20px; height: 20px;
+            cursor: pointer;
+        }
+        .anonymous-checkbox label {
+            font-size: 16px; color: #333;
+            cursor: pointer; font-weight: 500;
+        }
+        .anonymous-checkbox:hover {
+            background: #f0f0f0;
+        }
+        
         #popup-send-btn {
             width: 100%; padding: 16px;
             background: linear-gradient(to right, #ff6b6b, #ff8e8e);
@@ -223,6 +255,16 @@
             background: linear-gradient(to bottom, #ff6b6b, #ffd166);
             border-radius: 22px 0 0 22px;
         }
+        .message-sender {
+            font-size: 16px; font-weight: 600;
+            color: #e74c3c; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .message-sender .anonymous-badge {
+            background: #ff6b6b; color: white;
+            padding: 2px 8px; border-radius: 12px;
+            font-size: 12px; font-weight: 600;
+        }
         .message-text {
             margin: 0 0 22px; line-height: 1.7;
             color: #444; font-size: 18px; font-weight: 500;
@@ -234,7 +276,7 @@
             border-top: 1px dashed #eee; align-items: center;
         }
 
-        /* 🔥 LIKE BUTTON STYLES ===== */
+        /* 🔥 LIKE BUTTON STYLES */
         .heart-icon {
             cursor: pointer;
             display: flex; align-items: center; gap: 6px;
@@ -324,6 +366,7 @@
             #popup-message-input {
                 min-height: 120px; font-size: 18px !important;
             }
+            #popup-sender-name { font-size: 16px !important; }
             .popup h3 { font-size: 26px !important; }
             #popup-send-btn { font-size: 20px !important; }
             .load-more-btn { width: 100%; padding: 12px 30px; }
@@ -364,6 +407,16 @@
         <div id="message-popup" class="popup">
             <span class="close-btn">&times;</span>
             <h3>Gửi lời nhắn yêu thương</h3>
+            
+            <!-- 🔥 SENDER NAME INPUT -->
+            <input type="text" id="popup-sender-name" placeholder="Tên của bạn (ví dụ: Minh Anh)">
+            
+            <!-- 🔥 ANONYMOUS CHECKBOX -->
+            <label class="anonymous-checkbox">
+                <input type="checkbox" id="anonymous-checkbox">
+                <span>👤 Ẩn danh (không hiển thị tên công khai)</span>
+            </label>
+            
             <textarea id="popup-message-input" placeholder="Viết lời nhắn yêu thương của bạn... (Ví dụ: Chúc em mạnh khỏe và phải giữ mãi nụ cười thật tươi nhé. Love you so much ❤)"></textarea>
             <button id="popup-send-btn">Gửi lời nhắn</button>
         </div>
@@ -453,13 +506,24 @@
         // Send Message
         document.getElementById('popup-send-btn').addEventListener('click', async () => {
             const message = document.getElementById('popup-message-input').value.trim();
+            const senderName = document.getElementById('popup-sender-name').value.trim();
+            const isAnonymous = document.getElementById('anonymous-checkbox').checked;
+            
             if (!message) return alert('Vui lòng nhập lời nhắn!');
+            if (!senderName && !isAnonymous) return alert('Vui lòng nhập tên hoặc chọn ẩn danh!');
+            
             try {
                 await db.collection('messages').add({
-                    text: message, likes: 0, status: 'pending',
+                    text: message,
+                    senderName: isAnonymous ? 'Ẩn danh' : senderName,
+                    isAnonymous: isAnonymous,
+                    likes: 0,
+                    status: 'pending',
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 document.getElementById('popup-message-input').value = '';
+                document.getElementById('popup-sender-name').value = '';
+                document.getElementById('anonymous-checkbox').checked = false;
                 closePopup('message-popup');
                 showSuccessPopup();
             } catch (e) {
@@ -535,12 +599,18 @@
                 const el = document.createElement('div');
                 el.className = 'message';
                 
-                // 🔥 Check if user already liked this message (from localStorage)
+                // Check if user already liked this message
                 const likedMessages = JSON.parse(localStorage.getItem('likedMessages') || '[]');
                 const isLiked = likedMessages.includes(msg.id);
                 
+                // 🔥 Display sender name or "Ẩn danh"
+                const senderDisplay = msg.isAnonymous ? 
+                    '👤 Ẩn danh' : 
+                    `✍️ ${escapeHtml(msg.senderName || 'Ẩn danh')}`;
+                
                 el.innerHTML = `
-                    <div class="message-text">${msg.text}</div>
+                    <div class="message-sender">${senderDisplay}</div>
+                    <div class="message-text">${escapeHtml(msg.text)}</div>
                     <div class="message-actions">
                         <span class="heart-icon ${isLiked ? 'liked' : ''}" data-id="${msg.id}">
                             <span class="heart-symbol">${isLiked ? '❤' : '🤍'}</span>
@@ -596,44 +666,38 @@
             let currentCount = parseInt(countSpan.textContent) || 0;
             
             if (isLiked) {
-                // 🔥 UNLIKE: Remove from localStorage, decrease count
+                // UNLIKE
                 const index = likedMessages.indexOf(messageId);
                 if (index > -1) likedMessages.splice(index, 1);
                 localStorage.setItem('likedMessages', JSON.stringify(likedMessages));
                 
-                // Update UI immediately
                 heartIcon.classList.remove('liked');
                 symbolSpan.textContent = '🤍';
                 countSpan.textContent = Math.max(0, currentCount - 1);
                 
-                // Update Firebase (decrement)
                 try {
                     await db.collection('messages').doc(messageId).update({
                         likes: firebase.firestore.FieldValue.increment(-1)
                     });
                 } catch (e) {
                     console.error('Unlike error:', e);
-                    // Revert UI if Firebase fails
                     countSpan.textContent = currentCount;
                 }
             } else {
-                // 🔥 LIKE: Add to localStorage, increase count (allow spam)
+                // LIKE
                 likedMessages.push(messageId);
                 localStorage.setItem('likedMessages', JSON.stringify(likedMessages));
                 
-                // Update UI immediately with animation
                 heartIcon.classList.add('liked');
                 symbolSpan.textContent = '❤';
                 countSpan.textContent = currentCount + 1;
                 
-                // Update Firebase (increment)
                 try {
                     await db.collection('messages').doc(messageId).update({
                         likes: firebase.firestore.FieldValue.increment(1)
                     });
                 } catch (e) {
                     console.error('Like error:', e);
-                    // Revert UI if Firebase fails
                     heartIcon.classList.remove('liked');
                     symbolSpan.textContent = '🤍';
                     countSpan.textContent = currentCount;
@@ -665,7 +729,7 @@
                 });
         }
 
-        // 🔥 Event delegation for like buttons (handles dynamically added elements)
+        // Event delegation for like buttons
         document.addEventListener('click', e => {
             const heartIcon = e.target.closest('.heart-icon');
             if (heartIcon) {
@@ -684,6 +748,13 @@
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(setupMasonry, 250);
         });
+
+        // 🔥 ESCAPE HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
     </script>
 </body>
 </html>
