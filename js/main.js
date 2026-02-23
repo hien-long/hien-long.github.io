@@ -41,7 +41,34 @@ function formatDate(date) {
     });
 }
 
-// ===== INIT EVENT LISTENERS =====
+// ===== LOAD SECTIONS (Fix cho GitHub Pages) =====
+async function loadSection(path, container) {
+    try {
+        const response = await fetch(path);
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        const html = await response.text();
+        container.insertAdjacentHTML('beforeend', html);
+        return true;
+    } catch (error) {
+        console.error('Error loading ' + path + ':', error);
+        return false;
+    }
+}
+
+async function loadAllSections() {
+    const container = document.getElementById('sections-container');
+    if (!container) return;
+    
+    // Load tuần tự để đảm bảo thứ tự hiển thị
+    await loadSection('./sections/banner.html', container);
+    await loadSection('./sections/gallery.html', container);
+    await loadSection('./sections/messages.html', container);
+    
+    // Sau khi load xong sections thì init event listeners
+    initEventListeners();
+}
+
+// ===== EVENT LISTENERS =====
 function initEventListeners() {
     const openPopupBtn = document.getElementById('open-message-popup');
     if (openPopupBtn) {
@@ -426,11 +453,13 @@ function loadApprovedMessages() {
 
 // ===== MAIN INIT =====
 function initApp() {
-    initEventListeners();
-    initFeatures();
-    loadBanners();
-    loadGallery();
-    loadApprovedMessages();
+    // Load sections first, then init features
+    loadAllSections().then(function() {
+        initFeatures();
+        loadBanners();
+        loadGallery();
+        loadApprovedMessages();
+    });
 }
 
 if (document.readyState === 'loading') {
