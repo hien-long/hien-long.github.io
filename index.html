@@ -57,8 +57,48 @@
             </div>
         </div>
 
-<!-- Sections will be loaded here -->
-<div id="sections-container"></div>
+<!-- BANNER SECTION -->
+<section class="banner-section">
+    <div class="banner-carousel" id="banner-carousel">
+        <div style="text-align: center; padding: 100px 20px; color: #999;">Đang tải banner...</div>
+    </div>
+    <button class="banner-nav prev" onclick="changeBanner(-1)">❮</button>
+    <button class="banner-nav next" onclick="changeBanner(1)">❯</button>
+    <div class="banner-dots" id="banner-dots"></div>
+</section>
+
+<!-- GALLERY SECTION -->
+<section class="gallery-section">
+    <div class="gallery-header">
+        <h2>🔥 Những hoạt động tại Viện Huyết học</h2>
+    </div>
+    <div class="gallery-container">
+        <button class="gallery-nav prev" onclick="scrollGallery(-1)">❮</button>
+        <div class="gallery-scroll" id="gallery-scroll">
+            <div style="text-align:center; padding:20px; color:#999;">Đang tải gallery...</div>
+        </div>
+        <button class="gallery-nav next" onclick="scrollGallery(1)">❯</button>
+    </div>
+</section>
+
+<!-- MESSAGES SECTION -->
+<section class="messages-section">
+    <div class="messages-header">
+        <h2>💌 Lời chúc từ mọi người</h2>
+    </div>
+    <div class="messages-info">
+        <strong>⚠️ Lưu ý:</strong> Đây là bản demo với hệ thống quản lý admin hoàn chỉnh. 
+        Lời nhắn sẽ được lưu trữ và quản lý qua Firebase. 
+        Hãy gửi lời nhắn yêu thương của bạn để lan tỏa yêu thương đến các em nhỏ! 💕
+    </div>
+    <div class="messages" id="messages-container"></div>
+    <div class="load-more-container">
+        <button id="load-more-btn" class="load-more-btn">
+            <span class="btn-text">Tải thêm...</span>
+            <span class="spinner"></span>
+        </button>
+    </div>
+</section>
 
     </div>
 
