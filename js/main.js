@@ -458,14 +458,13 @@ function loadApprovedMessages() {
 
 // ===== MAIN INIT =====
 function initApp() {
-    console.log('Initializing app...');
-    loadAllSections().then(function() {
-        console.log('Sections loaded, initializing features...');
-        initFeatures();
-        loadBanners();
-        loadGallery();
-        loadApprovedMessages();
-    });
+    // Sections đã inline rồi, không cần load nữa
+    // loadAllSections(); // ← Comment dòng này
+    
+    initFeatures();
+    loadBanners();
+    loadGallery();
+    loadApprovedMessages();
 }
 
 if (document.readyState === 'loading') {
