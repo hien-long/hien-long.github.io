@@ -47,7 +47,7 @@ function initEventListeners() {
     // Popup: Open
     const openPopupBtn = document.getElementById('open-message-popup');
     if (openPopupBtn) {
-        openPopupBtn.addEventListener('click', e => {
+        openPopupBtn.addEventListener('click', function(e) {
             e.preventDefault();
             const overlay = document.getElementById('message-popup-overlay');
             const popup = document.getElementById('message-popup');
@@ -61,14 +61,18 @@ function initEventListeners() {
     // Popup: Close button
     const closeBtn = document.querySelector('.close-btn');
     if (closeBtn) {
-        closeBtn.addEventListener('click', () => closePopup('message-popup'));
+        closeBtn.addEventListener('click', function() {
+            closePopup('message-popup');
+        });
     }
     
     // Popup: Click outside to close
     const messagePopupOverlay = document.getElementById('message-popup-overlay');
     if (messagePopupOverlay) {
-        messagePopupOverlay.addEventListener('click', e => {
-            if (e.target === e.currentTarget) closePopup('message-popup');
+        messagePopupOverlay.addEventListener('click', function(e) {
+            if (e.target === e.currentTarget) {
+                closePopup('message-popup');
+            }
         });
     }
     
@@ -85,7 +89,7 @@ function initEventListeners() {
     }
     
     // Like handler (event delegation)
-    document.addEventListener('click', e => {
+    document.addEventListener('click', function(e) {
         const heartIcon = e.target.closest('.heart-icon');
         if (heartIcon) { 
             e.stopPropagation(); 
@@ -97,24 +101,26 @@ function initEventListeners() {
 // ===== FEATURES INIT =====
 function initFeatures() {
     // Loading bar animation
-    window.addEventListener('load', () => {
+    window.addEventListener('load', function() {
         const loadingBar = document.getElementById('loading-bar');
         if (loadingBar) {
-            setTimeout(() => {
+            setTimeout(function() {
                 loadingBar.classList.add('loading-complete');
-                setTimeout(() => loadingBar.remove(), 500);
+                setTimeout(function() { 
+                    loadingBar.remove(); 
+                }, 500);
             }, 500);
         }
     });
     
-    // Floating hearts on DOM ready
+    // Floating hearts
     for (let i = 0; i < 20; i++) {
         setTimeout(createHeart, i * 300);
     }
     
-    // Resize handler for masonry layout
+    // Resize handler for masonry
     let resizeTimer;
-    window.addEventListener('resize', () => { 
+    window.addEventListener('resize', function() { 
         clearTimeout(resizeTimer); 
         resizeTimer = setTimeout(setupMasonry, 250); 
     });
@@ -132,15 +138,17 @@ function createHeart() {
     const endX = startX + (Math.random() - 0.5) * 500;
     const endY = -100 - Math.random() * 100;
     
-    heart.style.setProperty('--tx', `${endX - startX}px`);
-    heart.style.setProperty('--ty', `${endY - startY}px`);
-    heart.style.fontSize = `${size}px`;
+    heart.style.setProperty('--tx', (endX - startX) + 'px');
+    heart.style.setProperty('--ty', (endY - startY) + 'px');
+    heart.style.fontSize = size + 'px';
     heart.style.color = 'white';
-    heart.style.left = `${startX}px`;
-    heart.style.top = `${startY}px`;
+    heart.style.left = startX + 'px';
+    heart.style.top = startY + 'px';
     
     document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 3000);
+    setTimeout(function() { 
+        heart.remove(); 
+    }, 3000);
 }
 
 // ===== BANNER FUNCTIONS =====
@@ -148,15 +156,13 @@ function loadBanners() {
     db.collection('banners')
       .where('active', '==', true)
       .orderBy('order', 'asc')
-      .onSnapshot(snapshot => {
-        banners = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      .onSnapshot(function(snapshot) {
+        banners = snapshot.docs.map(function(doc) { 
+            return { id: doc.id, ...doc.data() }; 
+        });
         renderBanners();
-    }, error => {
+    }, function(error) {
         console.error('Error loading banners:', error);
-        const carousel = document.getElementById('banner-carousel');
-        if (carousel) {
-            carousel.innerHTML = '<div style="text-align:center;padding:20px;color:#999;">Lỗi tải banner</div>';
-        }
     });
 }
 
@@ -172,22 +178,29 @@ function renderBanners() {
         return;
     }
 
-    carousel.innerHTML = banners.map((banner, index) => `
-        <div class="banner-slide ${index === 0 ? 'active' : ''}" data-index="${index}" ${banner.link ? `onclick="window.open('${banner.link}', '_blank')"` : ''}>
-            <img src="${banner.image}" alt="${banner.title || 'Banner'}" loading="lazy">
-            <div class="banner-overlay">
-                <div class="banner-content">
-                    ${banner.title ? `<h3 class="banner-title">${banner.title}</h3>` : ''}
-                    ${banner.link ? '<div class="banner-detail">Ấn vào để biết thêm chi tiết</div>' : ''}
-                </div>
-            </div>
-        </div>
-    `).join('');
-
-    dotsContainer.innerHTML = banners.map((_, index) => `
-        <div class="banner-dot ${index === 0 ? 'active' : ''}" onclick="goToBanner(${index})"></div>
-    `).join('');
-
+    let slidesHTML = '';
+    let dotsHTML = '';
+    
+    banners.forEach(function(banner, index) {
+        const activeClass = index === 0 ? 'active' : '';
+        const onclickAttr = banner.link ? 'onclick="window.open(\'' + banner.link + '\', \'_blank\')"' : '';
+        
+        slidesHTML += '<div class="banner-slide ' + activeClass + '" data-index="' + index + '" ' + onclickAttr + '>' +
+            '<img src="' + banner.image + '" alt="' + (banner.title || 'Banner') + '" loading="lazy">' +
+            '<div class="banner-overlay">' +
+                '<div class="banner-content">' +
+                    (banner.title ? '<h3 class="banner-title">' + banner.title + '</h3>' : '') +
+                    (banner.link ? '<div class="banner-detail">Ấn vào để biết thêm chi tiết</div>' : '') +
+                '</div>' +
+            '</div>' +
+        '</div>';
+        
+        dotsHTML += '<div class="banner-dot ' + (index === 0 ? 'active' : '') + '" onclick="goToBanner(' + index + ')"></div>';
+    });
+    
+    carousel.innerHTML = slidesHTML;
+    dotsContainer.innerHTML = dotsHTML;
+    
     startBannerAutoPlay();
 }
 
@@ -227,7 +240,9 @@ function goToBanner(index) {
 
 function startBannerAutoPlay() {
     stopBannerAutoPlay();
-    bannerInterval = setInterval(() => changeBanner(1), 5000);
+    bannerInterval = setInterval(function() {
+        changeBanner(1);
+    }, 5000);
 }
 
 function stopBannerAutoPlay() {
@@ -246,7 +261,7 @@ function resetBannerAutoPlay() {
 function loadGallery() {
     db.collection('gallery')
       .orderBy('order', 'asc')
-      .onSnapshot(snapshot => {
+      .onSnapshot(function(snapshot) {
         const galleryScroll = document.getElementById('gallery-scroll');
         if (!galleryScroll) return;
         
@@ -257,25 +272,19 @@ function loadGallery() {
             return; 
         }
         
-        snapshot.forEach(doc => {
+        snapshot.forEach(function(doc) {
             const data = doc.data();
             const card = document.createElement('div');
             card.className = 'gallery-card';
-            card.innerHTML = `
-                <img src="${data.image}" alt="${data.title}" loading="lazy">
-                <div class="card-content">
-                    <h3>${data.title}</h3>
-                    <p>${data.description || ''}</p>
-                </div>
-            `;
+            card.innerHTML = '<img src="' + data.image + '" alt="' + data.title + '" loading="lazy">' +
+                '<div class="card-content">' +
+                    '<h3>' + data.title + '</h3>' +
+                    '<p>' + (data.description || '') + '</p>' +
+                '</div>';
             galleryScroll.appendChild(card);
         });
-    }, error => {
+    }, function(error) {
         console.error('Error loading gallery:', error);
-        const galleryScroll = document.getElementById('gallery-scroll');
-        if (galleryScroll) {
-            galleryScroll.innerHTML = '<p style="color:#999;text-align:center;width:100%;">Lỗi tải gallery</p>';
-        }
     });
 }
 
@@ -287,28 +296,26 @@ function scrollGallery(direction) {
 }
 
 // ===== MESSAGE FUNCTIONS =====
-async function sendMessage() {
+function sendMessage() {
     const messageInput = document.getElementById('popup-message-input');
     const senderNameInput = document.getElementById('popup-sender-name');
     const anonymousCheckbox = document.getElementById('anonymous-checkbox');
     
-    const message = messageInput?.value.trim();
-    const senderName = senderNameInput?.value.trim();
-    const isAnonymous = anonymousCheckbox?.checked;
+    const message = messageInput ? messageInput.value.trim() : '';
+    const senderName = senderNameInput ? senderNameInput.value.trim() : '';
+    const isAnonymous = anonymousCheckbox ? anonymousCheckbox.checked : false;
     
     if (!message) return alert('Vui lòng nhập lời nhắn!');
     if (!senderName && !isAnonymous) return alert('Vui lòng nhập tên hoặc chọn ẩn danh!');
     
-    try {
-        await db.collection('messages').add({
-            text: message, 
-            senderName: isAnonymous ? 'Ẩn danh' : senderName,
-            isAnonymous: isAnonymous || false,
-            likes: 0, 
-            status: 'pending',
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        
+    db.collection('messages').add({
+        text: message, 
+        senderName: isAnonymous ? 'Ẩn danh' : senderName,
+        isAnonymous: isAnonymous,
+        likes: 0, 
+        status: 'pending',
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(function() {
         // Reset form
         if (messageInput) messageInput.value = '';
         if (senderNameInput) senderNameInput.value = '';
@@ -316,10 +323,10 @@ async function sendMessage() {
         
         closePopup('message-popup');
         showSuccessPopup();
-    } catch (e) { 
+    }).catch(function(e) { 
         console.error('Send message error:', e);
         alert('Lỗi: ' + e.message); 
-    }
+    });
 }
 
 function showSuccessPopup() {
@@ -331,9 +338,11 @@ function showSuccessPopup() {
     overlay.style.display = 'flex'; 
     popup.classList.add('show');
     
-    setTimeout(() => {
+    setTimeout(function() {
         popup.classList.remove('show');
-        setTimeout(() => { overlay.style.display = 'none'; }, 400);
+        setTimeout(function() { 
+            overlay.style.display = 'none'; 
+        }, 400);
     }, 5000);
 }
 
@@ -344,7 +353,9 @@ function closePopup(id) {
     if (!popup || !overlay) return;
     
     popup.classList.remove('show');
-    setTimeout(() => { overlay.style.display = 'none'; }, 400);
+    setTimeout(function() { 
+        overlay.style.display = 'none'; 
+    }, 400);
 }
 
 // ===== MASONRY LAYOUT =====
@@ -354,10 +365,9 @@ function setupMasonry() {
     
     const messages = Array.from(container.children);
     
-    // Mobile: stack vertically
     if (window.innerWidth <= 768) { 
         container.style.height = 'auto'; 
-        messages.forEach(msg => { 
+        messages.forEach(function(msg) { 
             msg.style.position = 'relative'; 
             msg.style.width = '100%'; 
             msg.style.left = '0';
@@ -372,29 +382,32 @@ function setupMasonry() {
     const numColumns = Math.max(1, Math.min(Math.floor(containerWidth / minCardWidth), 5));
     const cardWidth = (containerWidth - gap * (numColumns - 1)) / numColumns;
     
-    // Reset styles
-    messages.forEach(msg => { 
-        msg.style.width = `${cardWidth}px`; 
+    messages.forEach(function(msg) { 
+        msg.style.width = cardWidth + 'px'; 
         msg.style.position = 'absolute'; 
         msg.style.left = '0';
         msg.style.top = '0';
     });
     
-    // Calculate column positions
     const columnHeights = new Array(numColumns).fill(0);
-    const columnLefts = Array.from({length: numColumns}, (_, i) => i * (cardWidth + gap));
+    const columnLefts = [];
+    for (let i = 0; i < numColumns; i++) {
+        columnLefts.push(i * (cardWidth + gap));
+    }
     
-    // Position each message
-    messages.forEach((msg, index) => {
-        const shortestCol = columnHeights.indexOf(Math.min(...columnHeights));
-        msg.style.left = `${columnLefts[shortestCol]}px`;
-        msg.style.top = `${columnHeights[shortestCol]}px`;
+    messages.forEach(function(msg, index) {
+        const minHeight = Math.min.apply(null, columnHeights);
+        const shortestCol = columnHeights.indexOf(minHeight);
+        
+        msg.style.left = columnLefts[shortestCol] + 'px';
+        msg.style.top = columnHeights[shortestCol] + 'px';
         columnHeights[shortestCol] += msg.offsetHeight + gap;
-        msg.style.animationDelay = `${index * 0.05}s`;
+        msg.style.animationDelay = (index * 0.05) + 's';
         msg.style.opacity = '1';
     });
     
-    container.style.height = `${Math.max(...columnHeights)}px`;
+    const maxHeight = Math.max.apply(null, columnHeights);
+    container.style.height = maxHeight + 'px';
 }
 
 function renderMessages(startIndex, endIndex) {
@@ -403,28 +416,27 @@ function renderMessages(startIndex, endIndex) {
     
     const messagesToRender = allMessages.slice(startIndex, endIndex);
     
-    messagesToRender.forEach(msg => {
+    messagesToRender.forEach(function(msg) {
         const el = document.createElement('div');
         el.className = 'message';
         
         const likedMessages = JSON.parse(localStorage.getItem('likedMessages') || '[]');
-        const isLiked = likedMessages.includes(msg.id);
+        const isLiked = likedMessages.indexOf(msg.id) > -1;
         const senderDisplay = msg.isAnonymous 
             ? '👤 Ẩn danh' 
-            : `✍️ ${escapeHtml(msg.senderName || 'Ẩn danh')}`;
+            : '✍️ ' + escapeHtml(msg.senderName || 'Ẩn danh');
         const dateDisplay = formatDate(msg.timestamp);
         
-        el.innerHTML = `
-            <div class="message-sender">${senderDisplay}</div>
-            <div class="message-text">${escapeHtml(msg.text)}</div>
-            <div class="message-actions">
-                <span class="heart-icon ${isLiked ? 'liked' : ''}" data-id="${msg.id}">
-                    <span class="heart-symbol">${isLiked ? '❤' : '🤍'}</span>
-                    <span class="like-count">${msg.likes || 0}</span>
-                </span>
-                <span>${dateDisplay}</span>
-            </div>
-        `;
+        el.innerHTML = '<div class="message-sender">' + senderDisplay + '</div>' +
+            '<div class="message-text">' + escapeHtml(msg.text) + '</div>' +
+            '<div class="message-actions">' +
+                '<span class="heart-icon ' + (isLiked ? 'liked' : '') + '" data-id="' + msg.id + '">' +
+                    '<span class="heart-symbol">' + (isLiked ? '❤' : '🤍') + '</span>' +
+                    '<span class="like-count">' + (msg.likes || 0) + '</span>' +
+                '</span>' +
+                '<span>' + dateDisplay + '</span>' +
+            '</div>';
+        
         container.appendChild(el);
     });
     
@@ -454,7 +466,7 @@ function loadMoreMessages() {
         btn.disabled = true;
     }
     
-    setTimeout(() => {
+    setTimeout(function() {
         const startIndex = displayedCount;
         const endIndex = Math.min(startIndex + MESSAGES_PER_PAGE, allMessages.length);
         renderMessages(startIndex, endIndex);
@@ -468,15 +480,15 @@ function loadMoreMessages() {
     }, 300);
 }
 
-async function toggleLike(messageId, heartIcon) {
+function toggleLike(messageId, heartIcon) {
     if (!messageId || !heartIcon) return;
     
     const likedMessages = JSON.parse(localStorage.getItem('likedMessages') || '[]');
-    const isLiked = likedMessages.includes(messageId);
+    const isLiked = likedMessages.indexOf(messageId) > -1;
     
     const countSpan = heartIcon.querySelector('.like-count');
     const symbolSpan = heartIcon.querySelector('.heart-symbol');
-    let currentCount = parseInt(countSpan?.textContent) || 0;
+    let currentCount = parseInt(countSpan && countSpan.textContent) || 0;
     
     if (isLiked) {
         // Unlike
@@ -488,14 +500,12 @@ async function toggleLike(messageId, heartIcon) {
         if (symbolSpan) symbolSpan.textContent = '🤍';
         if (countSpan) countSpan.textContent = Math.max(0, currentCount - 1);
         
-        try { 
-            await db.collection('messages').doc(messageId).update({ 
-                likes: firebase.firestore.FieldValue.increment(-1) 
-            }); 
-        } catch (e) { 
+        db.collection('messages').doc(messageId).update({ 
+            likes: firebase.firestore.FieldValue.increment(-1) 
+        }).catch(function(e) { 
             console.error('Unlike error:', e); 
             if (countSpan) countSpan.textContent = currentCount; 
-        }
+        });
     } else {
         // Like
         likedMessages.push(messageId);
@@ -505,16 +515,14 @@ async function toggleLike(messageId, heartIcon) {
         if (symbolSpan) symbolSpan.textContent = '❤';
         if (countSpan) countSpan.textContent = currentCount + 1;
         
-        try { 
-            await db.collection('messages').doc(messageId).update({ 
-                likes: firebase.firestore.FieldValue.increment(1) 
-            }); 
-        } catch (e) { 
+        db.collection('messages').doc(messageId).update({ 
+            likes: firebase.firestore.FieldValue.increment(1) 
+        }).catch(function(e) { 
             console.error('Like error:', e); 
             heartIcon.classList.remove('liked'); 
             if (symbolSpan) symbolSpan.textContent = '🤍'; 
             if (countSpan) countSpan.textContent = currentCount; 
-        }
+        });
     }
 }
 
@@ -522,12 +530,14 @@ function loadApprovedMessages() {
     db.collection('messages')
       .where('status', '==', 'approved')
       .orderBy('timestamp', 'desc')
-      .onSnapshot(snapshot => {
-        allMessages = snapshot.docs.map(doc => ({ 
-            id: doc.id, 
-            ...doc.data(), 
-            timestamp: doc.data().timestamp 
-        }));
+      .onSnapshot(function(snapshot) {
+        allMessages = snapshot.docs.map(function(doc) { 
+            return { 
+                id: doc.id, 
+                ...doc.data(), 
+                timestamp: doc.data().timestamp 
+            }; 
+        });
         
         const container = document.getElementById('messages-container');
         if (!container) return;
@@ -540,18 +550,13 @@ function loadApprovedMessages() {
             displayedCount = Math.min(MESSAGES_PER_PAGE, allMessages.length);
         }
         updateLoadMoreButton();
-    }, error => {
+    }, function(error) {
         console.error('Error loading messages:', error);
-        const container = document.getElementById('messages-container');
-        if (container) {
-            container.innerHTML = '<p style="color:#999;text-align:center;">Lỗi tải lời nhắn</p>';
-        }
     });
 }
 
 // ===== MAIN INIT =====
 function initApp() {
-    // Sections are already inlined in HTML, so just init everything
     initEventListeners();
     initFeatures();
     loadBanners();
