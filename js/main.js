@@ -7,12 +7,18 @@ const firebaseConfig = {
     messagingSenderId: "544284022045",
     appId: "1:544284022045:web:22f2eef2ed918d93707df4"
 };
-firebase.initializeApp(firebaseConfig);
+
+// Initialize Firebase
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 const db = firebase.firestore();
 
 // ===== CONSTANTS =====
 const MESSAGES_PER_PAGE = 20;
-let allMessages = [], displayedCount = 0, isLoading = false;
+let allMessages = [];
+let displayedCount = 0;
+let isLoading = false;
 let banners = [];
 let currentBannerIndex = 0;
 let bannerInterval;
@@ -29,54 +35,56 @@ function formatDate(date) {
     if (date instanceof firebase.firestore.Timestamp) {
         date = date.toDate();
     }
-    return date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
-}
-
-// ===== LOAD SECTIONS =====
-async function loadSection(path, containerId) {
-    try {
-        const response = await fetch(path);
-        const html = await response.text();
-        document.getElementById(containerId).innerHTML = html;
-        return true;
-    } catch (error) {
-        console.error(`Error loading ${path}:`, error);
-        return false;
-    }
-}
-
-async function loadAllSections() {
-    await Promise.all([
-        loadSection('sections/banner.html', 'sections-container'),
-        loadSection('sections/gallery.html', 'sections-container'),
-        loadSection('sections/messages.html', 'sections-container')
-    ]);
-    // Re-attach event listeners after sections loaded
-    initEventListeners();
-    initFeatures();
+    return date.toLocaleDateString('vi-VN', { 
+        day: '2-digit', 
+        month: '2-digit', 
+        year: 'numeric' 
+    });
 }
 
 // ===== EVENT LISTENERS =====
 function initEventListeners() {
-    // Popup controls
-    document.getElementById('open-message-popup')?.addEventListener('click', e => {
-        e.preventDefault();
-        document.getElementById('message-popup-overlay').style.display = 'flex';
-        document.getElementById('message-popup').classList.add('show');
-    });
+    // Popup: Open
+    const openPopupBtn = document.getElementById('open-message-popup');
+    if (openPopupBtn) {
+        openPopupBtn.addEventListener('click', e => {
+            e.preventDefault();
+            const overlay = document.getElementById('message-popup-overlay');
+            const popup = document.getElementById('message-popup');
+            if (overlay && popup) {
+                overlay.style.display = 'flex';
+                popup.classList.add('show');
+            }
+        });
+    }
     
-    document.querySelector('.close-btn')?.addEventListener('click', () => closePopup('message-popup'));
-    document.getElementById('message-popup-overlay')?.addEventListener('click', e => {
-        if (e.target === e.currentTarget) closePopup('message-popup');
-    });
+    // Popup: Close button
+    const closeBtn = document.querySelector('.close-btn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => closePopup('message-popup'));
+    }
     
-    // Send message
-    document.getElementById('popup-send-btn')?.addEventListener('click', sendMessage);
+    // Popup: Click outside to close
+    const messagePopupOverlay = document.getElementById('message-popup-overlay');
+    if (messagePopupOverlay) {
+        messagePopupOverlay.addEventListener('click', e => {
+            if (e.target === e.currentTarget) closePopup('message-popup');
+        });
+    }
     
-    // Load more
-    document.getElementById('load-more-btn')?.addEventListener('click', loadMoreMessages);
+    // Send message button
+    const sendBtn = document.getElementById('popup-send-btn');
+    if (sendBtn) {
+        sendBtn.addEventListener('click', sendMessage);
+    }
     
-    // Like handler (delegation)
+    // Load more button
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', loadMoreMessages);
+    }
+    
+    // Like handler (event delegation)
     document.addEventListener('click', e => {
         const heartIcon = e.target.closest('.heart-icon');
         if (heartIcon) { 
@@ -88,24 +96,23 @@ function initEventListeners() {
 
 // ===== FEATURES INIT =====
 function initFeatures() {
-    // Loading bar
+    // Loading bar animation
     window.addEventListener('load', () => {
         const loadingBar = document.getElementById('loading-bar');
-        setTimeout(() => {
-            loadingBar.classList.add('loading-complete');
-            setTimeout(() => loadingBar.remove(), 500);
-        }, 500);
+        if (loadingBar) {
+            setTimeout(() => {
+                loadingBar.classList.add('loading-complete');
+                setTimeout(() => loadingBar.remove(), 500);
+            }, 500);
+        }
     });
     
-    // Floating hearts
-    document.addEventListener('DOMContentLoaded', () => {
-        for (let i = 0; i < 20; i++) setTimeout(createHeart, i * 300);
-        loadBanners();
-        loadGallery();
-        loadApprovedMessages();
-    });
+    // Floating hearts on DOM ready
+    for (let i = 0; i < 20; i++) {
+        setTimeout(createHeart, i * 300);
+    }
     
-    // Resize handler for masonry
+    // Resize handler for masonry layout
     let resizeTimer;
     window.addEventListener('resize', () => { 
         clearTimeout(resizeTimer); 
@@ -113,31 +120,43 @@ function initFeatures() {
     });
 }
 
-// ===== HEART FLOATING =====
+// ===== HEART FLOATING EFFECT =====
 function createHeart() {
     const heart = document.createElement('div');
     heart.className = 'heart';
     heart.innerHTML = '❤';
+    
     const size = Math.random() * 50 + 30;
     const startX = Math.random() * window.innerWidth;
     const startY = window.innerHeight + 50;
     const endX = startX + (Math.random() - 0.5) * 500;
     const endY = -100 - Math.random() * 100;
+    
     heart.style.setProperty('--tx', `${endX - startX}px`);
     heart.style.setProperty('--ty', `${endY - startY}px`);
     heart.style.fontSize = `${size}px`;
     heart.style.color = 'white';
     heart.style.left = `${startX}px`;
     heart.style.top = `${startY}px`;
+    
     document.body.appendChild(heart);
     setTimeout(() => heart.remove(), 3000);
 }
 
 // ===== BANNER FUNCTIONS =====
 function loadBanners() {
-    db.collection('banners').where('active', '==', true).orderBy('order', 'asc').onSnapshot(snapshot => {
+    db.collection('banners')
+      .where('active', '==', true)
+      .orderBy('order', 'asc')
+      .onSnapshot(snapshot => {
         banners = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         renderBanners();
+    }, error => {
+        console.error('Error loading banners:', error);
+        const carousel = document.getElementById('banner-carousel');
+        if (carousel) {
+            carousel.innerHTML = '<div style="text-align:center;padding:20px;color:#999;">Lỗi tải banner</div>';
+        }
     });
 }
 
@@ -174,32 +193,34 @@ function renderBanners() {
 
 function changeBanner(direction) {
     if (banners.length === 0) return;
+    
     const slides = document.querySelectorAll('.banner-slide');
     const dots = document.querySelectorAll('.banner-dot');
     
-    slides[currentBannerIndex]?.classList.remove('active');
-    dots[currentBannerIndex]?.classList.remove('active');
+    if (slides[currentBannerIndex]) slides[currentBannerIndex].classList.remove('active');
+    if (dots[currentBannerIndex]) dots[currentBannerIndex].classList.remove('active');
     
     currentBannerIndex = (currentBannerIndex + direction + banners.length) % banners.length;
     
-    slides[currentBannerIndex]?.classList.add('active');
-    dots[currentBannerIndex]?.classList.add('active');
+    if (slides[currentBannerIndex]) slides[currentBannerIndex].classList.add('active');
+    if (dots[currentBannerIndex]) dots[currentBannerIndex].classList.add('active');
     
     resetBannerAutoPlay();
 }
 
 function goToBanner(index) {
-    if (banners.length === 0) return;
+    if (banners.length === 0 || index < 0 || index >= banners.length) return;
+    
     const slides = document.querySelectorAll('.banner-slide');
     const dots = document.querySelectorAll('.banner-dot');
     
-    slides[currentBannerIndex]?.classList.remove('active');
-    dots[currentBannerIndex]?.classList.remove('active');
+    if (slides[currentBannerIndex]) slides[currentBannerIndex].classList.remove('active');
+    if (dots[currentBannerIndex]) dots[currentBannerIndex].classList.remove('active');
     
     currentBannerIndex = index;
     
-    slides[currentBannerIndex]?.classList.add('active');
-    dots[currentBannerIndex]?.classList.add('active');
+    if (slides[currentBannerIndex]) slides[currentBannerIndex].classList.add('active');
+    if (dots[currentBannerIndex]) dots[currentBannerIndex].classList.add('active');
     
     resetBannerAutoPlay();
 }
@@ -210,7 +231,10 @@ function startBannerAutoPlay() {
 }
 
 function stopBannerAutoPlay() {
-    if (bannerInterval) clearInterval(bannerInterval);
+    if (bannerInterval) {
+        clearInterval(bannerInterval);
+        bannerInterval = null;
+    }
 }
 
 function resetBannerAutoPlay() {
@@ -220,35 +244,57 @@ function resetBannerAutoPlay() {
 
 // ===== GALLERY FUNCTIONS =====
 function loadGallery() {
-    db.collection('gallery').orderBy('order', 'asc').onSnapshot(snapshot => {
+    db.collection('gallery')
+      .orderBy('order', 'asc')
+      .onSnapshot(snapshot => {
         const galleryScroll = document.getElementById('gallery-scroll');
         if (!galleryScroll) return;
         
         galleryScroll.innerHTML = '';
+        
         if (snapshot.empty) { 
             galleryScroll.innerHTML = '<p style="color:#999;text-align:center;width:100%;">Chưa có hoạt động nào</p>'; 
             return; 
         }
+        
         snapshot.forEach(doc => {
             const data = doc.data();
             const card = document.createElement('div');
             card.className = 'gallery-card';
-            card.innerHTML = `<img src="${data.image}" alt="${data.title}" loading="lazy"><div class="card-content"><h3>${data.title}</h3><p>${data.description || ''}</p></div>`;
+            card.innerHTML = `
+                <img src="${data.image}" alt="${data.title}" loading="lazy">
+                <div class="card-content">
+                    <h3>${data.title}</h3>
+                    <p>${data.description || ''}</p>
+                </div>
+            `;
             galleryScroll.appendChild(card);
         });
+    }, error => {
+        console.error('Error loading gallery:', error);
+        const galleryScroll = document.getElementById('gallery-scroll');
+        if (galleryScroll) {
+            galleryScroll.innerHTML = '<p style="color:#999;text-align:center;width:100%;">Lỗi tải gallery</p>';
+        }
     });
 }
 
 function scrollGallery(direction) {
     const scrollContainer = document.getElementById('gallery-scroll');
-    scrollContainer?.scrollBy({ left: direction * 370, behavior: 'smooth' });
+    if (scrollContainer) {
+        scrollContainer.scrollBy({ left: direction * 370, behavior: 'smooth' });
+    }
 }
 
 // ===== MESSAGE FUNCTIONS =====
 async function sendMessage() {
-    const message = document.getElementById('popup-message-input')?.value.trim();
-    const senderName = document.getElementById('popup-sender-name')?.value.trim();
-    const isAnonymous = document.getElementById('anonymous-checkbox')?.checked;
+    const messageInput = document.getElementById('popup-message-input');
+    const senderNameInput = document.getElementById('popup-sender-name');
+    const anonymousCheckbox = document.getElementById('anonymous-checkbox');
+    
+    const message = messageInput?.value.trim();
+    const senderName = senderNameInput?.value.trim();
+    const isAnonymous = anonymousCheckbox?.checked;
     
     if (!message) return alert('Vui lòng nhập lời nhắn!');
     if (!senderName && !isAnonymous) return alert('Vui lòng nhập tên hoặc chọn ẩn danh!');
@@ -257,20 +303,21 @@ async function sendMessage() {
         await db.collection('messages').add({
             text: message, 
             senderName: isAnonymous ? 'Ẩn danh' : senderName,
-            isAnonymous, 
+            isAnonymous: isAnonymous || false,
             likes: 0, 
             status: 'pending',
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
         
         // Reset form
-        document.getElementById('popup-message-input').value = '';
-        document.getElementById('popup-sender-name').value = '';
-        document.getElementById('anonymous-checkbox').checked = false;
+        if (messageInput) messageInput.value = '';
+        if (senderNameInput) senderNameInput.value = '';
+        if (anonymousCheckbox) anonymousCheckbox.checked = false;
         
         closePopup('message-popup');
         showSuccessPopup();
     } catch (e) { 
+        console.error('Send message error:', e);
         alert('Lỗi: ' + e.message); 
     }
 }
@@ -278,6 +325,7 @@ async function sendMessage() {
 function showSuccessPopup() {
     const overlay = document.getElementById('success-popup-overlay');
     const popup = document.getElementById('success-popup');
+    
     if (!overlay || !popup) return;
     
     overlay.style.display = 'flex'; 
@@ -285,17 +333,18 @@ function showSuccessPopup() {
     
     setTimeout(() => {
         popup.classList.remove('show');
-        setTimeout(() => overlay.style.display = 'none', 400);
+        setTimeout(() => { overlay.style.display = 'none'; }, 400);
     }, 5000);
 }
 
 function closePopup(id) {
     const popup = document.getElementById(id);
     const overlay = document.getElementById(id + '-overlay');
+    
     if (!popup || !overlay) return;
     
     popup.classList.remove('show');
-    setTimeout(() => overlay.style.display = 'none', 400);
+    setTimeout(() => { overlay.style.display = 'none'; }, 400);
 }
 
 // ===== MASONRY LAYOUT =====
@@ -304,11 +353,15 @@ function setupMasonry() {
     if (!container) return;
     
     const messages = Array.from(container.children);
+    
+    // Mobile: stack vertically
     if (window.innerWidth <= 768) { 
         container.style.height = 'auto'; 
         messages.forEach(msg => { 
             msg.style.position = 'relative'; 
             msg.style.width = '100%'; 
+            msg.style.left = '0';
+            msg.style.top = '0';
         });
         return; 
     }
@@ -319,20 +372,26 @@ function setupMasonry() {
     const numColumns = Math.max(1, Math.min(Math.floor(containerWidth / minCardWidth), 5));
     const cardWidth = (containerWidth - gap * (numColumns - 1)) / numColumns;
     
+    // Reset styles
     messages.forEach(msg => { 
         msg.style.width = `${cardWidth}px`; 
         msg.style.position = 'absolute'; 
+        msg.style.left = '0';
+        msg.style.top = '0';
     });
     
+    // Calculate column positions
     const columnHeights = new Array(numColumns).fill(0);
     const columnLefts = Array.from({length: numColumns}, (_, i) => i * (cardWidth + gap));
     
+    // Position each message
     messages.forEach((msg, index) => {
         const shortestCol = columnHeights.indexOf(Math.min(...columnHeights));
         msg.style.left = `${columnLefts[shortestCol]}px`;
         msg.style.top = `${columnHeights[shortestCol]}px`;
         columnHeights[shortestCol] += msg.offsetHeight + gap;
         msg.style.animationDelay = `${index * 0.05}s`;
+        msg.style.opacity = '1';
     });
     
     container.style.height = `${Math.max(...columnHeights)}px`;
@@ -343,12 +402,16 @@ function renderMessages(startIndex, endIndex) {
     if (!container) return;
     
     const messagesToRender = allMessages.slice(startIndex, endIndex);
+    
     messagesToRender.forEach(msg => {
         const el = document.createElement('div');
         el.className = 'message';
+        
         const likedMessages = JSON.parse(localStorage.getItem('likedMessages') || '[]');
         const isLiked = likedMessages.includes(msg.id);
-        const senderDisplay = msg.isAnonymous ? '👤 Ẩn danh' : `✍️ ${escapeHtml(msg.senderName || 'Ẩn danh')}`;
+        const senderDisplay = msg.isAnonymous 
+            ? '👤 Ẩn danh' 
+            : `✍️ ${escapeHtml(msg.senderName || 'Ẩn danh')}`;
         const dateDisplay = formatDate(msg.timestamp);
         
         el.innerHTML = `
@@ -385,8 +448,11 @@ function loadMoreMessages() {
     
     isLoading = true;
     const btn = document.getElementById('load-more-btn');
-    btn?.classList.add('loading'); 
-    if (btn) btn.disabled = true;
+    
+    if (btn) {
+        btn.classList.add('loading'); 
+        btn.disabled = true;
+    }
     
     setTimeout(() => {
         const startIndex = displayedCount;
@@ -394,22 +460,30 @@ function loadMoreMessages() {
         renderMessages(startIndex, endIndex);
         displayedCount = endIndex;
         isLoading = false;
-        btn?.classList.remove('loading');
+        
+        if (btn) {
+            btn.classList.remove('loading');
+        }
         updateLoadMoreButton();
     }, 300);
 }
 
 async function toggleLike(messageId, heartIcon) {
+    if (!messageId || !heartIcon) return;
+    
     const likedMessages = JSON.parse(localStorage.getItem('likedMessages') || '[]');
     const isLiked = likedMessages.includes(messageId);
+    
     const countSpan = heartIcon.querySelector('.like-count');
     const symbolSpan = heartIcon.querySelector('.heart-symbol');
     let currentCount = parseInt(countSpan?.textContent) || 0;
     
     if (isLiked) {
+        // Unlike
         const index = likedMessages.indexOf(messageId);
         if (index > -1) likedMessages.splice(index, 1);
         localStorage.setItem('likedMessages', JSON.stringify(likedMessages));
+        
         heartIcon.classList.remove('liked'); 
         if (symbolSpan) symbolSpan.textContent = '🤍';
         if (countSpan) countSpan.textContent = Math.max(0, currentCount - 1);
@@ -423,8 +497,10 @@ async function toggleLike(messageId, heartIcon) {
             if (countSpan) countSpan.textContent = currentCount; 
         }
     } else {
+        // Like
         likedMessages.push(messageId);
         localStorage.setItem('likedMessages', JSON.stringify(likedMessages));
+        
         heartIcon.classList.add('liked'); 
         if (symbolSpan) symbolSpan.textContent = '❤';
         if (countSpan) countSpan.textContent = currentCount + 1;
@@ -464,10 +540,28 @@ function loadApprovedMessages() {
             displayedCount = Math.min(MESSAGES_PER_PAGE, allMessages.length);
         }
         updateLoadMoreButton();
+    }, error => {
+        console.error('Error loading messages:', error);
+        const container = document.getElementById('messages-container');
+        if (container) {
+            container.innerHTML = '<p style="color:#999;text-align:center;">Lỗi tải lời nhắn</p>';
+        }
     });
 }
 
-// ===== INIT =====
-document.addEventListener('DOMContentLoaded', () => {
-    loadAllSections();
-});
+// ===== MAIN INIT =====
+function initApp() {
+    // Sections are already inlined in HTML, so just init everything
+    initEventListeners();
+    initFeatures();
+    loadBanners();
+    loadGallery();
+    loadApprovedMessages();
+}
+
+// Run when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}
