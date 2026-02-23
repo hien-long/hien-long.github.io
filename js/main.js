@@ -41,7 +41,7 @@ function formatDate(date) {
     });
 }
 
-// ===== LOAD SECTIONS (Fix cho GitHub Pages) =====
+// ===== LOAD SECTIONS =====
 async function loadSection(path, container) {
     try {
         const response = await fetch(path);
@@ -56,20 +56,25 @@ async function loadSection(path, container) {
 }
 
 async function loadAllSections() {
+    console.log('Loading sections...');
     const container = document.getElementById('sections-container');
-    if (!container) return;
+    if (!container) {
+        console.error('sections-container not found!');
+        return;
+    }
     
-    // Load tuần tự để đảm bảo thứ tự hiển thị
     await loadSection('./sections/banner.html', container);
     await loadSection('./sections/gallery.html', container);
     await loadSection('./sections/messages.html', container);
     
-    // Sau khi load xong sections thì init event listeners
+    console.log('Sections loaded!');
     initEventListeners();
 }
 
 // ===== EVENT LISTENERS =====
 function initEventListeners() {
+    console.log('Initializing event listeners...');
+    
     const openPopupBtn = document.getElementById('open-message-popup');
     if (openPopupBtn) {
         openPopupBtn.addEventListener('click', function(e) {
@@ -453,8 +458,9 @@ function loadApprovedMessages() {
 
 // ===== MAIN INIT =====
 function initApp() {
-    // Load sections first, then init features
+    console.log('Initializing app...');
     loadAllSections().then(function() {
+        console.log('Sections loaded, initializing features...');
         initFeatures();
         loadBanners();
         loadGallery();
