@@ -8,10 +8,10 @@
     <link rel="apple-touch-icon" href="https://i.ibb.co/0jqsMq0Z/your-image.png">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/banner.css">
-    <link rel="stylesheet" href="css/gallery.css">
-    <link rel="stylesheet" href="css/messages.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/banner.css">
+    <link rel="stylesheet" href="./css/gallery.css">
+    <link rel="stylesheet" href="./css/messages.css">
 </head>
 <body>
     <div id="loading-bar"></div>
@@ -57,48 +57,8 @@
             </div>
         </div>
 
-        <!-- BANNER SECTION (INLINE) -->
-        <section class="banner-section">
-            <div class="banner-carousel" id="banner-carousel">
-                <div style="text-align: center; padding: 100px 20px; color: #999;">Đang tải banner...</div>
-            </div>
-            <button class="banner-nav prev" onclick="changeBanner(-1)">❮</button>
-            <button class="banner-nav next" onclick="changeBanner(1)">❯</button>
-            <div class="banner-dots" id="banner-dots"></div>
-        </section>
-
-        <!-- GALLERY SECTION (INLINE) -->
-        <section class="gallery-section">
-            <div class="gallery-header">
-                <h2>🔥 Những hoạt động tại Viện Huyết học</h2>
-            </div>
-            <div class="gallery-container">
-                <button class="gallery-nav prev" onclick="scrollGallery(-1)">❮</button>
-                <div class="gallery-scroll" id="gallery-scroll">
-                    <div style="text-align:center; padding:20px; color:#999;">Đang tải gallery...</div>
-                </div>
-                <button class="gallery-nav next" onclick="scrollGallery(1)">❯</button>
-            </div>
-        </section>
-
-        <!-- MESSAGES SECTION (INLINE) -->
-        <section class="messages-section">
-            <div class="messages-header">
-                <h2>💌 Lời chúc từ mọi người</h2>
-            </div>
-            <div class="messages-info">
-                <strong>⚠️ Lưu ý:</strong> Đây là bản demo với hệ thống quản lý admin hoàn chỉnh. 
-                Lời nhắn sẽ được lưu trữ và quản lý qua Firebase. 
-                Hãy gửi lời nhắn yêu thương của bạn để lan tỏa yêu thương đến các em nhỏ! 💕
-            </div>
-            <div class="messages" id="messages-container"></div>
-            <div class="load-more-container">
-                <button id="load-more-btn" class="load-more-btn">
-                    <span class="btn-text">Tải thêm...</span>
-                    <span class="spinner"></span>
-                </button>
-            </div>
-        </section>
+        <!-- Sections will be loaded here -->
+        <div id="sections-container"></div>
 
     </div>
 
@@ -110,6 +70,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
     <!-- Main JS -->
-    <script src="js/main.js"></script>
+    <script src="./js/main.js"></script>
 </body>
 </html>
