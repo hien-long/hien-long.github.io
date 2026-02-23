@@ -4,17 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To @TheBlouse &lt;3</title>
-    
-    <!-- Fix: Xóa trailing spaces trong URLs -->
     <link rel="icon" type="image/png" href="https://i.ibb.co/0jqsMq0Z/your-image.png">
     <link rel="apple-touch-icon" href="https://i.ibb.co/0jqsMq0Z/your-image.png">
     
-    <!-- Global CSS -->
-    <link rel="stylesheet" href="./css/styles.css">
-    <!-- Section CSS -->
-    <link rel="stylesheet" href="./css/banner.css">
-    <link rel="stylesheet" href="./css/gallery.css">
-    <link rel="stylesheet" href="./css/messages.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/banner.css">
+    <link rel="stylesheet" href="css/gallery.css">
+    <link rel="stylesheet" href="css/messages.css">
 </head>
 <body>
     <div id="loading-bar"></div>
@@ -60,31 +57,31 @@
             </div>
         </div>
 
-        <!-- ✅ FIX: Inline sections trực tiếp (không dùng fetch, tránh CORS/GitHub Pages issues) -->
-        
-        <!-- BANNER CAROUSEL -->
+        <!-- BANNER SECTION (INLINE) -->
         <section class="banner-section">
             <div class="banner-carousel" id="banner-carousel">
-                <div class="loading" style="text-align: center; padding: 100px 20px; color: #999;">Đang tải banner...</div>
+                <div style="text-align: center; padding: 100px 20px; color: #999;">Đang tải banner...</div>
             </div>
             <button class="banner-nav prev" onclick="changeBanner(-1)">❮</button>
             <button class="banner-nav next" onclick="changeBanner(1)">❯</button>
             <div class="banner-dots" id="banner-dots"></div>
         </section>
 
-        <!-- Gallery Section -->
+        <!-- GALLERY SECTION (INLINE) -->
         <section class="gallery-section">
-            <div class="gallery-header"><h2>🔥 Những hoạt động tại Viện Huyết học</h2></div>
+            <div class="gallery-header">
+                <h2>🔥 Những hoạt động tại Viện Huyết học</h2>
+            </div>
             <div class="gallery-container">
                 <button class="gallery-nav prev" onclick="scrollGallery(-1)">❮</button>
                 <div class="gallery-scroll" id="gallery-scroll">
-                    <div class="loading">Đang tải gallery...</div>
+                    <div style="text-align:center; padding:20px; color:#999;">Đang tải gallery...</div>
                 </div>
                 <button class="gallery-nav next" onclick="scrollGallery(1)">❯</button>
             </div>
         </section>
 
-        <!-- Messages Section -->
+        <!-- MESSAGES SECTION (INLINE) -->
         <section class="messages-section">
             <div class="messages-header">
                 <h2>💌 Lời chúc từ mọi người</h2>
@@ -108,11 +105,11 @@
     <!-- Footer -->
     <footer>Trang web được tạo bằng HTML/CSS/JavaScript với Firebase</footer>
 
-    <!-- Firebase SDKs (Fix: xóa trailing spaces) -->
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
     <!-- Main JS -->
-    <script src="./js/main.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
