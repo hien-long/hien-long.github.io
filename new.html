@@ -762,6 +762,113 @@
             visibility: visible !important;
             opacity: 1 !important;
         }
+
+        /* =============================
+           MOBILE: CHUYỂN TIMELINE SANG DẠNG DỌC (STACK)
+           - bỏ absolute/top:50% gây lệch trên điện thoại
+           - tắt hover bung ngang trên thiết bị touch
+           ============================= */
+        @media (max-width: 768px){
+            /* container & list */
+            #timeline-container{ padding: 20px 0 !important; margin: 10px 0 !important; }
+            #timeline-container::before{ display:none !important; }
+            #timeline-items{
+                flex-direction: column !important;
+                overflow: visible !important;
+                padding: 0 !important;
+                gap: 14px !important;
+            }
+            .timeline-item{
+                width: 100% !important;
+                min-width: 0 !important;
+                height: auto !important;
+                margin: 0 !important;
+                text-align: left !important;
+            }
+
+            /* card: về flow bình thường */
+            .timeline-content{
+                position: relative !important;
+                left: auto !important;
+                right: auto !important;
+                top: auto !important;
+                bottom: auto !important;
+                transform: none !important;
+                width: 100% !important;
+                height: auto !important;
+                min-height: 0 !important;
+            }
+            .timeline-content img{ display:block !important; max-height: 220px !important; }
+            .timeline-content h3, .timeline-content p{ display:block !important; }
+
+                        /* ===== ribbon-timeline (MOBILE): dạng dọc, badge năm nằm trong góc trái card, chỉ HIỆN ẢNH ===== */
+            .ribbon-timeline .rt-wrap{
+                flex-direction: column !important;
+                gap: 16px !important;
+                padding: 10px 0 0 !important;
+            }
+            .ribbon-timeline .rt-seg{ display:none !important; }
+
+            /* Card về flow bình thường */
+            .ribbon-timeline .timeline-content{
+                position: relative !important;
+                left: auto !important;
+                transform: none !important;
+                width: 100% !important;
+                max-width: 560px !important;
+                height: auto !important;
+                margin: 0 auto !important;
+                display: flex !important;
+                flex-direction: column !important;
+                padding: 0 !important;
+            }
+
+            /* Ảnh full card */
+            .ribbon-timeline .tc-media{
+                width: 100% !important;
+                flex: 0 0 auto !important;
+                height: 260px !important;
+                padding: 0 !important;
+            }
+            .ribbon-timeline .tc-media img{
+                width: 100% !important;
+                height: 100% !important;
+                border-radius: 18px !important;
+                object-fit: cover !important;
+                transform: none !important;
+                display:block !important;
+            }
+
+            /* ẨN text trên mobile (chỉ để ảnh) */
+            .ribbon-timeline .tc-side{ display:none !important; }
+
+            /* Đưa badge năm vào góc trái TRONG card */
+            .ribbon-timeline .timeline-item{ position: relative !important; }
+            .ribbon-timeline .rt-pin{
+                position: absolute !important;
+                top: 12px !important;
+                left: 12px !important;
+                transform: none !important;
+                margin: 0 !important;
+                z-index: 10 !important;
+            }
+            .ribbon-timeline .rt-pin::after{ display:none !important; }
+            .ribbon-timeline .timeline-year{
+                width: 62px !important;
+                height: 62px !important;
+                font-size: 16px !important;
+                border-width: 5px !important;
+                box-shadow: 0 4px 0 rgba(0,0,0,.10) !important;
+            }
+        }
+
+        /* thiết bị touch: tắt hiệu ứng hover bung ngang (đỡ “giật” + lệch) */
+        @media (hover: none){
+            .timeline-item:hover .timeline-content{ transform: none !important; box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important; }
+            .timeline-item:hover .timeline-content img{ transform:none !important; }
+            .ribbon-timeline .timeline-item:hover .timeline-content{ width: 100% !important; }
+            .ribbon-timeline .timeline-item:hover .tc-media img{ transform:none !important; }
+        }
         .ribbon-timeline .timeline-item:hover .tc-media img{
             display:block !important;
             visibility: visible !important;
@@ -1682,6 +1789,100 @@ body[data-theme="dim-dark"] #timeline-section::before{
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
+
+
+/* ===== MOBILE: force vertical timeline cards (no ribbon/pin outside) ===== */
+@media (max-width: 980px){
+  .ribbon-timeline .rt-seg{ display:none !important; }
+
+  .ribbon-timeline .rt-wrap{
+    padding: 10px 0 0 !important;
+    gap: 16px !important;
+  }
+
+  .ribbon-timeline .timeline-item{
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 14px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* year badge: put on top-right INSIDE the card area */
+  .ribbon-timeline .rt-pin{
+    position: absolute !important;
+    top: 12px !important;
+    right: 12px !important;
+    left: auto !important;
+    transform: none !important;
+    z-index: 5 !important;
+    pointer-events: none !important;
+  }
+  .ribbon-timeline .rt-pin::after{ display:none !important; }
+
+  .ribbon-timeline .timeline-year{
+    width: 62px !important;
+    height: 62px !important;
+    font-size: 18px !important;
+    border-width: 5px !important;
+    box-shadow: 0 5px 0 rgba(0,0,0,.10) !important;
+  }
+
+  /* card becomes normal flow, full width */
+  .ribbon-timeline .timeline-content{
+    position: relative !important;
+    left: auto !important;
+    transform: none !important;
+    top: auto !important;
+    bottom: auto !important;
+    width: 100% !important;
+    max-width: 520px !important;
+    margin: 0 auto !important;
+  }
+  .ribbon-timeline .timeline-item.top .timeline-content,
+  .ribbon-timeline .timeline-item.bottom .timeline-content{
+    top: auto !important;
+    bottom: auto !important;
+  }
+
+  /* media/text layout: image left, text right (or hide text if you want) */
+  .ribbon-timeline .tc-media{
+    width: 42% !important;
+    flex: 0 0 42% !important;
+    padding: 12px !important;
+  }
+  .ribbon-timeline .tc-media img{
+    border-radius: 14px !important;
+  }
+
+  /* keep details visible on mobile (no hover) */
+  .ribbon-timeline .tc-side{
+    display: flex !important;
+    width: auto !important;
+    flex: 1 1 auto !important;
+    opacity: 1 !important;
+    padding: 16px 14px !important;
+  }
+  .ribbon-timeline .timeline-item:hover .timeline-content{ width: 100% !important; }
+}
+
+
+        /* ===== MOBILE FINAL OVERRIDES (giữ desktop nguyên) ===== */
+        @media (max-width: 768px){
+            /* ribbon timeline: chỉ ảnh + badge năm góc trái trong card */
+
+            .ribbon-timeline .timeline-item{ padding: 0 !important; }
+            .ribbon-timeline .timeline-content{ flex-direction: column !important; padding: 0 !important; width: calc(100% - 36px) !important; max-width: 420px !important; margin: 0 auto !important; }
+            .ribbon-timeline .timeline-content > h3,
+            .ribbon-timeline .timeline-content > p{ display:none !important; }
+            .ribbon-timeline .tc-side{ display:none !important; }
+            .ribbon-timeline .tc-media{ padding:0 !important; height:260px !important; width:100% !important; flex:0 0 auto !important; }
+            .ribbon-timeline .tc-media img{ border-radius:18px !important; height:100% !important; width:100% !important; object-fit:cover !important; }
+            .ribbon-timeline .rt-pin{ position:absolute !important; top:-14px !important; left:-14px !important; transform:none !important; z-index:10 !important; margin:0 !important; }
+            .ribbon-timeline .rt-pin::after{ display:none !important; }
+        }
+
 </style>
 </head>
 <body>
