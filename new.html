@@ -942,9 +942,765 @@
             #popup-send-btn { font-size: 20px !important; }
             .load-more-btn { width: 100%; padding: 12px 30px; }
         }
-    </style>
+    
+
+/* ===== MINIMAL STUDIO THEME OVERRIDES ===== */
+/* =========================
+   MINIMAL STUDIO THEME (override on top of original layout)
+   Giữ nguyên DOM + Firebase + masonry/timeline logic
+   ========================= */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root{
+  --ms-bg:#0b0f14;
+  --ms-panel: rgba(255,255,255,.06);
+  --ms-panel2: rgba(255,255,255,.08);
+  --ms-border: rgba(255,255,255,.12);
+  --ms-text: rgba(255,255,255,.92);
+  --ms-muted: rgba(255,255,255,.68);
+  --ms-accent:#ff4d4d;
+  --ms-accent2:#ffb020;
+  --ms-radius:18px;
+  --ms-radius-lg:22px;
+  --ms-shadow: 0 18px 60px rgba(0,0,0,.38);
+  --ms-shadow2: 0 10px 24px rgba(0,0,0,.28);
+}
+
+html, body{ height:100%; }
+body{
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
+  color: var(--ms-text) !important;
+  background:
+    radial-gradient(1200px 600px at 20% -10%, rgba(255,77,77,.18), transparent 60%),
+    radial-gradient(900px 500px at 90% 10%, rgba(255,176,32,.12), transparent 55%),
+    radial-gradient(800px 500px at 50% 120%, rgba(90,200,250,.08), transparent 60%),
+    var(--ms-bg) !important;
+  background-attachment: fixed;
+  animation: none !important; /* tắt gradientBG cũ để đỡ "lố" */
+}
+
+a{ color: inherit; }
+#loading-bar{ height: 3px !important; }
+
+/* ===== Header menu (giữ structure, đổi theme) ===== */
+.header-menu{
+  position: sticky;
+  top: 0;
+  z-index: 9998;
+  margin: 14px 14px 20px !important;
+  padding: 12px 18px !important;
+  border-radius: 999px !important;
+  background: rgba(11,15,20,.65) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  backdrop-filter: blur(14px) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35) !important;
+}
+
+.menu-title{
+  color: var(--ms-text) !important;
+  font-size: 1.05em !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em;
+}
+.menu-title::before{
+  content:"";
+  display:inline-block;
+  width:10px; height:10px;
+  border-radius:999px;
+  background: var(--ms-accent);
+  box-shadow: 0 0 0 4px rgba(255,77,77,.16);
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.menu-links a{
+  background: rgba(255,255,255,.05) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  color: var(--ms-muted) !important;
+  box-shadow: none !important;
+  font-weight: 700 !important;
+}
+.menu-links a:hover{
+  transform: translateY(-1px) !important;
+  background: rgba(255,255,255,.08) !important;
+  color: var(--ms-text) !important;
+  box-shadow: 0 10px 24px rgba(0,0,0,.22) !important;
+}
+.social-icon{ filter: grayscale(1) brightness(1.4); opacity:.9; }
+
+/* ===== Content wrapper ===== */
+.content-wrapper{
+  max-width: 1100px !important;
+  padding: 0 20px !important;
+}
+
+/* ===== Banner ===== */
+.banner-section{
+  border-radius: var(--ms-radius-lg) !important;
+  box-shadow: var(--ms-shadow2) !important;
+}
+.banner-carousel, .banner-slide{ border-radius: var(--ms-radius-lg) !important; }
+.banner-nav{
+  background: rgba(11,15,20,.6) !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  color: var(--ms-text) !important;
+}
+.banner-nav:hover{
+  background: rgba(11,15,20,.78) !important;
+  transform: translateY(-50%) scale(1.06) !important;
+}
+.banner-dot{ background: rgba(255,255,255,.35) !important; }
+.banner-dot.active{ border-color: var(--ms-accent) !important; }
+
+/* ===== Gallery cards ===== */
+.gallery-header h2,
+.messages-header h2{
+  color: var(--ms-text) !important;
+  letter-spacing: -0.02em;
+}
+.gallery-card{
+  background: rgba(255,255,255,.05) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  box-shadow: var(--ms-shadow2) !important;
+}
+.card-content h3{ color: var(--ms-text) !important; }
+.card-content p{ color: var(--ms-muted) !important; }
+.gallery-nav{
+  background: rgba(11,15,20,.6) !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+}
+.gallery-nav:hover{ background: rgba(11,15,20,.78) !important; }
+
+/* ===== Timeline title + container ===== */
+.ribbon-timeline .timeline-title{
+  color: var(--ms-text) !important;
+  margin-left: 0 !important;
+  font-size: 18px !important;
+  letter-spacing: -0.02em;
+}
+.ribbon-timeline .rt-container{
+  background: rgba(255,255,255,.04) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  border-radius: var(--ms-radius-lg) !important;
+  box-shadow: var(--ms-shadow2) !important;
+}
+
+/* ===== Messages info + masonry cards ===== */
+.messages-info{
+  background: rgba(255,255,255,.05) !important;
+  border-left-color: rgba(255,255,255,.20) !important;
+  color: var(--ms-muted) !important;
+}
+.messages-info strong{ color: var(--ms-text) !important; }
+
+.message{
+  background: rgba(255,255,255,.05) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  box-shadow: var(--ms-shadow2) !important;
+}
+.message::before{
+  background: linear-gradient(to bottom, rgba(255,77,77,.9), rgba(255,176,32,.9)) !important;
+}
+.message-sender{ color: var(--ms-text) !important; }
+.message-text{ color: var(--ms-muted) !important; }
+.message-actions{ border-top-color: rgba(255,255,255,.12) !important; color: rgba(255,255,255,.55) !important; }
+.heart-icon:hover{ transform: scale(1.08) !important; }
+.heart-icon.liked{ color: var(--ms-accent) !important; }
+
+/* ===== Popups ===== */
+.popup{
+  background: rgba(11,15,20,.92) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  color: var(--ms-text) !important;
+  backdrop-filter: blur(14px) !important;
+}
+.popup h3{ color: var(--ms-text) !important; }
+.close-btn{ color: rgba(255,255,255,.55) !important; }
+.close-btn:hover{ color: var(--ms-text) !important; }
+
+#popup-message-input, #popup-sender-name{
+  background: rgba(255,255,255,.06) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  color: var(--ms-text) !important;
+}
+#popup-message-input::placeholder, #popup-sender-name::placeholder{ color: rgba(255,255,255,.45) !important; }
+#popup-send-btn{
+  background: linear-gradient(135deg, var(--ms-accent), #ff8a8a) !important;
+}
+.anonymous-checkbox{
+  background: rgba(255,255,255,.05) !important;
+  color: var(--ms-muted) !important;
+}
+.anonymous-checkbox:hover{ background: rgba(255,255,255,.07) !important; }
+
+/* ===== Footer ===== */
+footer{
+  color: rgba(255,255,255,.55) !important;
+  border-top-color: rgba(255,255,255,.10) !important;
+}
+
+/* Hearts subtle (giữ effect nhưng nhẹ) */
+.heart{ opacity: .10 !important; z-index: 0 !important; }
+
+
+/* ===== PATCH: Menu anchors + Big CTA buttons + Timeline hover polish ===== */
+html{ scroll-behavior: smooth; }
+
+/* topbar */
+.ms-topbar{
+  position: sticky;
+  top: 0;
+  z-index: 10000;
+  margin: 12px 14px 0;
+  padding: 0;
+  border-radius: 999px;
+  background: rgba(11,15,20,.62);
+  border: 1px solid rgba(255,255,255,.10);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+.ms-topbar-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 14px;
+  padding: 10px 14px;
+}
+.ms-brand{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ms-text);
+}
+.ms-dot{
+  width: 10px; height: 10px;
+  border-radius: 999px;
+  background: var(--ms-accent);
+  box-shadow: 0 0 0 4px rgba(255,77,77,.16);
+}
+.ms-nav{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content:flex-end;
+}
+.ms-nav a{
+  font-size: 12.5px;
+  color: var(--ms-muted);
+  padding: 8px 10px;
+  border-radius: 999px;
+  transition: background .2s ease, color .2s ease, transform .2s ease;
+  border: 1px solid transparent;
+}
+.ms-nav a:hover{
+  color: var(--ms-text);
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.10);
+  transform: translateY(-1px);
+}
+.ms-nav .ms-cta{
+  color: #0b0f14;
+  background: linear-gradient(135deg, var(--ms-accent), #ff8a8a);
+  border-color: transparent;
+  font-weight: 800;
+}
+.ms-nav .ms-cta:hover{ filter: brightness(1.03); }
+
+/* hide old header-menu nav (giữ popup logic vẫn hoạt động qua JS click) */
+.header-menu{ display:none !important; }
+
+/* Big CTA buttons */
+.ms-cta-wrap{
+  margin: 14px auto 0;
+  max-width: 1100px;
+  padding: 0 20px;
+  display:flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+.ms-cta-wrap-bottom{ margin-top: 18px; }
+.ms-message-cta{
+  display:inline-flex;
+  align-items:center;
+  gap: 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 18px;
+  padding: 16px 18px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  font-size: 16px;
+  color: #0b0f14;
+  background: linear-gradient(135deg, var(--ms-accent), #ff8a8a);
+  box-shadow: 0 16px 40px rgba(255,77,77,.22);
+  transition: transform .2s ease, filter .2s ease;
+}
+.ms-message-cta:hover{ transform: translateY(-2px); filter: brightness(1.02); }
+.ms-message-cta:active{ transform: translateY(0); }
+.ms-message-cta-plus{
+  width: 26px; height: 26px;
+  border-radius: 999px;
+  background: rgba(11,15,20,.12);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight: 900;
+}
+.ms-cta-hint{ color: rgba(255,255,255,.60); font-size: 12.5px; }
+
+/* Timeline hover (giống bản lỗi: bung ngang mượt + shadow đẹp) */
+.ribbon-timeline .timeline-content{
+  transition: width .32s cubic-bezier(.22,.61,.36,1), box-shadow .32s cubic-bezier(.22,.61,.36,1), border-color .32s ease, transform .32s ease;
+}
+.ribbon-timeline .timeline-item:hover .timeline-content{
+  box-shadow: 0 22px 50px rgba(0,0,0,.42) !important;
+  border-color: rgba(255,255,255,.22) !important;
+}
+.ribbon-timeline .timeline-item:hover .tc-side{
+  opacity: 1 !important;
+}
+
+/* mobile */
+@media (max-width: 980px){
+  .ms-topbar{ margin: 10px 10px 0; }
+  .ms-cta-wrap{ padding: 0 14px; }
+}
+
+
+
+
+/* ===== THEME SWITCHER v3 (Light / Dim Dark) ===== */
+.ms-theme-btn{
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--t-border);
+  background: var(--t-panel2);
+  color: var(--t-topbar-text);
+  cursor: pointer;
+  transition: transform .2s ease, filter .2s ease, background .2s ease, border-color .2s ease, color .2s ease;
+}
+.ms-theme-btn:hover{ transform: translateY(-1px); filter: brightness(1.03); }
+.ms-theme-btn:active{ transform: translateY(0); }
+
+/* Theme tokens (set by data-theme on body) */
+body[data-theme="dim-dark"]{ /* Dark */
+  --t-bg: #0b0f14;
+  --t-text: rgba(255,255,255,.92);
+  --t-muted: rgba(255,255,255,.70);
+
+  --t-panel: rgba(255,255,255,.06);
+  --t-panel2: rgba(255,255,255,.08);
+  --t-border: rgba(255,255,255,.12);
+
+  --t-accent: #ff4d4d;
+  --t-accent2: #ff8a8a;
+
+  --t-topbar-bg: rgba(11,15,20,.62);
+  --t-topbar-text: rgba(255,255,255,.92);
+  --t-topbar-muted: rgba(255,255,255,.70);
+
+  --t-shadow2: 0 10px 26px rgba(0,0,0,.34);
+  --t-shadow: 0 18px 60px rgba(0,0,0,.46);
+
+  --t-cta-text: #0b0f14;
+}
+
+body[data-theme="light"]{ /* Light */
+  --t-bg: #ffffff;
+  --t-text: rgba(14,18,24,.94);
+  --t-muted: rgba(14,18,24,.78);
+
+  --t-panel: rgba(245,246,250,1);
+  --t-panel2: rgba(255,255,255,1);
+  --t-border: rgba(14,18,24,.14);
+
+  --t-accent: #ff3b3b;
+  --t-accent2: #ffb020;
+
+  --t-topbar-bg: rgba(255,255,255,.88);
+  --t-topbar-text: rgba(14,18,24,.94);
+  --t-topbar-muted: rgba(14,18,24,.78);
+
+  --t-shadow2: 0 12px 28px rgba(14,18,24,.12);
+  --t-shadow: 0 22px 70px rgba(14,18,24,.14);
+
+  --t-cta-text: #0b0f14;
+}
+
+/* Default theme */
+body:not([data-theme]){
+  --t-bg: #0b0f14;
+  --t-text: rgba(255,255,255,.92);
+  --t-muted: rgba(255,255,255,.70);
+  --t-panel: rgba(255,255,255,.06);
+  --t-panel2: rgba(255,255,255,.08);
+  --t-border: rgba(255,255,255,.12);
+  --t-accent: #ff4d4d;
+  --t-accent2: #ff8a8a;
+  --t-topbar-bg: rgba(11,15,20,.62);
+  --t-topbar-text: rgba(255,255,255,.92);
+  --t-topbar-muted: rgba(255,255,255,.70);
+  --t-shadow2: 0 10px 26px rgba(0,0,0,.34);
+  --t-shadow: 0 18px 60px rgba(0,0,0,.46);
+  --t-cta-text: #0b0f14;
+}
+
+/* Apply tokens */
+body{
+  background: var(--t-bg) !important;
+  color: var(--t-text) !important;
+}
+
+/* Topbar colors */
+.ms-topbar{
+  background: var(--t-topbar-bg) !important;
+  border-color: var(--t-border) !important;
+  box-shadow: var(--t-shadow2) !important;
+}
+.ms-brand{ color: var(--t-topbar-text) !important; }
+.ms-nav a{ color: var(--t-topbar-muted) !important; }
+.ms-nav a:hover{
+  color: var(--t-topbar-text) !important;
+  background: color-mix(in srgb, var(--t-panel2) 70%, transparent) !important;
+  border-color: color-mix(in srgb, var(--t-border) 70%, transparent) !important;
+}
+.ms-nav .ms-cta{
+  color: var(--t-cta-text) !important;
+  background: linear-gradient(135deg, var(--t-accent), var(--t-accent2)) !important;
+}
+
+/* Primary CTA buttons */
+.ms-message-cta{
+  background: linear-gradient(135deg, var(--t-accent), var(--t-accent2)) !important;
+  color: var(--t-cta-text) !important;
+  box-shadow: 0 16px 40px color-mix(in srgb, var(--t-accent) 22%, transparent) !important;
+}
+
+/* Panels/cards */
+.gallery-card, .message, .popup, .ribbon-timeline .rt-container{
+  background: var(--t-panel) !important;
+  border-color: var(--t-border) !important;
+  box-shadow: var(--t-shadow2) !important;
+}
+.card-content h3, .message-sender, .popup h3{ color: var(--t-text) !important; }
+.card-content p, .message-text, .messages-info, footer{ color: var(--t-muted) !important; }
+
+/* Inputs */
+#popup-message-input, #popup-sender-name{
+  background: var(--t-panel2) !important;
+  border-color: var(--t-border) !important;
+  color: var(--t-text) !important;
+}
+#popup-message-input::placeholder, #popup-sender-name::placeholder{
+  color: color-mix(in srgb, var(--t-text) 45%, transparent) !important;
+}
+
+/* Light mode: soften icons + separators */
+body[data-theme="light"] .social-icon{
+  filter: grayscale(.15) contrast(1.05) brightness(1.05);
+  opacity: .95;
+}
+body[data-theme="light"] .message-actions{
+  border-top-color: rgba(14,18,24,.14) !important;
+}
+body[data-theme="light"] .gallery-card,
+body[data-theme="light"] .message,
+body[data-theme="light"] .popup,
+body[data-theme="light"] .ribbon-timeline .rt-container{
+  box-shadow: 0 14px 34px rgba(14,18,24,.14) !important;
+  border-color: rgba(14,18,24,.18) !important;
+}
+
+body[data-theme="light"] .menu-links a,
+body[data-theme="light"] .ms-nav a,
+body[data-theme="light"] .ms-theme-btn{
+  color: rgba(14,18,24,.72) !important;
+  border-color: rgba(14,18,24,.14) !important;
+  background: rgba(255,255,255,.92) !important;
+}
+body[data-theme="light"] .menu-links a:hover,
+body[data-theme="light"] .ms-nav a:hover{
+  color: rgba(14,18,24,.92) !important;
+  background: rgba(255,255,255,1) !important;
+}
+
+
+
+/* Extra light text contrast */
+body[data-theme="light"] .card-content p,
+body[data-theme="light"] .message-text,
+body[data-theme="light"] .messages-info,
+body[data-theme="light"] footer{
+  color: rgba(14,18,24,.78) !important;
+}
+
+body[data-theme="light"] .card-content h3,
+body[data-theme="light"] .message-sender,
+body[data-theme="light"] .popup h3,
+body[data-theme="light"] .ribbon-timeline .timeline-title{
+  color: rgba(14,18,24,.94) !important;
+}
+
+body[data-theme="light"] #popup-message-input::placeholder,
+body[data-theme="light"] #popup-sender-name::placeholder{
+  color: rgba(14,18,24,.50) !important;
+}
+
+
+/* ===== Adaptive text sweep (fix hardcoded whites / reds / greys) ===== */
+.gallery-header h2,
+.messages-header h2,
+.ribbon-timeline .timeline-title{
+  color: var(--t-text) !important;
+}
+
+.messages-info{
+  color: var(--t-muted) !important;
+  background: var(--t-panel) !important;
+  border-left-color: color-mix(in srgb, var(--t-accent) 55%, var(--t-border)) !important;
+}
+.messages-info strong{
+  color: var(--t-text) !important;
+}
+
+.ms-cta-hint{
+  color: var(--t-muted) !important;
+}
+
+/* message cards */
+.message-sender{
+  color: var(--t-text) !important;
+}
+.message-text{
+  color: var(--t-muted) !important;
+}
+
+/* likes + date row */
+.message-actions{
+  color: var(--t-muted) !important;
+  border-top-color: var(--t-border) !important;
+}
+.message-actions .heart-icon{
+  color: var(--t-muted) !important;
+}
+.message-actions .heart-icon.liked{
+  color: var(--t-accent) !important;
+}
+.message-actions .like-count{
+  color: var(--t-text) !important;
+  font-weight: 800;
+}
+.message-actions > span:last-child{
+  color: var(--t-muted) !important;
+}
+
+/* anonymous badge keep readable */
+.message-sender .anonymous-badge{
+  background: linear-gradient(135deg, var(--t-accent), var(--t-accent2)) !important;
+  color: var(--t-cta-text) !important;
+}
+
+/* section separators (if any) */
+hr, .divider{
+  border-color: var(--t-border) !important;
+}
+
+
+/* ===== Fix: bỏ viền xám vuông ở gallery cards ===== */
+.gallery-card{
+  border: none !important;
+  outline: none !important;
+}
+.gallery-card .card-content{
+  border-top: 1px solid color-mix(in srgb, var(--t-border) 55%, transparent) !important;
+}
+body[data-theme="light"] .gallery-card{
+  box-shadow: 0 12px 26px rgba(14,18,24,.10) !important;
+  background: rgba(245,246,250,1) !important;
+}
+body[data-theme="dim-dark"] .gallery-card{
+  box-shadow: 0 12px 26px rgba(0,0,0,.40) !important;
+}
+
+
+/* ===== Section stripes (alternating backgrounds) ===== */
+/* Theme tokens for section stripes */
+body[data-theme="light"]{
+  --sec-a: #ffffff;
+  --sec-b: #f3f4f7;
+}
+body[data-theme="dim-dark"]{
+  --sec-a: #0b0f14;
+  --sec-b: #0f1520;
+}
+/* default (dark) */
+body:not([data-theme]){
+  --sec-a: #0b0f14;
+  --sec-b: #0f1520;
+}
+
+/* Full-bleed stripe helper */
+.banner-section, .gallery-section, #timeline-section, .messages-section{
+  position: relative;
+  padding-top: 34px;
+  padding-bottom: 34px;
+  z-index: 1;
+}
+.banner-section::before,
+.gallery-section::before,
+#timeline-section::before,
+.messages-section::before{
+  content:"";
+  position:absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 100%;
+  z-index: -1;
+}
+
+/* Alternate colors by section */
+.banner-section::before{ background: var(--sec-a); }
+.gallery-section::before{ background: var(--sec-b); }
+#timeline-section::before{ background: var(--sec-a); }
+.messages-section::before{ background: var(--sec-b); }
+
+/* subtle separators */
+body[data-theme="light"] .banner-section::before,
+body[data-theme="light"] .gallery-section::before,
+body[data-theme="light"] #timeline-section::before,
+body[data-theme="light"] .messages-section::before{
+  box-shadow: inset 0 1px 0 rgba(14,18,24,.06), inset 0 -1px 0 rgba(14,18,24,.06);
+}
+body[data-theme="dim-dark"] .banner-section::before,
+body[data-theme="dim-dark"] .gallery-section::before,
+body[data-theme="dim-dark"] #timeline-section::before,
+body[data-theme="dim-dark"] .messages-section::before{
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04), inset 0 -1px 0 rgba(255,255,255,.04);
+}
+
+/* Make page background neutral behind stripes */
+body[data-theme="light"]{ background: #ffffff !important; }
+body[data-theme="dim-dark"]{ background: #0b0f14 !important; }
+
+
+/* ===== Patch: bỏ khung to của timeline + fix 2 viền ở timeline cards ===== */
+.ribbon-timeline .rt-container{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+/* tắt style .timeline-content chung bên ngoài ribbon để tránh đè lên */
+.ribbon-timeline .timeline-content{
+  background: #fff !important;
+  border: 3px solid var(--c) !important;
+  outline: none !important;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.12) !important;
+}
+
+/* nếu có border/outline từ element con gây cảm giác 2 viền */
+.ribbon-timeline .timeline-content *,
+.ribbon-timeline .timeline-content img{
+  outline: none !important;
+}
+
+/* Gallery cards: đảm bảo chỉ 1 viền (nếu còn) */
+.gallery-card{
+  border: none !important;
+  outline: none !important;
+}
+
+
+/* ===== Fix banner: bỏ nền trắng dư thừa xung quanh carousel ===== */
+.banner-section{
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+.banner-carousel{
+  margin: 0 !important;
+}
+.banner-container{
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+/* Nếu có wrapper tạo khung trắng (thường là background trắng + padding) */
+.banner-section::before{
+  background: transparent !important; /* stripe vẫn do section::before, nhưng banner không cần khung trắng */
+}
+
+/* Card frame nếu còn */
+.banner-frame, .banner-wrapper{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+
+/* ===== Timeline section cleanup: bỏ "string" + bỏ khung nền to ===== */
+/* 1) tắt full-bleed stripe riêng của timeline (đỡ cảm giác 1 khung trắng to) */
+#timeline-section::before{
+  display: none !important;
+}
+/* 2) giảm padding của timeline section để không có khoảng trắng dư */
+#timeline-section{
+  padding-top: 18px !important;
+  padding-bottom: 18px !important;
+}
+
+/* 3) bỏ các đường kẻ mảnh (inset shadow) nếu còn dính */
+body[data-theme="light"] #timeline-section::before,
+body[data-theme="dim-dark"] #timeline-section::before{
+  box-shadow: none !important;
+}
+
+/* 4) nếu còn container nào tạo nền/viền ngoài timeline thì tắt luôn */
+.ribbon-timeline .rt-container{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+/* 5) bỏ margin/padding wrapper (nếu có) gây khoảng trắng bên phải/trái */
+.ribbon-timeline .rt-wrap{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+</style>
 </head>
 <body>
+
+    <!-- MINIMAL STUDIO TOPBAR (anchors) -->
+    <div class="ms-topbar">
+        <div class="ms-topbar-inner">
+            <div class="ms-brand"><span class="ms-dot"></span><span>The Blouse</span></div>
+            <nav class="ms-nav">
+                <a href="#activities-section">Activities</a>
+                <a href="#timeline-section">Timeline</a>
+                <a href="#messages-section">Messages</a>
+                <a class="ms-cta" href="admin.html">Admin</a>
+            
+                <button type="button" class="ms-theme-btn" id="ms-theme-btn" aria-label="Chuyển theme">Theme: Dark</button>
+            </nav>
+        </div>
+    </div>
+
     <div id="loading-bar"></div>
 
     <!-- HEADER MENU -->
@@ -998,6 +1754,14 @@
             <div class="banner-dots" id="banner-dots"></div>
         </section>
 
+        <div class="ms-cta-wrap">
+            <button type="button" class="ms-message-cta" id="ms-message-cta-top">
+                <span class="ms-message-cta-plus">+</span> Gửi lời nhắn
+            </button>
+            <div class="ms-cta-hint">Lời nhắn sẽ được duyệt bởi admin và hiển thị trên trang.</div>
+        </div>
+
+
         <!-- Gallery Section -->
         <section class="gallery-section">
             <div class="gallery-header"><h2>🔥 Những hoạt động tại Viện Huyết học</h2></div>
@@ -1037,6 +1801,13 @@
                     <span class="spinner"></span>
                 </button>
             </div>
+        
+        <div class="ms-cta-wrap ms-cta-wrap-bottom">
+            <button type="button" class="ms-message-cta" id="ms-message-cta-bottom">
+                <span class="ms-message-cta-plus">+</span> Gửi lời nhắn
+            </button>
+        </div>
+
         </section>
 
     </div>
@@ -1426,5 +2197,64 @@
 
         function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
     </script>
+
+    <script>
+      // Hook big CTA buttons to existing message popup
+      (function msHookMessageCTA(){
+        function openPopupViaExisting(){
+          const a = document.getElementById('open-message-popup');
+          if (a) { a.click(); return; }
+          // fallback: try known function if exists
+          if (typeof openMessagePopup === 'function') openMessagePopup();
+        }
+        document.addEventListener('DOMContentLoaded', function(){
+          const b1 = document.getElementById('ms-message-cta-top');
+          const b2 = document.getElementById('ms-message-cta-bottom');
+          if (b1) b1.addEventListener('click', openPopupViaExisting);
+          if (b2) b2.addEventListener('click', openPopupViaExisting);
+        });
+      })();
+    </script>
+
+
+<script>
+(function(){
+  const THEMES = [
+    { key: "light", label: "Light" },
+    { key: "dim-dark", label: "Dark" }
+  ];
+  const STORAGE_KEY = "tb_theme";
+
+  function normalizeTheme(key){
+    // migrate old values (grey/dark) -> dim-dark
+    if (!key) return "dim-dark";
+    if (key === "grey" || key === "dark") return "dim-dark";
+    if (key !== "light" && key !== "dim-dark") return "dim-dark";
+    return key;
+  }
+
+  function applyTheme(key){
+    const k = normalizeTheme(key);
+    document.body.setAttribute("data-theme", k);
+    const btn = document.getElementById("ms-theme-btn");
+    const t = THEMES.find(x => x.key === k) || THEMES[1];
+    if (btn) btn.textContent = "Theme: " + t.label;
+  }
+
+  function toggleTheme(){
+    const current = normalizeTheme(document.body.getAttribute("data-theme") || "dim-dark");
+    const next = (current === "dim-dark") ? "light" : "dim-dark";
+    localStorage.setItem(STORAGE_KEY, next);
+    applyTheme(next);
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    const saved = normalizeTheme(localStorage.getItem(STORAGE_KEY));
+    applyTheme(saved);
+    const btn = document.getElementById("ms-theme-btn");
+    if (btn) btn.addEventListener("click", toggleTheme);
+  });
+})();
+</script>
 </body>
 </html>
