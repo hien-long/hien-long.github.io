@@ -16,8 +16,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 :root{
-  --purple:#4b1d7a;
-  --purple2:#722cbf;
+  /* Brand: tím hồng */
+  --purple:#7C3AED;   /* violet */
+  --purple2:#EC4899;  /* pink */
   --bg-dark:#0b0f14;
   --text-dark: rgba(255,255,255,.92);
   --muted-dark: rgba(255,255,255,.70);
@@ -32,8 +33,8 @@
   --panel2-light:#ffffff;
   --border-light: rgba(14,18,24,.14);
 
-  --accent:#ff3b3b;
-  --accent2:#ffb020;
+  --accent: var(--purple);
+  --accent2: var(--purple2);
 }
 
 html, body{
@@ -143,8 +144,8 @@ body{ background: var(--t-bg); color: var(--t-text); }
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  background: rgba(114,44,191,.10);
-  border: 1px solid rgba(114,44,191,.18);
+  background: color-mix(in srgb, var(--purple) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--purple) 26%, transparent);
   color: var(--purple2);
 }
 .veo-logo-text{ font-size: 15px; }
@@ -183,11 +184,11 @@ body{ background: var(--t-bg); color: var(--t-text); }
   padding: 8px 12px;
   border-radius: 999px;
   border: 1px solid rgba(114,44,191,.25);
-  background: rgba(114,44,191,.06);
+  background: color-mix(in srgb, var(--purple) 12%, transparent);
   color: var(--purple);
   cursor: pointer;
 }
-.veo-theme-btn:hover{ background: rgba(114,44,191,.10); }
+.veo-theme-btn:hover{ background: color-mix(in srgb, var(--purple) 16%, transparent); }
 
 .veo-cta-btn{
   border: none;
@@ -198,8 +199,7 @@ body{ background: var(--t-bg); color: var(--t-text); }
   color: #fff;
   padding: 9px 14px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #5b2b9b, #7b3cff);
-  box-shadow: 0 10px 24px rgba(114,44,191,.22);
+  background: linear-gradient(135deg, var(--purple), var(--purple2)); box-shadow: 0 10px 24px rgba(114,44,191,.22);
   display:inline-flex;
   align-items:center;
   gap: 8px;
@@ -247,12 +247,12 @@ body{ background: var(--t-bg); color: var(--t-text); }
   color: var(--purple);
   font-weight: 900;
 }
-.veo-dropmenu a:hover{ background: rgba(114,44,191,.08); }
+.veo-dropmenu a:hover{ background: color-mix(in srgb, var(--purple) 14%, transparent); }
 .veo-dropmenu.is-open{ display:block; }
 
 /* purple stat bar */
 .veo-stats{
-  background: linear-gradient(90deg, #3b1c63, #4c2380, #3b1c63);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--purple) 70%, #000), color-mix(in srgb, var(--purple2) 70%, #000), color-mix(in srgb, var(--purple) 70%, #000));
   color: #fff;
 }
 .veo-stats-inner{
@@ -337,7 +337,7 @@ body{ background: var(--t-bg); color: var(--t-text); }
   text-shadow: 0 2px 10px rgba(0,0,0,.25);
 }
 .banner-detail{
-  color: #ffd166;
+  color: color-mix(in srgb, var(--purple2) 85%, #fff);
   font-size: 14px;
   font-weight: 700;
   opacity: .0;
@@ -493,8 +493,8 @@ body[data-theme="light"] .gallery-card{ box-shadow: 0 12px 26px rgba(14,18,24,.1
 .card-content p{ margin: 0; font-size: 13px; color: var(--t-muted); line-height: 1.5; }
 
 .gallery-nav{
-  background: rgba(114,44,191,.10);
-  border: 1px solid rgba(114,44,191,.18);
+  background: color-mix(in srgb, var(--purple) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--purple) 26%, transparent);
   width: 40px; height: 40px;
   border-radius: 999px;
   cursor:pointer;
@@ -504,7 +504,7 @@ body[data-theme="light"] .gallery-card{ box-shadow: 0 12px 26px rgba(14,18,24,.1
   align-items:center;
   justify-content:center;
 }
-.gallery-nav:hover{ background: rgba(114,44,191,.16); }
+.gallery-nav:hover{ background: color-mix(in srgb, var(--purple) 22%, transparent); }
 
 /* ===== Timeline (ribbon – 4 items) ===== */
 #timeline-container{ margin: 8px 0 0; }
@@ -873,6 +873,164 @@ footer{
 
 /* legacy header-menu must be hidden (still used as hidden trigger) */
 .header-menu{ display:none !important; }
+
+
+/* ===== Theme chooser popup ===== */
+.theme-chooser-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 12000;
+}
+.theme-chooser{
+  width: min(520px, calc(100vw - 28px));
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px 18px 16px;
+  border: 1px solid rgba(14,18,24,.12);
+  box-shadow: 0 22px 70px rgba(14,18,24,.22);
+  color: rgba(14,18,24,.92);
+}
+.theme-chooser h3{
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: rgba(14,18,24,.94);
+}
+.theme-chooser p{
+  margin: 0 0 14px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: rgba(14,18,24,.72);
+}
+.theme-chooser-actions{
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.theme-choice{
+  flex: 1 1 180px;
+  border-radius: 12px;
+  padding: 12px 14px;
+  border: 1px solid rgba(114,44,191,.20);
+  background: color-mix(in srgb, var(--purple) 12%, transparent);
+  color: #4b1d7a;
+  font-weight: 900;
+  cursor: pointer;
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 10px;
+  transition: transform .15s ease, background .15s ease, border-color .15s ease;
+}
+.theme-choice:hover{
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--purple) 16%, transparent);
+  border-color: rgba(114,44,191,.28);
+}
+.theme-choice .chip{
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(14,18,24,.06);
+  color: rgba(14,18,24,.70);
+  font-weight: 900;
+}
+.theme-choice.dark{
+  background: rgba(14,18,24,.08);
+  border-color: rgba(14,18,24,.16);
+  color: rgba(14,18,24,.92);
+}
+.theme-choice.dark:hover{
+  background: rgba(14,18,24,.12);
+  border-color: rgba(14,18,24,.22);
+}
+body[data-theme="dim-dark"] .theme-chooser{
+  background: rgba(11,15,20,.92);
+  border-color: rgba(255,255,255,.12);
+  color: rgba(255,255,255,.92);
+  box-shadow: 0 22px 70px rgba(0,0,0,.50);
+}
+body[data-theme="dim-dark"] .theme-chooser h3{ color: rgba(255,255,255,.92); }
+body[data-theme="dim-dark"] .theme-chooser p{ color: rgba(255,255,255,.70); }
+body[data-theme="dim-dark"] .theme-choice{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.12);
+  color: rgba(255,255,255,.92);
+}
+body[data-theme="dim-dark"] .theme-choice:hover{
+  background: rgba(255,255,255,.09);
+  border-color: rgba(255,255,255,.18);
+}
+body[data-theme="dim-dark"] .theme-choice .chip{
+  background: rgba(255,255,255,.10);
+  color: rgba(255,255,255,.78);
+}
+
+
+
+/* ===== Header color changes on theme switch ===== */
+body[data-theme="dim-dark"] .veo-top{
+  background: rgba(11,15,20,.92);
+  border-bottom: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 10px 24px rgba(0,0,0,.45);
+}
+body[data-theme="dim-dark"] .veo-logo{
+  color: rgba(255,255,255,.92);
+}
+body[data-theme="dim-dark"] .veo-mark{
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.16);
+  color: rgba(255,255,255,.92);
+}
+body[data-theme="dim-dark"] .veo-nav a{
+  color: rgba(255,255,255,.88);
+}
+body[data-theme="dim-dark"] .veo-nav a:hover{
+  color: #ffffff;
+}
+body[data-theme="dim-dark"] .veo-nav a::after{
+  background: rgba(255,255,255,.85);
+}
+body[data-theme="dim-dark"] .veo-theme-btn{
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.18);
+  color: rgba(255,255,255,.92);
+}
+body[data-theme="dim-dark"] .veo-theme-btn:hover{
+  background: rgba(255,255,255,.12);
+}
+body[data-theme="dim-dark"] .veo-menu-btn{
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.18);
+  color: rgba(255,255,255,.92);
+}
+body[data-theme="dim-dark"] .veo-menu-btn:hover{
+  background: rgba(255,255,255,.12);
+}
+body[data-theme="dim-dark"] .veo-dropmenu{
+  background: rgba(11,15,20,.96);
+  border-color: rgba(255,255,255,.14);
+  box-shadow: 0 18px 60px rgba(0,0,0,.55);
+}
+body[data-theme="dim-dark"] .veo-dropmenu a{
+  color: rgba(255,255,255,.90);
+}
+body[data-theme="dim-dark"] .veo-dropmenu a:hover{
+  background: rgba(255,255,255,.10);
+}
+
+/* Light mode keep crisp white */
+body[data-theme="light"] .veo-top{
+  background: #fff;
+  border-bottom: 1px solid rgba(14,18,24,.08);
+  box-shadow: 0 10px 22px rgba(14,18,24,.10);
+}
+
 </style>
 
 </head>
@@ -928,6 +1086,23 @@ footer{
     </header>
 
 <div id="loading-bar"></div>
+
+<!-- Theme chooser (first visit) -->
+<div class="theme-chooser-overlay" id="theme-chooser-overlay" role="dialog" aria-modal="true" aria-labelledby="theme-chooser-title">
+  <div class="theme-chooser">
+    <h3 id="theme-chooser-title">Chọn giao diện</h3>
+    <p>Muốn dùng <b>Light</b> hay <b>Dark</b> cho lần này?</p>
+    <div class="theme-chooser-actions">
+      <button type="button" class="theme-choice light" id="theme-choice-light">
+        Light <span class="chip">Sáng</span>
+      </button>
+      <button type="button" class="theme-choice dark" id="theme-choice-dark">
+        Dark <span class="chip">Tối</span>
+      </button>
+    </div>
+  </div>
+</div>
+
 
 
 
@@ -1527,6 +1702,70 @@ footer{
       if (window.innerWidth > 980) close();
     });
   });
+})();
+</script>
+
+
+<script>
+/* Theme chooser popup: show on first visit, pick theme then auto-close */
+(function(){
+  const STORAGE_KEY = "tb_theme";
+  const overlay = document.getElementById("theme-chooser-overlay");
+  const btnLight = document.getElementById("theme-choice-light");
+  const btnDark  = document.getElementById("theme-choice-dark");
+
+  function normalizeTheme(key){
+    if (!key) return null;
+    if (key === "grey" || key === "dark") return "dim-dark";
+    if (key !== "light" && key !== "dim-dark") return null;
+    return key;
+  }
+
+  function applyTheme(key){
+    const k = (key === "light") ? "light" : "dim-dark";
+    document.body.setAttribute("data-theme", k);
+    const btn = document.getElementById("ms-theme-btn");
+    if (btn) btn.textContent = "Theme: " + (k === "light" ? "Light" : "Dark");
+  }
+
+  function close(){
+    if (!overlay) return;
+    overlay.style.display = "none";
+  }
+
+  function open(){
+    if (!overlay) return;
+    overlay.style.display = "flex";
+  }
+
+  function choose(k){
+    localStorage.setItem(STORAGE_KEY, k);
+    applyTheme(k);
+    close();
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    // If user already has theme saved, don't show popup.
+    const saved = normalizeTheme(localStorage.getItem(STORAGE_KEY));
+    if (!saved){
+      // Ensure a sane default behind the modal so text is readable
+      applyTheme("dim-dark");
+      open();
+    }
+  });
+
+  if (btnLight) btnLight.addEventListener("click", function(){ choose("light"); });
+  if (btnDark)  btnDark.addEventListener("click", function(){ choose("dim-dark"); });
+
+  // Click outside closes ONLY if already chose before (avoid accidental close on first-time)
+  if (overlay){
+    overlay.addEventListener("click", function(e){
+      if (e.target === overlay){
+        const saved = normalizeTheme(localStorage.getItem(STORAGE_KEY));
+        if (saved){ close(); }
+      }
+    });
+  }
 })();
 </script>
 
