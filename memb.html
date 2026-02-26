@@ -2,379 +2,833 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Thành viên | The Blouse</title>
 
-  <link rel="stylesheet" href="./styles.css" />
+  <link rel="icon" type="image/png" href="https://i.ibb.co/0jqsMq0Z/your-image.png">
+  <link rel="apple-touch-icon" href="https://i.ibb.co/0jqsMq0Z/your-image.png">
+
+  <!-- Font (avoid @import delays) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Use shared site styles (header/footer/theme tokens/etc.) -->
+  <link rel="stylesheet" href="styles.css">
 
   <style>
-    /* ===== Members Page ===== */
-    .members-hero{
-      padding: 34px 0 10px;
-    }
-
-    .members-hero h1{
+    /* ===== Team / Members Page (only page-specific styles) ===== */
+    .page-hero{ padding: 54px 0 18px; }
+    .page-hero h1{
       margin: 0 0 10px;
-      font-size: clamp(26px, 3vw, 34px);
-      letter-spacing: -0.02em;
-      color: var(--t-text);
+      font-size: clamp(28px, 4vw, 42px);
+      letter-spacing: -0.03em;
     }
-
-    .members-hero p{
+    .page-hero p{
       margin: 0;
       color: var(--t-muted);
       font-weight: 600;
-      line-height: 1.6;
+      max-width: 70ch;
     }
 
-    .members-toolbar{
-      margin-top: 18px;
+    .team-controls{
+      margin-top: 22px;
       display:flex;
       gap: 12px;
       flex-wrap: wrap;
       align-items: center;
-      justify-content: space-between;
     }
-
-    .members-search{
-      flex: 1;
-      min-width: 220px;
+    .search-wrap{
+      flex: 1 1 260px;
       display:flex;
       align-items:center;
       gap: 10px;
-      padding: 12px 14px;
+      padding: 10px 12px;
       border-radius: 14px;
-      background: var(--t-panel);
       border: 1px solid var(--t-border);
-      box-shadow: 0 10px 22px rgba(0,0,0,.12);
+      background: color-mix(in srgb, var(--t-panel2) 75%, transparent);
     }
-
-    body[data-theme="light"] .members-search{
-      box-shadow: 0 10px 22px rgba(14,18,24,.08);
-    }
-
-    .members-search input{
+    .search-ico{ opacity:.75; }
+    #member-search{
       width: 100%;
       border: none;
       outline: none;
       background: transparent;
       color: var(--t-text);
-      font: inherit;
       font-weight: 700;
     }
-
-    .members-search .ico{
-      width: 34px;
-      height: 34px;
-      border-radius: 12px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background: color-mix(in srgb, var(--purple) 14%, transparent);
-      border: 1px solid color-mix(in srgb, var(--purple) 22%, transparent);
-      color: var(--purple2);
-      font-weight: 900;
-      flex: 0 0 auto;
+    .chips{ display:flex; gap: 10px; flex-wrap: wrap; }
+    .chip{
+      border: 1px solid var(--t-border);
+      background: transparent;
+      color: var(--t-text);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+    }
+    .chip:hover{ transform: translateY(-1px); border-color: color-mix(in srgb, var(--accent) 55%, var(--t-border)); }
+    .chip.is-active{
+      background: linear-gradient(135deg,
+        color-mix(in srgb, var(--accent) 22%, transparent),
+        color-mix(in srgb, var(--accent2) 20%, transparent)
+      );
+      border-color: color-mix(in srgb, var(--accent2) 55%, var(--t-border));
     }
 
-    .members-meta{
+    .team-grid{
+      margin: 18px 0 70px;
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    @media (max-width: 980px){ .team-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+    @media (max-width: 560px){ .team-grid{ grid-template-columns: 1fr; } }
+
+    .profile-card{
+      position: relative;
+      border-radius: 18px;
+      border: 1px solid var(--t-border);
+      background: color-mix(in srgb, var(--t-panel2) 85%, transparent);
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      box-shadow: 0 14px 30px rgba(0,0,0,.18);
+    }
+    body[data-theme="light"] .profile-card{ box-shadow: 0 12px 26px rgba(14,18,24,.12); }
+
+    .profile-card::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(800px 220px at 20% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 60%),
+        radial-gradient(700px 200px at 90% 10%, color-mix(in srgb, var(--accent2) 18%, transparent), transparent 60%);
+      opacity: .9;
+      pointer-events:none;
+    }
+    .profile-card:hover{
+      transform: translateY(-6px);
+      border-color: color-mix(in srgb, var(--accent2) 55%, var(--t-border));
+      box-shadow: 0 22px 46px rgba(0,0,0,.28);
+    }
+    body[data-theme="light"] .profile-card:hover{ box-shadow: 0 20px 40px rgba(14,18,24,.18); }
+
+    .profile-top{
+      position: relative;
+      padding: 16px 16px 10px;
       display:flex;
-      gap: 10px;
       align-items:center;
+      gap: 12px;
+    }
+    .avatar{
+      width: 56px; height: 56px;
+      border-radius: 16px;
+      object-fit: cover;
+      border: 1px solid color-mix(in srgb, var(--t-border) 70%, transparent);
+      background: color-mix(in srgb, var(--t-panel) 85%, transparent);
+    }
+    .profile-name{
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      font-size: 16px;
+      margin: 0;
+    }
+    .profile-role{
+      margin: 2px 0 0;
       color: var(--t-muted);
       font-weight: 800;
       font-size: 13px;
     }
-
-    .pill{
-      padding: 10px 12px;
+    .profile-body{ position: relative; padding: 0 16px 16px; }
+    .profile-bio{
+      margin: 8px 0 12px;
+      color: color-mix(in srgb, var(--t-text) 86%, var(--t-muted));
+      font-weight: 650;
+      line-height: 1.5;
+      min-height: 3.1em;
+    }
+    .badges{ display:flex; flex-wrap: wrap; gap: 8px; }
+    .badge{
+      font-size: 12px;
+      font-weight: 850;
+      padding: 6px 10px;
       border-radius: 999px;
-      background: var(--t-panel);
       border: 1px solid var(--t-border);
-      box-shadow: 0 10px 22px rgba(0,0,0,.10);
+      background: color-mix(in srgb, var(--t-panel) 70%, transparent);
     }
 
-    .members-grid{
-      margin-top: 18px;
-      display:grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
+    .profile-actions{
+      position: relative;
+      padding: 0 16px 16px;
+      display:flex;
+      gap: 10px;
     }
-
-    @media (max-width: 980px){
-      .members-grid{ grid-template-columns: repeat(2, 1fr); }
-    }
-
-    @media (max-width: 520px){
-      .members-grid{ grid-template-columns: 1fr; }
-    }
-
-    .mcard{
-      background: var(--t-panel);
+    .icon-btn{
+      flex: 1;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 14px;
       border: 1px solid var(--t-border);
-      border-radius: 22px;
-      overflow:hidden;
-      cursor:pointer;
-      box-shadow: 0 14px 30px rgba(0,0,0,.18);
-      transition: all .18s ease;
-    }
-
-    .mcard:hover{
-      transform: translateY(-5px);
-      border-color: color-mix(in srgb, var(--purple2) 35%, var(--t-border));
-    }
-
-    .mcard img{
-      width:100%;
-      height:220px;
-      object-fit: cover;
-      display:block;
-    }
-
-    .mcard .body{
-      padding: 14px;
-    }
-
-    .mcard h3{
-      margin:0 0 6px;
-      font-size:16px;
-      font-weight:900;
+      background: transparent;
       color: var(--t-text);
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
     }
+    .icon-btn:hover{
+      transform: translateY(-1px);
+      border-color: color-mix(in srgb, var(--accent2) 55%, var(--t-border));
+      background: linear-gradient(135deg,
+        color-mix(in srgb, var(--accent) 14%, transparent),
+        color-mix(in srgb, var(--accent2) 12%, transparent)
+      );
+    }
+    .icon-btn span{ opacity:.9; }
 
-    .mcard p{
-      margin:0;
-      font-size:13px;
+    .empty-state{
+      margin: 14px 0 80px;
+      padding: 18px;
+      border: 1px dashed var(--t-border);
+      border-radius: 16px;
       color: var(--t-muted);
-      font-weight:700;
+      font-weight: 800;
+      display:none;
+    }
+    .loading-state{
+      margin: 14px 0 80px;
+      padding: 18px;
+      border: 1px dashed var(--t-border);
+      border-radius: 16px;
+      color: var(--t-muted);
+      font-weight: 800;
     }
 
-    /* ===== Modal ===== */
-    .m-overlay{
-      position:fixed;
-      inset:0;
+    /* Modal (Full Profile Sheet) */
+    .modal-backdrop{
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.60);
       display:none;
       align-items:center;
       justify-content:center;
-      background: rgba(0,0,0,.6);
-      z-index:9999;
-      padding:20px;
+      z-index: 20000;
+      padding: 18px;
     }
-
-    .m-overlay.show{
-      display:flex;
-    }
-
-    .m-modal{
-      width:min(900px,100%);
-      background: var(--t-panel2);
-      border-radius:20px;
+    .modal{
+      width: min(940px, 100%);
+      border-radius: 26px;
+      border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--t-border));
+      background:
+        radial-gradient(1200px 600px at 10% 0%, color-mix(in srgb, var(--accent2) 18%, transparent), transparent 55%),
+        radial-gradient(900px 500px at 80% 30%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 55%),
+        color-mix(in srgb, var(--t-bg) 92%, black);
+      box-shadow: 0 34px 110px rgba(0,0,0,.55);
       overflow:hidden;
-      border:1px solid var(--t-border);
-      display:grid;
-      grid-template-columns:350px 1fr;
     }
-
-    @media(max-width:860px){
-      .m-modal{ grid-template-columns:1fr; }
-    }
-
-    .m-left img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-    }
-
-    .m-right{
-      padding:20px;
-    }
-
-    .m-right h2{
-      margin:0 0 8px;
-      font-size:22px;
-      font-weight:1000;
-    }
-
-    .m-right .role{
-      font-size:14px;
-      font-weight:900;
-      color: var(--t-muted);
-      margin-bottom:14px;
-    }
-
-    .m-right .bio{
-      line-height:1.7;
-      font-weight:600;
-      white-space: pre-wrap;
-    }
-
-    .m-links{
-      margin-top:16px;
+    .modal-head{
+      padding: 12px 14px;
       display:flex;
-      gap:10px;
-      flex-wrap:wrap;
+      align-items:center;
+      justify-content: space-between;
+      gap: 14px;
+      border-bottom: 1px solid var(--t-border);
+      background: color-mix(in srgb, var(--t-bg) 82%, black);
+    }
+    .modal-title{ font-weight: 950; letter-spacing: -0.03em; }
+    .modal-close{
+      border: 1px solid var(--t-border);
+      background: color-mix(in srgb, var(--t-bg) 80%, black);
+      color: var(--t-text);
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-weight: 950;
+      cursor: pointer;
+    }
+    .modal-close:hover{ border-color: color-mix(in srgb, var(--accent2) 55%, var(--t-border)); }
+    .modal-body{ padding: 18px; }
+
+    .profile-sheet{
+      display:grid;
+      grid-template-columns: 300px 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    @media (max-width: 860px){ .profile-sheet{ grid-template-columns: 1fr; } }
+
+    .p-left{ display:flex; align-items:center; justify-content:center; padding: 18px 10px; }
+    .p-avatar-wrap{
+      width: 220px; height: 220px;
+      border-radius: 999px;
+      position: relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .p-avatar-wrap::before{
+      content:"";
+      position:absolute; inset: -8px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      opacity: .85;
+    }
+    .p-avatar-wrap::after{
+      content:"";
+      position:absolute; inset: -26px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, color-mix(in srgb, var(--accent2) 40%, transparent), transparent 60%);
+      filter: blur(8px);
+      opacity: .9;
+      pointer-events:none;
+    }
+    .p-avatar{
+      position: relative;
+      width: 206px; height: 206px;
+      border-radius: 999px;
+      object-fit: cover;
+      border: 10px solid color-mix(in srgb, var(--t-panel2) 92%, transparent);
+      background: color-mix(in srgb, var(--t-panel2) 85%, transparent);
     }
 
-    .m-links a{
-      padding:8px 12px;
-      border-radius:999px;
-      border:1px solid var(--t-border);
-      background:var(--t-panel);
-      font-size:13px;
-      font-weight:900;
+    .p-right{ padding: 8px 8px 6px; }
+    .p-hello{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-weight: 950;
+      font-size: 12px;
+      letter-spacing: .08em;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent2), color-mix(in srgb, var(--accent) 92%, #000));
+      width: fit-content;
+    }
+    .p-name{
+      margin: 10px 0 6px;
+      font-size: 32px;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      font-weight: 950;
+    }
+    .p-divider{ height: 1px; background: var(--t-border); margin: 14px 0; }
+
+    .p-info{
+      display:grid;
+      grid-template-columns: 140px 1fr;
+      gap: 10px 14px;
+      font-weight: 800;
+      font-size: 14px;
+    }
+    @media (max-width: 520px){ .p-info{ grid-template-columns: 110px 1fr; } }
+    .p-label{ color: var(--t-muted); }
+    .p-value a{
+      color: var(--accent2);
       text-decoration:none;
-      color:var(--t-text);
+      font-weight: 900;
+      word-break: break-word;
     }
+    .p-value a:hover{ text-decoration: underline; }
 
-    .m-close{
-      position:absolute;
-      right:16px;
-      top:16px;
-      cursor:pointer;
-      font-weight:900;
-      font-size:18px;
-    }
-
-    .empty-state{
-      margin-top:20px;
-      padding:18px;
+    .p-quote{
+      margin-top: 16px;
+      padding: 14px 14px;
+      border-radius: 16px;
+      border: 1px solid var(--t-border);
+      background: color-mix(in srgb, var(--t-panel2) 70%, transparent);
       text-align:center;
-      border-radius:18px;
-      background:var(--t-panel);
-      border:1px solid var(--t-border);
-      font-weight:700;
-      color:var(--t-muted);
-      display:none;
+      font-weight: 800;
+      color: var(--t-text);
     }
+
+    .p-actions{
+      margin-top: 16px;
+      display:flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content:center;
+    }
+    .p-btn{
+      appearance:none;
+      border: none;
+      cursor:pointer;
+      text-decoration:none;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-weight: 950;
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      box-shadow: 0 16px 34px rgba(0,0,0,.18);
+    }
+    .p-btn.primary{ color: #fff; background: linear-gradient(135deg, #22c1f5, #2563eb); }
+    .p-btn.secondary{ color: #fff; background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 88%, #000), color-mix(in srgb, var(--accent2) 90%, #000)); }
+    .p-btn.ghost{
+      color: var(--t-text);
+      border: 1px solid var(--t-border);
+      background: color-mix(in srgb, var(--t-bg) 65%, transparent);
+      box-shadow:none;
+    }
+    .p-btn:hover{ transform: translateY(-1px); }
   </style>
 </head>
 
-<body data-theme="dim-dark">
+<body>
+  <div id="loading-bar"></div>
 
-<main class="content-wrapper">
-  <section class="members-hero">
-    <h1>👥 Thành viên</h1>
-    <p>Dữ liệu được đồng bộ trực tiếp từ Firebase.</p>
+  <!-- Header: keep same ids so existing theme JS works -->
+  <header class="veo-header">
+    <div class="veo-top">
+      <div class="veo-inner">
+        <a class="veo-logo" href="index.html">
+          <span class="veo-mark">❤</span>
+          <span class="veo-logo-text">The Blouse</span>
+        </a>
 
-    <div class="members-toolbar">
-      <div class="members-search">
-        <div class="ico">⌕</div>
-        <input id="member-search" placeholder="Tìm tên / vai trò..." />
+        <nav class="veo-nav" aria-label="Primary">
+          <a href="index.html">Home</a>
+          <a href="memb.html" aria-current="page" style="color: var(--purple2);">Team</a>
+        </nav>
+
+        <div class="veo-actions">
+          <button type="button" class="veo-theme-btn" id="ms-theme-btn" aria-label="Chuyển theme">Theme: Dark</button>
+          <a class="veo-cta-btn" href="admin.html" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">
+            <span class="veo-cta-ico">⚙</span>
+            Admin
+          </a>
+        </div>
       </div>
-      <div class="members-meta">
-        <div class="pill">Tổng: <span id="member-count">0</span></div>
+    </div>
+  </header>
+
+  <main class="content-wrapper" style="position:relative; z-index:1;">
+    <section class="page-hero">
+      <h1>👥 Thành viên</h1>
+      <p>Trang giới thiệu team — dữ liệu load trực tiếp từ Firebase <code>members</code> (thêm/sửa/xóa bằng <code>admin.html</code>).</p>
+
+      <div class="team-controls">
+        <div class="search-wrap" role="search">
+          <span class="search-ico">⌕</span>
+          <input id="member-search" type="search" placeholder="Tìm theo tên / role / bio…" autocomplete="off" />
+        </div>
+
+        <div class="chips" id="team-chips" aria-label="Lọc theo role"></div>
       </div>
-    </div>
+    </section>
 
-    <div class="empty-state" id="members-empty">
-      Chưa có thành viên nào.
-    </div>
+    <section aria-label="Danh sách thành viên">
+      <div class="loading-state" id="loading-state">Đang tải thành viên…</div>
+      <div class="team-grid" id="team-grid"></div>
+      <div class="empty-state" id="empty-state">Không tìm thấy thành viên nào khớp bộ lọc hiện tại 😭</div>
+    </section>
+  </main>
 
-    <div class="members-grid" id="members-grid"></div>
-  </section>
-</main>
-
-<div class="m-overlay" id="m-overlay">
-  <div class="m-modal">
-    <div class="m-left">
-      <img id="m-ava" />
-    </div>
-    <div class="m-right">
-      <div class="m-close" id="m-close">✕</div>
-      <h2 id="m-name"></h2>
-      <div class="role" id="m-role"></div>
-      <div class="bio" id="m-bio"></div>
-      <div class="m-links" id="m-links"></div>
+  <!-- Modal -->
+  <div class="modal-backdrop" id="member-modal" role="dialog" aria-modal="true" aria-label="Chi tiết thành viên">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title" id="modal-title">Thành viên</div>
+        <button class="modal-close" id="modal-close" type="button">✕</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
     </div>
   </div>
-</div>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <!-- Footer (same as index) -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col footer-brand">
+        <div class="footer-logo">To @TheBlouse <span aria-hidden="true">♡</span></div>
+        <p class="footer-desc">Góc nhỏ để lưu lại hoạt động và những lời chúc gửi tới Viện Huyết học.</p>
 
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyCKysT8eZ3LJqyi7vCjoqQGIpjgTyt7HYg",
-  authDomain: "loiyeuthuong-5bfab.firebaseapp.com",
-  projectId: "loiyeuthuong-5bfab",
-  storageBucket: "loiyeuthuong-5bfab.firebasestorage.app",
-  messagingSenderId: "544284022045",
-  appId: "1:544284022045:web:22f2eef2ed918d93707df4"
-};
+        <div class="footer-social" aria-label="Mạng xã hội">
+          <a class="social-btn" href="https://www.facebook.com/theblouse.prj" aria-label="Facebook">
+            <span class="social-ico">f</span><span class="social-text">FACEBOOK</span>
+          </a>
+          <a class="social-btn" href="https://www.instagram.com/blouse_thantien" aria-label="Instagram">
+            <span class="social-ico">◎</span><span class="social-text">INSTAGRAM</span>
+          </a>
+        </div>
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-const grid = document.getElementById("members-grid");
-const emptyEl = document.getElementById("members-empty");
-const countEl = document.getElementById("member-count");
-const searchEl = document.getElementById("member-search");
-
-let allMembers = [];
-
-function render(list){
-  grid.innerHTML="";
-  if(!list.length){
-    emptyEl.style.display="block";
-    countEl.textContent="0";
-    return;
-  }
-  emptyEl.style.display="none";
-  countEl.textContent=list.length;
-
-  list.forEach(m=>{
-    const card=document.createElement("div");
-    card.className="mcard";
-    card.innerHTML=`
-      <img src="${m.avatar || 'https://via.placeholder.com/800'}">
-      <div class="body">
-        <h3>${m.name||''}</h3>
-        <p>${m.role||''}</p>
+        <ul class="footer-contact">
+          <li><span class="fc-ico">☎</span><span>037 501 3747</span></li>
+          <li><span class="fc-ico">⌂</span><span>Hà Nội</span></li>
+          <li><span class="fc-ico">✉</span><a href="mailto:hello@example.com">theblouse.prj@gmail.com</a></li>
+        </ul>
       </div>
-    `;
-    card.onclick=()=>openModal(m);
-    grid.appendChild(card);
-  });
-}
 
-function openModal(m){
-  document.getElementById("m-ava").src=m.avatar||'';
-  document.getElementById("m-name").textContent=m.name||'';
-  document.getElementById("m-role").textContent=m.role||'';
-  document.getElementById("m-bio").textContent=m.bio||'';
+      <div class="footer-col">
+        <div class="footer-title">Sản phẩm</div>
+        <a class="footer-link" href="index.html#timeline-section">Timeline</a>
+        <a class="footer-link" href="index.html#activities-section">Hoạt động</a>
+        <a class="footer-link" href="index.html#messages-section">Lời chúc</a>
+        <a class="footer-link" href="memb.html">Thành viên</a>
+      </div>
 
-  const links=document.getElementById("m-links");
-  links.innerHTML="";
-  if(m.facebook){
-    links.innerHTML+=`<a href="${m.facebook}" target="_blank">Facebook</a>`;
-  }
-  if(m.instagram){
-    links.innerHTML+=`<a href="${m.instagram}" target="_blank">Instagram</a>`;
-  }
+      <div class="footer-col">
+        <div class="footer-title">Chính sách</div>
+        <a class="footer-link" href="#">Hướng dẫn</a>
+        <a class="footer-link" href="#">Chính sách bảo mật</a>
+        <a class="footer-link" href="#">Điều khoản sử dụng</a>
+        <a class="footer-link" href="#">Liên hệ hỗ trợ</a>
+      </div>
 
-  document.getElementById("m-overlay").classList.add("show");
-}
+      <div class="footer-col footer-newsletter" id="newsletter">
+        <div class="footer-title">Đăng kí nhận tin</div>
+        <p class="footer-sub">Để lại thông tin, tụi mình sẽ cập nhật những tin tức quan trọng.</p>
 
-document.getElementById("m-close").onclick=()=>{
-  document.getElementById("m-overlay").classList.remove("show");
-};
+        <form class="footer-form" onsubmit="return false;">
+          <label class="footer-field">
+            <span>Họ tên</span>
+            <input type="text" placeholder="Tên của bạn" autocomplete="name">
+          </label>
 
-searchEl.oninput=()=>{
-  const q=searchEl.value.toLowerCase();
-  render(allMembers.filter(m=>
-    (m.name||'').toLowerCase().includes(q) ||
-    (m.role||'').toLowerCase().includes(q)
-  ));
-};
+          <label class="footer-field">
+            <span>Email</span>
+            <input type="email" placeholder="you@email.com" autocomplete="email">
+          </label>
 
-db.collection("members")
-  .where("active","==",true)
-  .orderBy("order","asc")
-  .onSnapshot(snap=>{
-    allMembers=snap.docs.map(d=>d.data());
-    render(allMembers);
-  });
-</script>
+          <button class="footer-submit" type="button">Đăng ký</button>
+        </form>
+      </div>
+    </div>
 
+    <div class="footer-bottom">
+      <div class="footer-bottom-links">
+        <a href="#">GIỚI THIỆU DỰ ÁN</a>
+        <span class="dot">|</span>
+        <a href="memb.html">THÀNH VIÊN THE BLOUSE</a>
+        <span class="dot">|</span>
+        <a href="#">CHI TIẾT HOẠT ĐỘNG</a>
+      </div>
+
+      <div class="footer-copy">Copyright © 2023 - 2026 • All rights reserved</div>
+
+      <button class="footer-top" type="button" aria-label="Lên đầu trang">⌃</button>
+    </div>
+  </footer>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    // ===== Firebase init (same as index/admin) =====
+    const firebaseConfig = {
+      apiKey: "AIzaSyCKysT8eZ3LJqyi7vCjoqQGIpjgTyt7HYg",
+      authDomain: "loiyeuthuong-5bfab.firebaseapp.com",
+      projectId: "loiyeuthuong-5bfab",
+      storageBucket: "loiyeuthuong-5bfab.firebasestorage.app",
+      messagingSenderId: "544284022045",
+      appId: "1:544284022045:web:22f2eef2ed918d93707df4"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ===== Utilities =====
+    function escapeHtml(text){
+      const div = document.createElement("div");
+      div.textContent = (text ?? "");
+      return div.innerHTML;
+    }
+
+    function avatarFallback(name){
+      const n = (name || "Member");
+      return "https://ui-avatars.com/api/?background=7C3AED&color=fff&name=" + encodeURIComponent(n);
+    }
+
+    // ===== Members state =====
+    let MEMBERS = [];            // normalized list
+    let q = "";
+    let activeRole = "ALL";
+
+    const grid = document.getElementById("team-grid");
+    const chips = document.getElementById("team-chips");
+    const empty = document.getElementById("empty-state");
+    const loading = document.getElementById("loading-state");
+    const search = document.getElementById("member-search");
+
+    function normalizeMember(doc){
+      const d = doc.data() || {};
+      const links = {
+        facebook: d.facebook || "",
+        instagram: d.instagram || ""
+      };
+
+      // tags optional: if admin doesn't set tags, we derive from role split by "/" or ","
+      let tags = Array.isArray(d.tags) ? d.tags : [];
+      if (!tags.length && typeof d.role === "string" && d.role.trim()){
+        tags = d.role.split(/[\/,|]/g).map(s => s.trim()).filter(Boolean).slice(0, 3);
+      }
+
+      return {
+        id: doc.id,
+        name: (d.name || "").trim() || "Chưa có tên",
+        role: (d.role || "").trim() || "Chưa cập nhật",
+        avatar: (d.avatar || "").trim() || avatarFallback(d.name),
+        bio: (d.bio || "").trim() || "Chưa có mô tả.",
+        active: (d.active !== false),
+        order: Number.isFinite(d.order) ? d.order : (parseInt(d.order, 10) || 9999),
+        links,
+        tags
+      };
+    }
+
+    // ===== Filter / render =====
+    function matches(member){
+      if (!member.active) return false;
+
+      const roleOk = (activeRole === "ALL") || (member.role === activeRole);
+      if (!roleOk) return false;
+
+      if (!q) return true;
+
+      const hay = (member.name + " " + member.role + " " + member.bio + " " + (member.tags || []).join(" "))
+        .toLowerCase();
+
+      return hay.includes(q);
+    }
+
+    function el(tag, attrs = {}, children = []){
+      const node = document.createElement(tag);
+      for (const [k, v] of Object.entries(attrs)){
+        if (k === "class") node.className = v;
+        else if (k === "html") node.innerHTML = v;
+        else if (k.startsWith("on") && typeof v === "function") node.addEventListener(k.slice(2), v);
+        else node.setAttribute(k, v);
+      }
+      children.forEach(c => node.appendChild(c));
+      return node;
+    }
+
+    function card(member){
+      const a = el("a", { class: "profile-card", href: "#", "data-id": member.id });
+      a.addEventListener("click", (e) => { e.preventDefault(); openModal(member); });
+
+      const top = el("div", { class: "profile-top" });
+      top.appendChild(el("img", { class: "avatar", src: member.avatar, alt: member.name, loading: "lazy" }));
+      const meta = el("div");
+      meta.appendChild(el("p", { class: "profile-name", html: escapeHtml(member.name) }));
+      meta.appendChild(el("p", { class: "profile-role", html: escapeHtml(member.role) }));
+      top.appendChild(meta);
+
+      const body = el("div", { class: "profile-body" });
+      body.appendChild(el("div", { class: "profile-bio", html: escapeHtml(member.bio) }));
+
+      const badges = el("div", { class: "badges" });
+      (member.tags || []).slice(0, 3).forEach(t => badges.appendChild(el("span", { class: "badge", html: escapeHtml(t) })));
+      body.appendChild(badges);
+
+      const actions = el("div", { class: "profile-actions" });
+
+      const btn1 = el("button", { class: "icon-btn", type: "button" });
+      btn1.innerHTML = "<span>👤</span> Xem";
+      btn1.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); openModal(member); });
+
+      const btn2 = el("button", { class: "icon-btn", type: "button" });
+      btn2.innerHTML = "<span>↗</span> Social";
+      btn2.addEventListener("click", (e) => {
+        e.preventDefault(); e.stopPropagation();
+        const link = (member.links && (member.links.instagram || member.links.facebook)) || "";
+        if (!link) return openModal(member);
+        window.open(link, "_blank", "noopener");
+      });
+
+      actions.appendChild(btn1);
+      actions.appendChild(btn2);
+
+      a.appendChild(top);
+      a.appendChild(body);
+      a.appendChild(actions);
+      return a;
+    }
+
+    function renderGrid(){
+      grid.innerHTML = "";
+      const list = MEMBERS.filter(matches);
+      if (!list.length){
+        empty.style.display = "block";
+      } else {
+        empty.style.display = "none";
+        list.forEach(m => grid.appendChild(card(m)));
+      }
+    }
+
+    function setActiveChip(key){
+      activeRole = key;
+      [...chips.querySelectorAll(".chip")].forEach(c => c.classList.toggle("is-active", c.dataset.key === key));
+      renderGrid();
+    }
+
+    function renderChips(){
+      chips.innerHTML = "";
+      const roles = [...new Set(MEMBERS.filter(m => m.active).map(m => m.role))].sort((a,b)=>a.localeCompare(b,'vi'));
+      const allBtn = el("button", { class: "chip is-active", type: "button", "data-key": "ALL" });
+      allBtn.textContent = "Tất cả";
+      allBtn.addEventListener("click", () => setActiveChip("ALL"));
+      chips.appendChild(allBtn);
+
+      roles.forEach(r => {
+        const b = el("button", { class: "chip", type: "button", "data-key": r });
+        b.textContent = r;
+        b.addEventListener("click", () => setActiveChip(r));
+        chips.appendChild(b);
+      });
+    }
+
+    // ===== Modal =====
+    function openModal(member){
+      const modal = document.getElementById("member-modal");
+      const title = document.getElementById("modal-title");
+      const body = document.getElementById("modal-body");
+
+      title.textContent = member.name;
+
+      const fb = member.links.facebook ? `<a href="${escapeHtml(member.links.facebook)}" target="_blank" rel="noopener">${escapeHtml(member.links.facebook)}</a>` : "<span style='opacity:.7'>(không có)</span>";
+      const ig = member.links.instagram ? `<a href="${escapeHtml(member.links.instagram)}" target="_blank" rel="noopener">${escapeHtml(member.links.instagram)}</a>` : "<span style='opacity:.7'>(không có)</span>";
+
+      body.innerHTML = `
+        <div class="profile-sheet">
+          <div class="p-left">
+            <div class="p-avatar-wrap">
+              <img class="p-avatar" src="${escapeHtml(member.avatar)}" alt="${escapeHtml(member.name)}" />
+            </div>
+          </div>
+
+          <div class="p-right">
+            <div class="p-hello">THE BLOUSE</div>
+            <div class="p-name">${escapeHtml(member.name)}</div>
+            <div style="font-weight:900; color: var(--t-muted);">${escapeHtml(member.role)}</div>
+
+            <div class="p-divider"></div>
+
+            <div class="p-info">
+              <div class="p-label">Bio</div>
+              <div class="p-value">${escapeHtml(member.bio)}</div>
+
+              <div class="p-label">Facebook</div>
+              <div class="p-value">${fb}</div>
+
+              <div class="p-label">Instagram</div>
+              <div class="p-value">${ig}</div>
+
+              <div class="p-label">Tags</div>
+              <div class="p-value">${(member.tags||[]).map(t => `<span class="badge" style="display:inline-flex;margin:0 6px 6px 0;">${escapeHtml(t)}</span>`).join("") || "<span style='opacity:.7'>(không có)</span>"}</div>
+            </div>
+
+            <div class="p-quote">“Cảm ơn bạn đã ghé xem team tụi mình.”</div>
+
+            <div class="p-actions">
+              ${member.links.instagram ? `<a class="p-btn primary" href="${escapeHtml(member.links.instagram)}" target="_blank" rel="noopener"><span>◎</span> Instagram</a>` : ""}
+              ${member.links.facebook ? `<a class="p-btn secondary" href="${escapeHtml(member.links.facebook)}" target="_blank" rel="noopener"><span>f</span> Facebook</a>` : ""}
+              <button class="p-btn ghost" type="button" onclick="(function(){document.getElementById('modal-close').click();})()">
+                <span>✕</span> Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      modal.style.display = "flex";
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal(){
+      const modal = document.getElementById("member-modal");
+      modal.style.display = "none";
+      document.body.style.overflow = "";
+    }
+
+    document.getElementById("modal-close").addEventListener("click", closeModal);
+    document.getElementById("member-modal").addEventListener("click", (e) => { if (e.target.id === "member-modal") closeModal(); });
+    window.addEventListener("keydown", (e) => {
+      const modal = document.getElementById("member-modal");
+      if (e.key === "Escape" && modal.style.display === "flex") closeModal();
+    });
+
+    // ===== Search =====
+    search.addEventListener("input", (e) => {
+      q = (e.target.value || "").trim().toLowerCase();
+      renderGrid();
+    });
+
+    // ===== Load from Firestore =====
+    function loadMembers(){
+      loading.style.display = "block";
+      db.collection("members")
+        .where("active", "==", true)
+        .orderBy("order", "asc")
+        .onSnapshot((snapshot) => {
+          MEMBERS = snapshot.docs.map(normalizeMember);
+          loading.style.display = "none";
+          renderChips();
+          // keep currently selected chip if still exists; else reset
+          const roles = new Set(MEMBERS.map(m => m.role));
+          if (activeRole !== "ALL" && !roles.has(activeRole)) activeRole = "ALL";
+          setActiveChip(activeRole);
+        }, (err) => {
+          loading.style.display = "none";
+          empty.style.display = "block";
+          empty.textContent = "Lỗi tải dữ liệu members: " + (err && err.message ? err.message : err);
+        });
+    }
+
+    // ===== Theme + footer behaviors (copied from index to keep consistent) =====
+    (function(){
+      const THEMES = [
+        { key: "light", label: "Light" },
+        { key: "dim-dark", label: "Dark" }
+      ];
+      const STORAGE_KEY = "tb_theme";
+      function normalizeTheme(key){
+        if (!key) return "dim-dark";
+        if (key === "grey" || key === "dark") return "dim-dark";
+        if (key !== "light" && key !== "dim-dark") return "dim-dark";
+        return key;
+      }
+      function applyTheme(key){
+        const k = normalizeTheme(key);
+        document.body.setAttribute("data-theme", k);
+        const btn = document.getElementById("ms-theme-btn");
+        const t = THEMES.find(x => x.key === k) || THEMES[1];
+        if (btn) btn.textContent = "Theme: " + t.label;
+      }
+      function toggleTheme(){
+        const current = normalizeTheme(document.body.getAttribute("data-theme") || "dim-dark");
+        const next = (current === "dim-dark") ? "light" : "dim-dark";
+        localStorage.setItem(STORAGE_KEY, next);
+        applyTheme(next);
+      }
+      document.addEventListener("DOMContentLoaded", function(){
+        const saved = normalizeTheme(localStorage.getItem(STORAGE_KEY));
+        applyTheme(saved);
+        const btn = document.getElementById("ms-theme-btn");
+        if (btn) btn.addEventListener("click", toggleTheme);
+      });
+    })();
+
+    // Loading bar
+    window.addEventListener('load', () => {
+      const loadingBar = document.getElementById('loading-bar');
+      if (!loadingBar) return;
+      setTimeout(() => {
+        loadingBar.classList.add('loading-complete');
+        setTimeout(() => loadingBar.remove(), 500);
+      }, 400);
+    });
+
+    // Footer back-to-top
+    (function(){
+      const btn = document.querySelector('.footer-top');
+      if(!btn) return;
+      btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    })();
+
+    // Kick off
+    loadMembers();
+  </script>
 </body>
 </html>
