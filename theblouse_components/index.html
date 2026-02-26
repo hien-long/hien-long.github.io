@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To @TheBlouse &lt;3</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/0jqsMq0Z/your-image.png">
+    <link rel="apple-touch-icon" href="https://i.ibb.co/0jqsMq0Z/your-image.png">
+    
+    <link rel="stylesheet" href="assets/css/styles.css">
+
+    <meta name="tb-page-scripts" content="assets/js/index.js">
+</head>
+<body>
+
+    <!-- VEO-LIKE HEADER (2 rows) -->
+        <div id="tb-header"></div>
+
+<div id="loading-bar"></div>
+
+<!-- Theme chooser (first visit) -->
+<div class="theme-chooser-overlay" id="theme-chooser-overlay" role="dialog" aria-modal="true" aria-labelledby="theme-chooser-title">
+  <div class="theme-chooser">
+    <h3 id="theme-chooser-title">Chọn giao diện</h3>
+    <p>Muốn dùng <b>Light</b> hay <b>Dark</b> cho lần này?</p>
+    <div class="theme-chooser-actions">
+      <button type="button" class="theme-choice light" id="theme-choice-light">
+        Light <span class="chip">Sáng</span>
+      </button>
+      <button type="button" class="theme-choice dark" id="theme-choice-dark">
+        Dark <span class="chip">Tối</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+        <!-- BANNER CAROUSEL -->
+        <section class="banner-section">
+            <div class="banner-carousel" id="banner-carousel">
+                <div class="loading" style="text-align: center; padding: 100px 20px; color: #999;">Đang tải banner...</div>
+            </div>
+            <button class="banner-nav prev" onclick="changeBanner(-1)">❮</button>
+            <button class="banner-nav next" onclick="changeBanner(1)">❯</button>
+            <div class="banner-dots" id="banner-dots"></div>
+        </section>
+
+        
+
+    <!-- HEADER MENU -->
+    <div class="header-menu">
+        <div class="menu-links">
+            <a href="#" id="open-message-popup"><span>+</span> Gửi lời nhắn</a>
+            <a href="https://www.facebook.com/theblouse.prj" target="_blank">
+                <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" class="social-icon"> FB
+            </a>
+            <a href="https://www.instagram.com/blouse_thantien/" target="_blank">
+                <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" class="social-icon"> IG
+            </a>
+        </div>
+        <div class="menu-title">@TheBlouse</div>
+    </div>
+
+    <!-- CONTENT WRAPPER -->
+    <div class="content-wrapper">
+
+        <!-- Success Popup -->
+        <div id="success-popup-overlay" class="popup-overlay">
+            <div id="success-popup" class="popup success-popup">
+                <div class="check-icon">✓</div>
+                <h3>Cảm ơn bạn đã gửi lời nhắn!</h3>
+                <p>Lời nhắn sẽ được duyệt bởi admin và xuất hiện trên trang trong vài phút.</p>
+            </div>
+        </div>
+
+        <!-- Message Popup -->
+        <div id="message-popup-overlay" class="popup-overlay">
+            <div id="message-popup" class="popup">
+                <span class="close-btn">&times;</span>
+                <h3>Gửi lời nhắn yêu thương</h3>
+                <input type="text" id="popup-sender-name" placeholder="Tên của bạn (ví dụ: Minh Anh)">
+                <label class="anonymous-checkbox">
+                    <input type="checkbox" id="anonymous-checkbox">
+                    <span>👤 Ẩn danh (không hiển thị tên công khai)</span>
+                </label>
+                <textarea id="popup-message-input" placeholder="Viết lời nhắn yêu thương của bạn..."></textarea>
+                <button id="popup-send-btn">Gửi lời nhắn</button>
+            </div>
+        </div>
+<div class="ms-cta-wrap">
+            <button type="button" class="ms-message-cta" id="ms-message-cta-top">
+                <span class="ms-message-cta-plus">+</span> Gửi lời nhắn
+            </button>
+            <div class="ms-cta-hint">Lời nhắn sẽ được duyệt bởi admin và hiển thị trên trang.</div>
+        </div>
+
+        <!-- Gallery Section -->
+        <section id="activities-section" class="gallery-section">
+            <div class="gallery-header"><h2>🔥 Những hoạt động tại Viện Huyết học</h2></div>
+            <div class="gallery-container">
+                <button class="gallery-nav prev" onclick="scrollGallery(-1)">❮</button>
+                <div class="gallery-scroll" id="gallery-scroll">
+                    <div class="loading">Đang tải gallery...</div>
+                </div>
+                <button class="gallery-nav next" onclick="scrollGallery(1)">❯</button>
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section id="timeline-section" class="ribbon-timeline">
+            <h2 class="timeline-title">Thời gian hoạt động của The Blouse</h2>
+            <div id="timeline-container" class="rt-container">
+                <div id="timeline-items" class="rt-wrap">
+                    <div style="text-align: center; width: 100%; color: #999; padding: 20px;">Đang tải timeline...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Messages Section -->
+        <section id="messages-section" class="messages-section">
+            <div class="messages-header">
+                <h2>💌 Lời chúc từ mọi người</h2>
+            </div>
+            <div class="messages-info">
+                <strong>⚠️ Lưu ý:</strong> Đây là bản demo với hệ thống quản lý admin hoàn chỉnh. 
+                Lời nhắn sẽ được lưu trữ và quản lý qua Firebase. 
+                Hãy gửi lời nhắn yêu thương của bạn để lan tỏa yêu thương đến các em nhỏ! 💕
+            </div>
+            <div class="messages" id="messages-container"></div>
+            <div class="load-more-container">
+                <button id="load-more-btn" class="load-more-btn">
+                    <span class="btn-text">Tải thêm...</span>
+                    <span class="spinner"></span>
+                </button>
+            </div>
+        
+        <div class="ms-cta-wrap ms-cta-wrap-bottom">
+            <button type="button" class="ms-message-cta" id="ms-message-cta-bottom">
+                <span class="ms-message-cta-plus">+</span> Gửi lời nhắn
+            </button>
+        </div>
+
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+        <div id="tb-footer"></div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    
+
+    
+
+    <script src="assets/js/bootstrap.js"></script>
+</body>
+</html>
