@@ -125,6 +125,15 @@
         .status-badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
         .status-active { background: #4CAF50; color: white; }
         .status-inactive { background: #999; color: white; }
+
+        /* 👥 MEMBERS MANAGEMENT */
+        #member-form { display: none; background: #f9f9f9; padding: 20px; margin-bottom: 20px; border-radius: 8px; }
+        #member-form .form-group { margin-bottom: 15px; }
+        .member-item { display: flex; gap: 15px; align-items: start; background: #f9f9f9; padding: 15px; border-radius: 8px; }
+        .member-item img { width: 90px; height: 90px; object-fit: cover; border-radius: 50%; border: 2px solid #eee; }
+        .member-item .info { flex: 1; }
+        .member-item .info h4 { margin: 0 0 8px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .member-item .info p { margin: 0 0 8px; color: #666; font-size: 14px; }
         
         .loading { text-align: center; padding: 40px; color: #666; }
         .empty { text-align: center; padding: 40px; color: #999; font-style: italic; }
@@ -142,7 +151,7 @@
         <!-- 🔐 LOGIN SECTION -->
         <div id="login-section">
             <h2>🔐 Admin Dashboard</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 30px;">Quản lý lời nhắn & gallery</p>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">Quản lý lời nhắn, gallery, banner & thành viên</p>
             <div class="form-group"><label>Email</label><input type="email" id="admin-email" placeholder="admin@loiythuong.com"></div>
             <div class="form-group"><label>Mật khẩu</label><input type="password" id="admin-password" placeholder="••••••••"></div>
             <button class="btn btn-primary" onclick="handleLogin()">Đăng nhập</button>
@@ -163,6 +172,7 @@
             <div class="admin-menu">
                 <button class="menu-item active" data-target="banner-section">🎨 Banner</button>
                 <button class="menu-item" data-target="gallery-section">🖼️ Gallery</button>
+                <button class="menu-item" data-target="members-section">👥 Thành viên</button>
                 <button class="menu-item" data-target="messages-section">✉️ Messages</button>
             </div>
 
@@ -234,6 +244,36 @@
                 </div>
             </div>
 
+            <!-- 👥 MEMBERS SECTION -->
+            <div id="members-section" class="admin-section">
+                <div class="messages-section">
+                    <div class="section-header">
+                        <span class="section-title">👥 Quản lý thành viên dự án</span>
+                        <button class="btn btn-success btn-small" onclick="showAddMemberForm()">+ Thêm thành viên</button>
+                    </div>
+
+                    <div id="member-form">
+                        <h3 id="member-form-title">Thêm thành viên mới</h3>
+                        <div class="form-group"><label>Họ tên *</label><input type="text" id="member-name" placeholder="Nguyễn Văn A"></div>
+                        <div class="form-group"><label>Vai trò *</label><input type="text" id="member-role" placeholder="Trưởng dự án"></div>
+                        <div class="form-group"><label>Ảnh đại diện (URL)</label><input type="text" id="member-avatar" placeholder="https://..."></div>
+                        <div class="form-group"><label>Giới thiệu ngắn</label><textarea id="member-bio" rows="3" placeholder="Mô tả ngắn về thành viên"></textarea></div>
+                        <div class="form-group"><label>Facebook (optional)</label><input type="text" id="member-facebook" placeholder="https://facebook.com/..."/></div>
+                        <div class="form-group"><label>Instagram (optional)</label><input type="text" id="member-instagram" placeholder="https://instagram.com/..."/></div>
+                        <div class="form-group"><label>Thứ tự hiển thị</label><input type="number" id="member-order" value="1" min="1"></div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="member-active" checked>
+                            <label for="member-active">Hiển thị trên trang thành viên</label>
+                        </div>
+                        <input type="hidden" id="member-id">
+                        <button class="btn btn-primary" onclick="saveMember()">💾 Lưu</button>
+                        <button class="btn btn-warning" onclick="hideMemberForm()">❌ Hủy</button>
+                    </div>
+
+                    <div class="message-list" id="member-list"><div class="loading">Đang tải thành viên...</div></div>
+                </div>
+            </div>
+
             <!-- ✉️ MESSAGES SECTION -->
             <div id="messages-section" class="admin-section">
                 <!-- ⏳ PENDING MESSAGES -->
@@ -271,7 +311,8 @@
 
         let allMessages = [], filteredMessages = [];
         let editingGalleryId = null;
-        let editingBannerId = null;  // 🔥 NEW
+        let editingBannerId = null;
+        let editingMemberId = null;
 
         auth.onAuthStateChanged(user => {
             if (user) {
@@ -280,7 +321,8 @@
                 document.getElementById('admin-email-display').textContent = user.email;
                 loadMessages();
                 loadAdminGallery();
-                loadBanners();  // 🔥 NEW
+                loadBanners();
+                loadMembers();
             } else {
                 document.getElementById('login-section').style.display = 'block';
                 document.getElementById('dashboard-section').style.display = 'none';
@@ -540,6 +582,118 @@
                             <div style="display:flex; gap:10px; align-items:center;">
                                 <button class="btn btn-warning btn-small" onclick="editBanner('${doc.id}')">✏️ Sửa</button>
                                 <button class="btn btn-danger btn-small" onclick="deleteBanner('${doc.id}')">🗑️ Xóa</button>
+                            </div>
+                        </div>`;
+                }).join('');
+            });
+        }
+
+        function showAddMemberForm() {
+            document.getElementById('member-form').style.display = 'block';
+            document.getElementById('member-form-title').textContent = 'Thêm thành viên mới';
+            document.getElementById('member-name').value = '';
+            document.getElementById('member-role').value = '';
+            document.getElementById('member-avatar').value = '';
+            document.getElementById('member-bio').value = '';
+            document.getElementById('member-facebook').value = '';
+            document.getElementById('member-instagram').value = '';
+            document.getElementById('member-order').value = '1';
+            document.getElementById('member-active').checked = true;
+            document.getElementById('member-id').value = '';
+            editingMemberId = null;
+        }
+
+        function hideMemberForm() {
+            document.getElementById('member-form').style.display = 'none';
+        }
+
+        async function saveMember() {
+            const name = document.getElementById('member-name').value.trim();
+            const role = document.getElementById('member-role').value.trim();
+            const avatar = document.getElementById('member-avatar').value.trim();
+            const bio = document.getElementById('member-bio').value.trim();
+            const facebook = document.getElementById('member-facebook').value.trim();
+            const instagram = document.getElementById('member-instagram').value.trim();
+            const order = parseInt(document.getElementById('member-order').value) || 1;
+            const active = document.getElementById('member-active').checked;
+
+            if (!name || !role) {
+                showNotification('Vui lòng nhập tên và vai trò thành viên!', 'error');
+                return;
+            }
+
+            const memberData = { name, role, avatar, bio, facebook, instagram, order, active, updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
+
+            try {
+                if (editingMemberId) {
+                    await db.collection('members').doc(editingMemberId).update(memberData);
+                    showNotification('Đã cập nhật thành viên!', 'success');
+                } else {
+                    memberData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                    await db.collection('members').add(memberData);
+                    showNotification('Đã thêm thành viên mới!', 'success');
+                }
+                hideMemberForm();
+                loadMembers();
+            } catch (e) {
+                showNotification('Lỗi: ' + e.message, 'error');
+            }
+        }
+
+        async function editMember(id) {
+            const doc = await db.collection('members').doc(id).get();
+            if (doc.exists) {
+                const data = doc.data();
+                document.getElementById('member-form').style.display = 'block';
+                document.getElementById('member-form-title').textContent = 'Chỉnh sửa thành viên';
+                document.getElementById('member-name').value = data.name || '';
+                document.getElementById('member-role').value = data.role || '';
+                document.getElementById('member-avatar').value = data.avatar || '';
+                document.getElementById('member-bio').value = data.bio || '';
+                document.getElementById('member-facebook').value = data.facebook || '';
+                document.getElementById('member-instagram').value = data.instagram || '';
+                document.getElementById('member-order').value = data.order || 1;
+                document.getElementById('member-active').checked = data.active !== false;
+                document.getElementById('member-id').value = id;
+                editingMemberId = id;
+            }
+        }
+
+        async function deleteMember(id) {
+            if (!confirm('Bạn có chắc muốn xóa thành viên này?')) return;
+            try {
+                await db.collection('members').doc(id).delete();
+                showNotification('Đã xóa thành viên!', 'success');
+                loadMembers();
+            } catch (e) {
+                showNotification('Lỗi: ' + e.message, 'error');
+            }
+        }
+
+        function loadMembers() {
+            db.collection('members').orderBy('order', 'asc').onSnapshot(snapshot => {
+                const container = document.getElementById('member-list');
+                if (snapshot.empty) {
+                    container.innerHTML = '<div class="empty">Chưa có thành viên nào</div>';
+                    return;
+                }
+
+                container.innerHTML = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    const statusBadge = data.active ? '<span class="status-badge status-active">● Hiển thị</span>' : '<span class="status-badge status-inactive">● Ẩn</span>';
+                    return `
+                        <div class="member-item">
+                            <img src="${data.avatar || 'https://ui-avatars.com/api/?background=e74c3c&color=fff&name=' + encodeURIComponent(data.name || 'Member')}" alt="${data.name || 'Member'}">
+                            <div class="info">
+                                <h4>${data.name || 'Chưa có tên'} ${statusBadge}</h4>
+                                <p><strong>Vai trò:</strong> ${data.role || 'Chưa cập nhật'}</p>
+                                ${data.bio ? `<p>${data.bio}</p>` : ''}
+                                <p><strong>Thứ tự:</strong> ${data.order || 1}</p>
+                                ${(data.facebook || data.instagram) ? `<p>${data.facebook ? `<a href="${data.facebook}" target="_blank" style="color:#1877f2; margin-right: 10px;">Facebook</a>` : ''}${data.instagram ? `<a href="${data.instagram}" target="_blank" style="color:#e1306c;">Instagram</a>` : ''}</p>` : ''}
+                            </div>
+                            <div style="display:flex; gap:10px; align-items:center;">
+                                <button class="btn btn-warning btn-small" onclick="editMember('${doc.id}')">✏️ Sửa</button>
+                                <button class="btn btn-danger btn-small" onclick="deleteMember('${doc.id}')">🗑️ Xóa</button>
                             </div>
                         </div>`;
                 }).join('');
