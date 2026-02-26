@@ -14,7 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <!-- Use shared site styles (header/footer/theme tokens/etc.) -->
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="./styles.css">
 
   <style>
     /* ===== Team / Members Page (only page-specific styles) ===== */
@@ -759,7 +759,6 @@
     function loadMembers(){
       loading.style.display = "block";
       db.collection("members")
-        .where("active", "==", true)
         .orderBy("order", "asc")
         .onSnapshot((snapshot) => {
           MEMBERS = snapshot.docs.map(normalizeMember);
