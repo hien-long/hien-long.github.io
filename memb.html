@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Thành viên | The Blouse</title>
+
+  <link rel="stylesheet" href="./styles.css" />
+
+  <style>
+    /* ===== Members Page ===== */
+    .members-hero{
+      padding: 34px 0 10px;
+    }
+
+    .members-hero h1{
+      margin: 0 0 10px;
+      font-size: clamp(26px, 3vw, 34px);
+      letter-spacing: -0.02em;
+      color: var(--t-text);
+    }
+
+    .members-hero p{
+      margin: 0;
+      color: var(--t-muted);
+      font-weight: 600;
+      line-height: 1.6;
+    }
+
+    .members-toolbar{
+      margin-top: 18px;
+      display:flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .members-search{
+      flex: 1;
+      min-width: 220px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: var(--t-panel);
+      border: 1px solid var(--t-border);
+      box-shadow: 0 10px 22px rgba(0,0,0,.12);
+    }
+
+    body[data-theme="light"] .members-search{
+      box-shadow: 0 10px 22px rgba(14,18,24,.08);
+    }
+
+    .members-search input{
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--t-text);
+      font: inherit;
+      font-weight: 700;
+    }
+
+    .members-search .ico{
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: color-mix(in srgb, var(--purple) 14%, transparent);
+      border: 1px solid color-mix(in srgb, var(--purple) 22%, transparent);
+      color: var(--purple2);
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+
+    .members-meta{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      color: var(--t-muted);
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .pill{
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: var(--t-panel);
+      border: 1px solid var(--t-border);
+      box-shadow: 0 10px 22px rgba(0,0,0,.10);
+    }
+
+    .members-grid{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    @media (max-width: 980px){
+      .members-grid{ grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 520px){
+      .members-grid{ grid-template-columns: 1fr; }
+    }
+
+    .mcard{
+      background: var(--t-panel);
+      border: 1px solid var(--t-border);
+      border-radius: 22px;
+      overflow:hidden;
+      cursor:pointer;
+      box-shadow: 0 14px 30px rgba(0,0,0,.18);
+      transition: all .18s ease;
+    }
+
+    .mcard:hover{
+      transform: translateY(-5px);
+      border-color: color-mix(in srgb, var(--purple2) 35%, var(--t-border));
+    }
+
+    .mcard img{
+      width:100%;
+      height:220px;
+      object-fit: cover;
+      display:block;
+    }
+
+    .mcard .body{
+      padding: 14px;
+    }
+
+    .mcard h3{
+      margin:0 0 6px;
+      font-size:16px;
+      font-weight:900;
+      color: var(--t-text);
+    }
+
+    .mcard p{
+      margin:0;
+      font-size:13px;
+      color: var(--t-muted);
+      font-weight:700;
+    }
+
+    /* ===== Modal ===== */
+    .m-overlay{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background: rgba(0,0,0,.6);
+      z-index:9999;
+      padding:20px;
+    }
+
+    .m-overlay.show{
+      display:flex;
+    }
+
+    .m-modal{
+      width:min(900px,100%);
+      background: var(--t-panel2);
+      border-radius:20px;
+      overflow:hidden;
+      border:1px solid var(--t-border);
+      display:grid;
+      grid-template-columns:350px 1fr;
+    }
+
+    @media(max-width:860px){
+      .m-modal{ grid-template-columns:1fr; }
+    }
+
+    .m-left img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .m-right{
+      padding:20px;
+    }
+
+    .m-right h2{
+      margin:0 0 8px;
+      font-size:22px;
+      font-weight:1000;
+    }
+
+    .m-right .role{
+      font-size:14px;
+      font-weight:900;
+      color: var(--t-muted);
+      margin-bottom:14px;
+    }
+
+    .m-right .bio{
+      line-height:1.7;
+      font-weight:600;
+      white-space: pre-wrap;
+    }
+
+    .m-links{
+      margin-top:16px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .m-links a{
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--t-border);
+      background:var(--t-panel);
+      font-size:13px;
+      font-weight:900;
+      text-decoration:none;
+      color:var(--t-text);
+    }
+
+    .m-close{
+      position:absolute;
+      right:16px;
+      top:16px;
+      cursor:pointer;
+      font-weight:900;
+      font-size:18px;
+    }
+
+    .empty-state{
+      margin-top:20px;
+      padding:18px;
+      text-align:center;
+      border-radius:18px;
+      background:var(--t-panel);
+      border:1px solid var(--t-border);
+      font-weight:700;
+      color:var(--t-muted);
+      display:none;
+    }
+  </style>
+</head>
+
+<body data-theme="dim-dark">
+
+<main class="content-wrapper">
+  <section class="members-hero">
+    <h1>👥 Thành viên</h1>
+    <p>Dữ liệu được đồng bộ trực tiếp từ Firebase.</p>
+
+    <div class="members-toolbar">
+      <div class="members-search">
+        <div class="ico">⌕</div>
+        <input id="member-search" placeholder="Tìm tên / vai trò..." />
+      </div>
+      <div class="members-meta">
+        <div class="pill">Tổng: <span id="member-count">0</span></div>
+      </div>
+    </div>
+
+    <div class="empty-state" id="members-empty">
+      Chưa có thành viên nào.
+    </div>
+
+    <div class="members-grid" id="members-grid"></div>
+  </section>
+</main>
+
+<div class="m-overlay" id="m-overlay">
+  <div class="m-modal">
+    <div class="m-left">
+      <img id="m-ava" />
+    </div>
+    <div class="m-right">
+      <div class="m-close" id="m-close">✕</div>
+      <h2 id="m-name"></h2>
+      <div class="role" id="m-role"></div>
+      <div class="bio" id="m-bio"></div>
+      <div class="m-links" id="m-links"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCKysT8eZ3LJqyi7vCjoqQGIpjgTyt7HYg",
+  authDomain: "loiyeuthuong-5bfab.firebaseapp.com",
+  projectId: "loiyeuthuong-5bfab",
+  storageBucket: "loiyeuthuong-5bfab.firebasestorage.app",
+  messagingSenderId: "544284022045",
+  appId: "1:544284022045:web:22f2eef2ed918d93707df4"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+const grid = document.getElementById("members-grid");
+const emptyEl = document.getElementById("members-empty");
+const countEl = document.getElementById("member-count");
+const searchEl = document.getElementById("member-search");
+
+let allMembers = [];
+
+function render(list){
+  grid.innerHTML="";
+  if(!list.length){
+    emptyEl.style.display="block";
+    countEl.textContent="0";
+    return;
+  }
+  emptyEl.style.display="none";
+  countEl.textContent=list.length;
+
+  list.forEach(m=>{
+    const card=document.createElement("div");
+    card.className="mcard";
+    card.innerHTML=`
+      <img src="${m.avatar || 'https://via.placeholder.com/800'}">
+      <div class="body">
+        <h3>${m.name||''}</h3>
+        <p>${m.role||''}</p>
+      </div>
+    `;
+    card.onclick=()=>openModal(m);
+    grid.appendChild(card);
+  });
+}
+
+function openModal(m){
+  document.getElementById("m-ava").src=m.avatar||'';
+  document.getElementById("m-name").textContent=m.name||'';
+  document.getElementById("m-role").textContent=m.role||'';
+  document.getElementById("m-bio").textContent=m.bio||'';
+
+  const links=document.getElementById("m-links");
+  links.innerHTML="";
+  if(m.facebook){
+    links.innerHTML+=`<a href="${m.facebook}" target="_blank">Facebook</a>`;
+  }
+  if(m.instagram){
+    links.innerHTML+=`<a href="${m.instagram}" target="_blank">Instagram</a>`;
+  }
+
+  document.getElementById("m-overlay").classList.add("show");
+}
+
+document.getElementById("m-close").onclick=()=>{
+  document.getElementById("m-overlay").classList.remove("show");
+};
+
+searchEl.oninput=()=>{
+  const q=searchEl.value.toLowerCase();
+  render(allMembers.filter(m=>
+    (m.name||'').toLowerCase().includes(q) ||
+    (m.role||'').toLowerCase().includes(q)
+  ));
+};
+
+db.collection("members")
+  .where("active","==",true)
+  .orderBy("order","asc")
+  .onSnapshot(snap=>{
+    allMembers=snap.docs.map(d=>d.data());
+    render(allMembers);
+  });
+</script>
+
+</body>
+</html>
