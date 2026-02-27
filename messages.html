@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Lời nhắn | The Blouse</title>
+    <link href="https://i.ibb.co/0jqsMq0Z/your-image.png" rel="icon" type="image/png" />
+    <link href="https://i.ibb.co/0jqsMq0Z/your-image.png" rel="apple-touch-icon" />
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+
+    <!-- Use shared site styles -->
+    <link href="./styles.css" rel="stylesheet" />
+    <script src="./common-ui.js"></script>
+
+    <style>
+        .page-hero {
+            padding: 54px 0 18px;
+        }
+
+        .page-hero h1 {
+            margin: 0 0 10px;
+            font-size: clamp(32px, 5vw, 42px);
+            letter-spacing: -0.03em;
+        }
+
+        .page-hero p {
+            margin: 0;
+            color: var(--t-muted);
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .cta-container {
+            margin: 20px 0 40px;
+        }
+    </style>
+</head>
+
+<body data-theme="dim-dark">
+    <div id="loading-bar"></div>
+
+    <!-- Dynamic Header -->
+    <div id="site-header"></div>
+
+    <main class="content-wrapper" style="position:relative; z-index:1;">
+        <section class="page-hero">
+            <h1>💌 Bức tường yêu thương</h1>
+            <p>Nơi gửi gắm những lời chúc, những thông điệp chân thành và động viên dành cho các em nhỏ tại Viện Huyết
+                học, cũng như cho dự án The Blouse.</p>
+
+            <div class="cta-container">
+                <button type="button" class="ms-message-cta" id="open-message-popup">
+                    <span class="ms-message-cta-plus">+</span> Gửi lời nhắn
+                </button>
+            </div>
+        </section>
+
+        <!-- Messages Section -->
+        <section id="messages-section" class="messages-section" style="padding-top: 0;">
+            <div class="messages-info">
+                <strong>⚠️ Lưu ý:</strong> Lời nhắn sẽ được lưu trữ và quản lý qua Firebase.
+                Hãy gửi lời nhắn yêu thương của bạn để lan tỏa yêu thương đến các em nhỏ! 💕
+            </div>
+            <div class="messages" id="messages-container" style="min-height: 400px;"></div>
+
+            <div class="load-more-container">
+                <button id="load-more-btn" class="load-more-btn">
+                    <span class="btn-text">Tải thêm lời nhắn...</span>
+                    <span class="spinner"></span>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Popup Send Message -->
+    <div class="popup-overlay" id="message-popup-overlay">
+        <div class="popup" id="message-popup">
+            <div class="close-btn" id="close-popup-btn">✕</div>
+            <h3>Gửi lời nhắn ✨</h3>
+            <input type="text" id="popup-sender-name" placeholder="Tên của bạn (hoặc để trống nếu ẩn danh)"
+                autocomplete="name">
+            <textarea id="popup-message-input"
+                placeholder="Viết những lời chân thành dành tặng các bệnh nhi nhé..."></textarea>
+
+            <label class="anonymous-checkbox">
+                <input type="checkbox" id="anonymous-checkbox">
+                <span>Gửi dưới dạng ẩn danh 👤</span>
+            </label>
+
+            <button id="popup-send-btn">Gửi yêu thương 🚀</button>
+            <div style="margin-top:12px; font-size:12.5px; color:var(--t-muted); text-align:center;">
+                Lời nhắn của bạn sẽ được hiện trên tường sau khi Admin duyệt.
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Success -->
+    <div class="popup-overlay" id="success-popup-overlay">
+        <div class="popup success-popup" id="success-popup">
+            <div class="check-icon">✓</div>
+            <h3>Tuyệt vời!</h3>
+            <p style="color:var(--t-muted); font-size:15px; margin-bottom:18px;">
+                Lời nhắn của bạn đã được gửi thành công.<br>Quản trị viên sẽ sớm duyệt nó lên tường nhà chung The
+                Blouse.
+            </p>
+            <div style="font-size:24px;">💕</div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-col footer-brand">
+                <div class="footer-logo">To @TheBlouse <span aria-hidden="true">♡</span></div>
+                <p class="footer-desc">Góc nhỏ để lưu lại hoạt động và những lời chúc gửi tới Viện Huyết học.</p>
+                <div class="footer-social" aria-label="Mạng xã hội">
+                    <a class="social-btn" href="https://www.facebook.com/theblouse.prj" aria-label="Facebook"><span
+                            class="social-ico">f</span><span class="social-text">FACEBOOK</span></a>
+                    <a class="social-btn" href="https://www.instagram.com/blouse_thantien" aria-label="Instagram"><span
+                            class="social-ico">◎</span><span class="social-text">INSTAGRAM</span></a>
+                </div>
+                <ul class="footer-contact">
+                    <li><span class="fc-ico">☎</span><span>037 501 3747</span></li>
+                    <li><span class="fc-ico">⌂</span><span>Hà Nội</span></li>
+                    <li><span class="fc-ico">✉</span><a
+                            href="mailto:theblouse.prj@gmail.com">theblouse.prj@gmail.com</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <div class="footer-title">Sản phẩm</div>
+                <a class="footer-link" href="index.html#timeline-section">Timeline</a>
+                <a class="footer-link" href="events.html">Hoạt động</a>
+                <a class="footer-link" href="#messages-section">Lời chúc</a>
+                <a class="footer-link" href="memb.html">Thành viên</a>
+            </div>
+
+            <div class="footer-col">
+                <div class="footer-title">Chính sách</div>
+                <a class="footer-link" href="#">Hướng dẫn</a>
+                <a class="footer-link" href="#">Chính sách bảo mật</a>
+                <a class="footer-link" href="#">Điều khoản sử dụng</a>
+                <a class="footer-link" href="#">Liên hệ hỗ trợ</a>
+            </div>
+
+            <div class="footer-col footer-newsletter" id="newsletter">
+                <div class="footer-title">Đăng kí nhận tin</div>
+                <p class="footer-sub">Để lại thông tin, tụi mình sẽ cập nhật những tin tức quan trọng.</p>
+                <form class="footer-form" onsubmit="return false;">
+                    <label class="footer-field">
+                        <span>Họ tên</span>
+                        <input autocomplete="name" placeholder="Tên của bạn" type="text" />
+                    </label>
+                    <label class="footer-field">
+                        <span>Email</span>
+                        <input autocomplete="email" placeholder="you@email.com" type="email" />
+                    </label>
+                    <button class="footer-submit" type="button">Đăng ký</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-links">
+                <a href="#">GIỚI THIỆU DỰ ÁN</a>
+                <span class="dot">|</span>
+                <a href="memb.html">THÀNH VIÊN THE BLOUSE</a>
+                <span class="dot">|</span>
+                <a href="events.html">CHI TIẾT HOẠT ĐỘNG</a>
+            </div>
+            <div class="footer-copy">Copyright © 2023 - 2026 • All rights reserved</div>
+            <button aria-label="Lên đầu trang" class="footer-top" type="button">⌃</button>
+        </div>
+    </footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCKysT8eZ3LJqyi7vCjoqQGIpjgTyt7HYg",
+            authDomain: "loiyeuthuong-5bfab.firebaseapp.com",
+            projectId: "loiyeuthuong-5bfab",
+            storageBucket: "loiyeuthuong-5bfab.firebasestorage.app",
+            messagingSenderId: "544284022045",
+            appId: "1:544284022045:web:22f2eef2ed918d93707df4"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        const MESSAGES_PER_PAGE = 30;
+        let allMessages = [], displayedCount = 0, isLoading = false;
+
+        window.addEventListener('load', () => {
+            const loadingBar = document.getElementById('loading-bar');
+            if (loadingBar) {
+                setTimeout(() => {
+                    loadingBar.classList.add('loading-complete');
+                    setTimeout(() => loadingBar.remove(), 500);
+                }, 500);
+            }
+        });
+
+        function formatDate(date) {
+            if (!date) return 'N/A';
+            if (date instanceof firebase.firestore.Timestamp) {
+                date = date.toDate();
+            }
+            return date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ===== MESSAGE FUNCTIONS =====
+        document.getElementById('popup-send-btn').addEventListener('click', async () => {
+            const message = document.getElementById('popup-message-input').value.trim();
+            const senderName = document.getElementById('popup-sender-name').value.trim();
+            const isAnonymous = document.getElementById('anonymous-checkbox').checked;
+
+            if (!message) return alert('Vui lòng nhập lời nhắn!');
+            if (!senderName && !isAnonymous) return alert('Vui lòng nhập tên hoặc chọn ẩn danh!');
+
+            try {
+                await db.collection('messages').add({
+                    text: message,
+                    senderName: isAnonymous ? 'Ẩn danh' : senderName,
+                    isAnonymous,
+                    likes: 0,
+                    status: 'pending',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                document.getElementById('popup-message-input').value = '';
+                document.getElementById('popup-sender-name').value = '';
+                document.getElementById('anonymous-checkbox').checked = false;
+
+                closePopup('message-popup');
+                showSuccessPopup();
+            } catch (e) {
+                alert('Lỗi: ' + e.message);
+            }
+        });
+
+        function showSuccessPopup() {
+            const overlay = document.getElementById('success-popup-overlay');
+            const popup = document.getElementById('success-popup');
+            if (!overlay || !popup) return;
+
+            overlay.style.display = 'flex';
+            popup.classList.add('show');
+
+            setTimeout(() => {
+                popup.classList.remove('show');
+                setTimeout(() => overlay.style.display = 'none', 400);
+            }, 5000);
+        }
+
+        function closePopup(id) {
+            const popup = document.getElementById(id);
+            const overlay = document.getElementById(id + '-overlay');
+            if (!popup || !overlay) return;
+
+            popup.classList.remove('show');
+            setTimeout(() => overlay.style.display = 'none', 400);
+        }
+
+        function openPopup() {
+            const overlay = document.getElementById('message-popup-overlay');
+            const popup = document.getElementById('message-popup');
+            if (!overlay || !popup) return;
+
+            overlay.style.display = 'flex';
+            // Trigger reflow
+            void popup.offsetWidth;
+            popup.classList.add('show');
+        }
+
+        document.getElementById('open-message-popup')?.addEventListener('click', e => {
+            e.preventDefault();
+            openPopup();
+        });
+
+        document.getElementById('close-popup-btn')?.addEventListener('click', () => closePopup('message-popup'));
+
+        document.getElementById('message-popup-overlay')?.addEventListener('click', e => {
+            if (e.target === e.currentTarget) closePopup('message-popup');
+        });
+
+        // Masonry Layout
+        function setupMasonry() {
+            const container = document.getElementById('messages-container');
+            if (!container) return;
+
+            const messages = Array.from(container.children);
+            if (messages.length === 0) return;
+
+            if (window.innerWidth <= 768) {
+                container.style.height = 'auto';
+                return;
+            }
+
+            const gap = 25;
+            const containerWidth = container.offsetWidth;
+            const minCardWidth = 320;
+            const numColumns = Math.max(1, Math.min(Math.floor(containerWidth / minCardWidth), 5));
+            const cardWidth = (containerWidth - gap * (numColumns - 1)) / numColumns;
+
+            messages.forEach(msg => {
+                msg.style.width = `${cardWidth}px`;
+                msg.style.position = 'absolute';
+            });
+
+            const columnHeights = new Array(numColumns).fill(0);
+            const columnLefts = Array.from({ length: numColumns }, (_, i) => i * (cardWidth + gap));
+
+            messages.forEach((msg, index) => {
+                const shortestCol = columnHeights.indexOf(Math.min(...columnHeights));
+                msg.style.left = `${columnLefts[shortestCol]}px`;
+                msg.style.top = `${columnHeights[shortestCol]}px`;
+                columnHeights[shortestCol] += msg.offsetHeight + gap;
+                msg.style.animationDelay = `${(index % 10) * 0.05}s`;
+            });
+
+            container.style.height = `${Math.max(...columnHeights)}px`;
+        }
+
+        function renderMessages(startIndex, endIndex) {
+            const container = document.getElementById('messages-container');
+            if (!container) return;
+
+            const messagesToRender = allMessages.slice(startIndex, endIndex);
+
+            messagesToRender.forEach(msg => {
+                const el = document.createElement('div');
+                el.className = 'message';
+
+                const likedMessages = JSON.parse(localStorage.getItem('likedMessages') || '[]');
+                const isLiked = likedMessages.includes(msg.id);
+
+                // Pick a random background tint for sticky notes feel
+                const colors = [
+                    'rgba(255,182,193,0.05)', // LightPink
+                    'rgba(173,216,230,0.05)', // LightBlue
+                    'rgba(255,255,224,0.05)', // LightYellow
+                    'rgba(144,238,144,0.05)', // LightGreen
+                    'rgba(221,160,221,0.05)'  // Plum
+                ];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+                // Add style directly to override default message background slightly
+                el.style.background = `linear-gradient(to bottom right, var(--t-panel), ${randomColor})`;
+
+                const senderDisplay = msg.isAnonymous ? '👤 Ẩn danh' : `✍️ ${escapeHtml(msg.senderName || 'Ẩn danh')}`;
+                const dateDisplay = formatDate(msg.timestamp);
+
+                el.innerHTML = `
+          <div class="message-sender">${senderDisplay}</div>
+          <div class="message-text">${escapeHtml(msg.text)}</div>
+          <div class="message-actions">
+            <span class="heart-icon ${isLiked ? 'liked' : ''}" data-id="${msg.id}">
+              <span class="heart-symbol">${isLiked ? '❤' : '🤍'}</span>
+              <span class="like-count">${msg.likes || 0}</span>
+            </span>
+            <span>${dateDisplay}</span>
+          </div>
+        `;
+                container.appendChild(el);
+            });
+
+            // Allow DOM to update before calculating heights
+            requestAnimationFrame(() => {
+                setTimeout(setupMasonry, 50);
+            });
+        }
+
+        function updateLoadMoreButton() {
+            const btn = document.getElementById('load-more-btn');
+            if (!btn) return;
+
+            if (displayedCount >= allMessages.length) {
+                btn.style.display = 'none';
+            } else {
+                btn.style.display = 'inline-flex';
+                btn.disabled = isLoading;
+            }
+        }
+
+        function loadMoreMessages() {
+            if (isLoading || displayedCount >= allMessages.length) return;
+            isLoading = true;
+
+            const btn = document.getElementById('load-more-btn');
+            if (btn) {
+                btn.classList.add('loading');
+                btn.disabled = true;
+            }
+
+            setTimeout(() => {
+                const startIndex = displayedCount;
+                const endIndex = Math.min(startIndex + MESSAGES_PER_PAGE, allMessages.length);
+                renderMessages(startIndex, endIndex);
+                displayedCount = endIndex;
+                isLoading = false;
+
+                if (btn) {
+                    btn.classList.remove('loading');
+                }
+                updateLoadMoreButton();
+            }, 300);
+        }
+
+        async function toggleLike(messageId, heartIcon) {
+            if (!heartIcon) return;
+
+            const likedMessages = JSON.parse(localStorage.getItem('likedMessages') || '[]');
+            const isLiked = likedMessages.includes(messageId);
+
+            const countSpan = heartIcon.querySelector('.like-count');
+            const symbolSpan = heartIcon.querySelector('.heart-symbol');
+            if (!countSpan || !symbolSpan) return;
+
+            let currentCount = parseInt(countSpan.textContent) || 0;
+
+            if (isLiked) {
+                // Unlike
+                const index = likedMessages.indexOf(messageId);
+                if (index > -1) likedMessages.splice(index, 1);
+                localStorage.setItem('likedMessages', JSON.stringify(likedMessages));
+
+                heartIcon.classList.remove('liked');
+                symbolSpan.textContent = '🤍';
+                countSpan.textContent = Math.max(0, currentCount - 1);
+
+                try {
+                    await db.collection('messages').doc(messageId).update({
+                        likes: firebase.firestore.FieldValue.increment(-1)
+                    });
+                } catch (e) {
+                    console.error('Unlike error:', e);
+                    countSpan.textContent = currentCount; // revert on failure
+                }
+            } else {
+                // Like
+                likedMessages.push(messageId);
+                localStorage.setItem('likedMessages', JSON.stringify(likedMessages));
+
+                heartIcon.classList.add('liked');
+                symbolSpan.textContent = '❤';
+                countSpan.textContent = currentCount + 1;
+
+                try {
+                    await db.collection('messages').doc(messageId).update({
+                        likes: firebase.firestore.FieldValue.increment(1)
+                    });
+                } catch (e) {
+                    console.error('Like error:', e);
+                    heartIcon.classList.remove('liked');
+                    symbolSpan.textContent = '🤍';
+                    countSpan.textContent = currentCount; // revert on failure
+                }
+            }
+        }
+
+        function loadApprovedMessages() {
+            const container = document.getElementById('messages-container');
+            if (container) {
+                container.innerHTML = '<div style="width:100%;text-align:center;padding:40px;color:var(--t-muted);">Đang tải lời nhắn...</div>';
+            }
+
+            db.collection('messages')
+                .where('status', '==', 'approved')
+                .orderBy('timestamp', 'desc')
+                .onSnapshot(snapshot => {
+                    allMessages = snapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data(),
+                        timestamp: doc.data().timestamp
+                    }));
+
+                    if (container) container.innerHTML = '';
+                    displayedCount = 0;
+
+                    if (allMessages.length > 0) {
+                        const initialCount = Math.min(MESSAGES_PER_PAGE, allMessages.length);
+                        renderMessages(0, initialCount);
+                        displayedCount = initialCount;
+                    } else if (container) {
+                        container.innerHTML = '<div style="width:100%;text-align:center;padding:40px;color:var(--t-muted);">Chưa có lời nhắn nào được hiển thị. Trở thành người đầu tiên gửi lời chúc nhé!</div>';
+                        container.style.height = 'auto'; // reset masonry height if empty
+                    }
+
+                    updateLoadMoreButton();
+                }, error => {
+                    console.error("Error loading messages: ", error);
+                    if (container) container.innerHTML = '<div style="width:100%;text-align:center;padding:40px;color:#e74c3c;">Lỗi tải dữ liệu. Vui lòng thử lại sau.</div>';
+                });
+        }
+
+        // Global click delegate for like hearts
+        document.addEventListener('click', e => {
+            const heartIcon = e.target.closest('.heart-icon');
+            if (heartIcon) {
+                e.stopPropagation();
+                toggleLike(heartIcon.dataset.id, heartIcon);
+            }
+        });
+
+        document.getElementById('load-more-btn')?.addEventListener('click', loadMoreMessages);
+
+        // Initial Load
+        loadApprovedMessages();
+
+        // Resize handler for Masonry layout update
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(setupMasonry, 250);
+        });
+
+        // Footer "back to top"
+        (function () {
+            const btn = document.querySelector('.footer-top');
+            if (!btn) return;
+            btn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        })();
+    </script>
+</body>
+
+</html>

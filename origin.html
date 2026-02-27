@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Hành trình | The Blouse</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+
+    <!-- Shared Styles (needed for menu) -->
+    <link href="./styles.css" rel="stylesheet" />
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            overflow: hidden;
+            /* Full screen, no scroll */
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* Hover Header Menu */
+        .header-hover-area {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            z-index: 9998;
+        }
+
+        .veo-header-wrap {
+            position: fixed;
+            top: -120px;
+            /* Hide initially */
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+            transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        /* Show menu when hovering top area, or hovering menu itself */
+        .header-hover-area:hover~.veo-header-wrap,
+        .veo-header-wrap:hover {
+            top: 0;
+        }
+
+        /* Hint for Menu */
+        .menu-hint {
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 500;
+            z-index: 9997;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .header-hover-area:hover~.menu-hint {
+            opacity: 0;
+        }
+
+        /* Story Slider Container */
+        .story-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* Full Screen Background Image */
+        .slide-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .slide-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            opacity: 0.85;
+            transform: scale(1.02);
+            transition: transform 12s linear;
+        }
+
+        .slide.active .slide-bg img {
+            transform: scale(1.12);
+            /* Slow infinite-feel pan */
+        }
+
+        /* Shadow/Blur Gradient Overlay to make text pop */
+        .glow-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(10, 10, 12, 0.95) 0%, rgba(10, 10, 12, 0.6) 45%, rgba(10, 10, 12, 0) 100%);
+            z-index: 2;
+        }
+
+        /* Alternate gradient side for even slides */
+        .slide:nth-child(even) .glow-overlay {
+            background: linear-gradient(to left, rgba(10, 10, 12, 0.95) 0%, rgba(10, 10, 12, 0.6) 45%, rgba(10, 10, 12, 0) 100%);
+        }
+
+        /* Text Content Box */
+        .slide-content-box {
+            position: absolute;
+            z-index: 3;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 8%;
+            width: 45%;
+            max-width: 600px;
+            color: #fff;
+            /* Hardcode white logic so theme toggle doesn't ruin it */
+        }
+
+        .slide:nth-child(even) .slide-content-box {
+            left: auto;
+            right: 8%;
+            text-align: right;
+        }
+
+        .slide-number {
+            font-size: 140px;
+            font-weight: 900;
+            line-height: 0.8;
+            color: rgba(255, 255, 255, 0.04);
+            position: absolute;
+            top: -60px;
+            left: -20px;
+            z-index: -1;
+            user-select: none;
+        }
+
+        .slide:nth-child(even) .slide-number {
+            left: auto;
+            right: -20px;
+        }
+
+        .chapter {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: #d8b4fe;
+            /* Highlight color */
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: inline-block;
+            border-bottom: 1px solid rgba(216, 180, 254, 0.4);
+            padding-bottom: 8px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease 0.3s;
+        }
+
+        .title {
+            font-size: clamp(38px, 4.5vw, 64px);
+            font-weight: 900;
+            line-height: 1.15;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease 0.4s;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .desc {
+            font-size: clamp(16px, 1.2vw, 19px);
+            line-height: 1.8;
+            color: #cbd5e1;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease 0.5s;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .desc strong {
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .slide.active .chapter,
+        .slide.active .title,
+        .slide.active .desc {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Invisible Click Zones (Left/Right half) */
+        .click-prev,
+        .click-next {
+            position: absolute;
+            top: 80px;
+            /* Below hover area */
+            bottom: 60px;
+            /* Above dots */
+            width: 50vw;
+            z-index: 50;
+            cursor: pointer;
+        }
+
+        .click-prev {
+            left: 0;
+            cursor: w-resize;
+        }
+
+        .click-next {
+            right: 0;
+            cursor: e-resize;
+        }
+
+        /* Navigation Timeline */
+        .controls {
+            position: fixed;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 70%;
+            max-width: 800px;
+            z-index: 100;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: -1;
+            transform: translateY(-50%);
+        }
+
+        .timeline-progress {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 2px;
+            background: #d8b4fe;
+            z-index: -1;
+            transform: translateY(-50%);
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative;
+            box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.6);
+        }
+
+        .dot:hover {
+            background: #fff;
+            transform: scale(1.3);
+        }
+
+        .dot.active {
+            background: #d8b4fe;
+            transform: scale(1.5);
+            box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.6), 0 0 15px rgba(216, 180, 254, 0.8);
+        }
+
+        .dot-year {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.4);
+            transition: 0.3s;
+            pointer-events: none;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+            white-space: nowrap;
+        }
+
+        .dot.active .dot-year,
+        .dot:hover .dot-year {
+            color: #d8b4fe;
+            top: -35px;
+            font-size: 16px;
+        }
+
+        /* Loading progress line under active dot */
+        .progress-bar {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 3px;
+            background: #d8b4fe;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .bottom-hint {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 13px;
+            font-weight: 500;
+            pointer-events: none;
+            z-index: 90;
+        }
+
+        @media (max-width: 768px) {
+            .slide-content-box {
+                width: 85%;
+                left: 7.5% !important;
+                /* Force to center-left on mobile */
+                right: auto !important;
+                text-align: left !important;
+                top: auto;
+                bottom: 10%;
+                transform: none;
+            }
+
+            .slide:nth-child(even) .slide-number {
+                left: -10px;
+                right: auto;
+            }
+
+            .glow-overlay,
+            .slide:nth-child(even) .glow-overlay {
+                /* Gradient from bottom to top for mobile */
+                background: linear-gradient(to top, rgba(10, 10, 12, 0.95) 0%, rgba(10, 10, 12, 0.7) 50%, rgba(10, 10, 12, 0) 100%);
+            }
+
+            .title {
+                font-size: 32px;
+                margin-bottom: 16px;
+            }
+
+            .desc {
+                font-size: 15px;
+                line-height: 1.6;
+            }
+
+            .menu-hint {
+                display: none;
+            }
+
+            .bottom-hint {
+                display: none;
+            }
+
+            .click-prev,
+            .click-next {
+                width: 100vw;
+                height: 40vh;
+            }
+
+            .click-prev {
+                top: 0;
+                cursor: n-resize;
+            }
+
+            .click-next {
+                top: auto;
+                bottom: 0;
+                cursor: s-resize;
+            }
+
+            .controls {
+                width: 85%;
+                bottom: 40px;
+            }
+        }
+
+        /* LIGHT THEME OVERRIDES */
+        body[data-theme="light"] {
+            background: #fff;
+        }
+
+        body[data-theme="light"] .slide-bg {
+            background: #fff;
+        }
+
+        body[data-theme="light"] .glow-overlay {
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.6) 45%, rgba(255, 255, 255, 0) 100%);
+        }
+
+        body[data-theme="light"] .slide:nth-child(even) .glow-overlay {
+            background: linear-gradient(to left, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.6) 45%, rgba(255, 255, 255, 0) 100%);
+        }
+
+        @media (max-width: 768px) {
+
+            body[data-theme="light"] .glow-overlay,
+            body[data-theme="light"] .slide:nth-child(even) .glow-overlay {
+                background: linear-gradient(to top, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0) 100%);
+            }
+        }
+
+        body[data-theme="light"] .slide-content-box {
+            color: #111;
+        }
+
+        body[data-theme="light"] .slide-number {
+            color: rgba(0, 0, 0, 0.04);
+        }
+
+        body[data-theme="light"] .desc {
+            color: #475569;
+            text-shadow: none;
+        }
+
+        body[data-theme="light"] .desc strong {
+            color: #000;
+        }
+
+        body[data-theme="light"] .title {
+            text-shadow: none;
+        }
+
+        body[data-theme="light"] .dot {
+            background: rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.6);
+        }
+
+        body[data-theme="light"] .dot:hover {
+            background: #000;
+        }
+
+        body[data-theme="light"] .dot.active {
+            background: #a855f7;
+            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.6), 0 0 15px rgba(168, 85, 247, 0.8);
+        }
+
+        body[data-theme="light"] .timeline-line {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        body[data-theme="light"] .dot-year {
+            color: rgba(0, 0, 0, 0.4);
+            text-shadow: none;
+        }
+
+        body[data-theme="light"] .menu-hint,
+        body[data-theme="light"] .bottom-hint {
+            color: rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+
+<body data-theme="dim-dark">
+
+    <div id="loading-bar"></div>
+
+    <!-- Hidden Header Trigger Area -->
+    <div class="header-hover-area"></div>
+    <div class="menu-hint">Rê chuột lên trên cùng để hiện thanh menu</div>
+
+    <div class="veo-header-wrap">
+        <!-- Dynamic Header Injected Here -->
+        <div id="site-header"></div>
+    </div>
+
+    <!-- Click zones -->
+    <div class="click-prev" onclick="prevSlide()" title="Trở lại (hoặc bấm mũi tên trái)"></div>
+    <div class="click-next" onclick="nextSlide()" title="Kế tiếp (hoặc bấm mũi tên phải/click chuột)"></div>
+
+    <div class="story-container" id="story-container">
+        <!-- Loading spinner -->
+        <div
+            style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#fff; z-index:999;">
+            <div
+                style="font-size:20px; letter-spacing:2px; font-weight:600; opacity:0.6; animation:pulse 1.5s infinite;">
+                Đang tải hành trình...</div>
+        </div>
+        <style>
+            @keyframes pulse {
+                0% {
+                    opacity: 0.4;
+                }
+
+                50% {
+                    opacity: 1;
+                }
+
+                100% {
+                    opacity: 0.4;
+                }
+            }
+        </style>
+    </div>
+
+    <!-- Navigation Timeline -->
+    <div class="controls" id="controls">
+        <div class="timeline-line"></div>
+        <div class="timeline-progress" id="timeline-progress"></div>
+    </div>
+    <div class="bottom-hint" id="progress-text">1 / 5</div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <!-- Shared JS to inject header -->
+    <script src="./common-ui.js"></script>
+
+    <script>
+        // Init Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCKysT8eZ3LJqyi7vCjoqQGIpjgTyt7HYg",
+            authDomain: "loiyeuthuong-5bfab.firebaseapp.com",
+            projectId: "loiyeuthuong-5bfab",
+            storageBucket: "loiyeuthuong-5bfab.firebasestorage.app",
+            messagingSenderId: "544284022045",
+            appId: "1:544284022045:web:22f2eef2ed918d93707df4"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        let slides = [];
+        let controlsContainer = document.getElementById('controls');
+        const progressText = document.getElementById('progress-text');
+
+        let currentSlide = 0;
+        let isAnimating = false;
+
+        // Auto play variables
+        let autoPlayTimer;
+        const SLIDE_DURATION = 15000; // 15s per slide
+
+        // Initialize Slider
+        function initSlider() {
+            slides = document.querySelectorAll('.slide');
+            if (slides.length === 0) return;
+
+            // Clear previous controls
+            controlsContainer.innerHTML = '<div class="timeline-line"></div><div class="timeline-progress" id="timeline-progress"></div>';
+
+            slides.forEach((slide, idx) => {
+                const year = slide.getAttribute('data-year');
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                if (idx === 0) {
+                    dot.classList.add('active');
+                }
+
+                if (year) {
+                    const yearLabel = document.createElement('div');
+                    yearLabel.classList.add('dot-year');
+                    yearLabel.innerText = year;
+                    dot.appendChild(yearLabel);
+                }
+
+                // Active dot progress simulation
+                const progressBar = document.createElement('div');
+                progressBar.classList.add('progress-bar');
+                dot.appendChild(progressBar);
+
+                dot.onclick = (e) => {
+                    e.stopPropagation();
+                    goToSlide(idx);
+                };
+                controlsContainer.appendChild(dot);
+            });
+            updateTimelineLine();
+            updateProgressText();
+            startAutoPlay();
+        }
+
+        function updateTimelineLine() {
+            const progressLine = document.getElementById('timeline-progress');
+            if (progressLine && slides.length > 1) {
+                const percentage = (currentSlide / (slides.length - 1)) * 100;
+                progressLine.style.width = percentage + '%';
+            }
+        }
+
+        const animateProgressBar = () => {
+            const dotsList = document.querySelectorAll('.dot');
+            dotsList.forEach(d => {
+                const pb = d.querySelector('.progress-bar');
+                if (d.classList.contains('active')) {
+                    pb.style.transition = `width ${SLIDE_DURATION}ms linear`;
+
+                    // Small timeout ensures transition applies after DOM layout
+                    setTimeout(() => pb.style.width = '100%', 50);
+                } else {
+                    pb.style.transition = 'none';
+                    pb.style.width = '0%';
+                }
+            });
+        };
+
+        function resetAutoPlay() {
+            clearInterval(autoPlayTimer);
+            startAutoPlay();
+        }
+
+        function startAutoPlay() {
+            animateProgressBar();
+            autoPlayTimer = setInterval(() => {
+                nextSlide();
+            }, SLIDE_DURATION);
+        }
+
+        function goToSlide(index) {
+            if (isAnimating || index === currentSlide) return;
+
+            // Loop 
+            if (index < 0) index = slides.length - 1;
+            if (index >= slides.length) index = 0;
+
+            isAnimating = true;
+
+            // Out
+            slides[currentSlide].classList.remove('active');
+            const dots = document.querySelectorAll('.dot');
+            dots[currentSlide].classList.remove('active');
+
+            // In
+            currentSlide = index;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+
+            updateTimelineLine();
+            updateProgressText();
+            resetAutoPlay();
+
+            setTimeout(() => { isAnimating = false; }, 1000);
+        }
+
+        function nextSlide() { goToSlide(currentSlide + 1); }
+        function prevSlide() { goToSlide(currentSlide - 1); }
+
+        function updateProgressText() {
+            progressText.innerText = `${currentSlide + 1} / ${slides.length}`;
+        }
+
+        // Keyboard bindings
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // Wheel binding (debounced)
+        let lastScrollTime = 0;
+        window.addEventListener('wheel', (e) => {
+            const now = new Date().getTime();
+            if (now - lastScrollTime < 1500) return;
+            if (Math.abs(e.deltaY) > 20) {
+                if (e.deltaY > 0) nextSlide();
+                else prevSlide();
+                lastScrollTime = now;
+            }
+        }, { passive: true });
+
+        // Mobile swipe
+        let touchstartX = 0;
+        let touchendX = 0;
+        let touchstartY = 0;
+        let touchendY = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchstartX = e.changedTouches[0].screenX;
+            touchstartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        document.addEventListener('touchend', e => {
+            touchendX = e.changedTouches[0].screenX;
+            touchendY = e.changedTouches[0].screenY;
+            handleGesture();
+        }, { passive: true });
+
+        function handleGesture() {
+            const xDiff = Math.abs(touchstartX - touchendX);
+            const yDiff = Math.abs(touchstartY - touchendY);
+
+            if (xDiff > yDiff) { // horizontal swipe
+                if (touchendX < touchstartX - 40) nextSlide();
+                if (touchendX > touchstartX + 40) prevSlide();
+            } else { // vertical swipe plays next/prev too
+                if (touchendY < touchstartY - 40) nextSlide();
+                if (touchendY > touchstartY + 40) prevSlide();
+            }
+        }
+
+        // Fetch and Render Slides
+        function loadSlides() {
+            db.collection('journey').orderBy('order', 'asc').get().then(snapshot => {
+                const container = document.getElementById('story-container');
+                container.innerHTML = '';
+
+                if (snapshot.empty) {
+                    container.innerHTML = '<div style="color:#fff; text-align:center; padding-top:20vh; font-size:20px;">Đang cập nhật Câu chuyện Hành trình. Xin quay lại sau...</div>';
+                    return;
+                }
+
+                container.innerHTML = snapshot.docs.map((doc, index) => {
+                    const data = doc.data();
+                    const numStr = (index + 1).toString().padStart(2, '0');
+                    const isActive = index === 0 ? 'active' : '';
+
+                    return `
+                        <div class="slide ${isActive}" data-year="${data.year}">
+                            <div class="slide-bg">
+                                <img src="${data.image}" alt="Slide">
+                                <div class="glow-overlay"></div>
+                            </div>
+                            <div class="slide-content-box">
+                                <div class="slide-number">${numStr}</div>
+                                ${data.chapter ? `<div class="chapter">${data.chapter}</div>` : ''}
+                                ${data.title ? `<div class="title">${data.title.replace(/\n/g, '<br>')}</div>` : ''}
+                                ${data.desc ? `<div class="desc">${data.desc}</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                setTimeout(initSlider, 100);
+            }).catch(error => {
+                console.error("Error loading slides", error);
+            });
+        }
+
+        // Start
+        window.addEventListener('load', () => { setTimeout(loadSlides, 100); });
+
+    </script>
+</body>
+
+</html>

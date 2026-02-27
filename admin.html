@@ -1,15 +1,36 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Nhắn gửi lời yêu thương</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; min-height: 100vh; padding: 20px; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        h1, h2, h3 { color: #333; margin-bottom: 20px; }
-        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
         /* ===== MENU NAVIGATION ===== */
         .admin-menu {
             display: flex;
@@ -17,7 +38,7 @@
             border-bottom: 1px solid #ddd;
             padding-bottom: 10px;
         }
-        
+
         .menu-item {
             padding: 8px 16px;
             background: #f0f0f0;
@@ -26,136 +47,686 @@
             margin-right: 5px;
             border-radius: 4px 4px 0 0;
         }
-        
+
         .menu-item.active {
             background: #e74c3c;
             color: white;
         }
-        
+
         /* ===== SECTION VISIBILITY ===== */
         .admin-section {
             display: none;
         }
-        
+
         .admin-section.active {
             display: block;
         }
-        
+
         /* ===== LOGIN FORM ===== */
-        #login-section { max-width: 400px; margin: 100px auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-        #login-section h2 { text-align: center; color: #e74c3c; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
-        .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 14px; }
-        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #e74c3c; }
-        .btn { width: 100%; padding: 12px; border: none; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
-        .btn-primary { background: linear-gradient(135deg, #e74c3c, #ff6b6b); color: white; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4); }
-        .btn-danger { background: #e74c3c; color: white; }
-        .btn-success { background: #4CAF50; color: white; }
-        .btn-warning { background: #ff9800; color: white; }
-        .btn-info { background: #2196F3; color: white; }
-        .btn-small { padding: 8px 16px; font-size: 14px; width: auto; }
-        
+        #login-section {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        #login-section h2 {
+            text-align: center;
+            color: #e74c3c;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #e74c3c;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #e74c3c, #ff6b6b);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-success {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ff9800;
+            color: white;
+        }
+
+        .btn-info {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 14px;
+            width: auto;
+        }
+
         /* ===== DASHBOARD ===== */
-        #dashboard-section { display: none; }
-        .header-bar { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
-        .admin-info { display: flex; align-items: center; gap: 15px; }
-        .admin-email { font-weight: 600; color: #333; }
-        
+        #dashboard-section {
+            display: none;
+        }
+
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .admin-email {
+            font-weight: 600;
+            color: #333;
+        }
+
         /* ===== STATS ===== */
-        .stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); text-align: center; }
-        .stat-number { font-size: 36px; font-weight: 700; color: #e74c3c; margin-bottom: 10px; }
-        .stat-label { color: #666; font-size: 14px; }
-        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+
         /* ===== SEARCH ===== */
-        .search-box { width: 100%; padding: 12px 20px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px; margin-bottom: 20px; }
-        .search-box:focus { outline: none; border-color: #e74c3c; }
-        
+        .search-box {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #e74c3c;
+        }
+
         /* ===== MESSAGE LISTS ===== */
-        .messages-section { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 30px; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0; }
-        .section-title { font-size: 20px; font-weight: 700; color: #333; }
-        .message-count { background: #e74c3c; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
-        .message-list { display: flex; flex-direction: column; gap: 15px; }
-        .message-item { background: #f9f9f9; padding: 20px; border-radius: 8px; border-left: 4px solid #e74c3c; }
-        .message-item.approved { border-left-color: #4CAF50; }
-        .message-text { font-size: 15px; color: #333; margin-bottom: 15px; line-height: 1.6; max-height: 100px; overflow-y: auto; }
-        .sender-info { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding: 8px 12px; background: white; border-radius: 6px; border: 1px solid #ddd; }
-        .sender-name { font-weight: 600; color: #e74c3c; }
-        .anonymous-badge { background: #ff6b6b; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
-        .message-meta { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #666; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
-        .message-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-        
+        .messages-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .message-count {
+            background: #e74c3c;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .message-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message-item {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .message-item.approved {
+            border-left-color: #4CAF50;
+        }
+
+        .message-text {
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.6;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+
+        .sender-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+
+        .sender-name {
+            font-weight: 600;
+            color: #e74c3c;
+        }
+
+        .anonymous-badge {
+            background: #ff6b6b;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .message-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
         /* 🔥 EDIT LIKE COUNT */
-        .edit-like-container { display: flex; align-items: center; gap: 8px; background: white; padding: 6px 12px; border-radius: 6px; border: 1px solid #ddd; }
-        .edit-like-input { width: 80px; padding: 6px; border: 1px solid #ddd; border-radius: 4px; text-align: center; font-size: 14px; font-weight: 600; }
-        .edit-like-input:focus { outline: none; border-color: #e74c3c; }
-        .current-likes { font-weight: 600; color: #e91e63; min-width: 60px; }
-        
+        .edit-like-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+
+        .edit-like-input {
+            width: 80px;
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .edit-like-input:focus {
+            outline: none;
+            border-color: #e74c3c;
+        }
+
+        .current-likes {
+            font-weight: 600;
+            color: #e91e63;
+            min-width: 60px;
+        }
+
         /* 🔥 GALLERY MANAGEMENT */
-        #gallery-form { display: none; background: #f9f9f9; padding: 20px; margin-bottom: 20px; border-radius: 8px; }
-        #gallery-form .form-group { margin-bottom: 15px; }
-        #gallery-form textarea { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 14px; resize: vertical; }
-        #gallery-form textarea:focus { outline: none; border-color: #e74c3c; }
-        
-        .gallery-item { display: flex; gap: 15px; align-items: start; background: #f9f9f9; padding: 15px; border-radius: 8px; }
-        .gallery-item img { width: 150px; height: 100px; object-fit: cover; border-radius: 8px; }
-        .gallery-item .info { flex: 1; }
-        .gallery-item .info h4 { margin: 0 0 10px; }
-        .gallery-item .info p { margin: 0 0 10px; color: #666; font-size: 14px; }
-        .gallery-item .info .order { margin: 0; font-size: 13px; color: #999; }
-        
+        #gallery-form {
+            display: none;
+            background: #f9f9f9;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        #gallery-form .form-group {
+            margin-bottom: 15px;
+        }
+
+        #gallery-form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        #gallery-form textarea:focus {
+            outline: none;
+            border-color: #e74c3c;
+        }
+
+        .gallery-item {
+            display: flex;
+            gap: 15px;
+            align-items: start;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .gallery-item img {
+            width: 150px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .gallery-item .info {
+            flex: 1;
+        }
+
+        .gallery-item .info h4 {
+            margin: 0 0 10px;
+        }
+
+        .gallery-item .info p {
+            margin: 0 0 10px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .gallery-item .info .order {
+            margin: 0;
+            font-size: 13px;
+            color: #999;
+        }
+
         /* 🔥 BANNER MANAGEMENT (NEW) */
-        #banner-form { display: none; background: #f9f9f9; padding: 20px; margin-bottom: 20px; border-radius: 8px; }
-        #banner-form .form-group { margin-bottom: 15px; }
-        #banner-form textarea { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 14px; resize: vertical; }
-        #banner-form textarea:focus { outline: none; border-color: #e74c3c; }
-        .checkbox-group { display: flex; align-items: center; gap: 10px; margin-top: 5px; }
-        .checkbox-group input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
-        .checkbox-group label { margin: 0; font-weight: 500; cursor: pointer; font-size: 14px; }
-        
-        .banner-item { display: flex; gap: 15px; align-items: start; background: #f9f9f9; padding: 15px; border-radius: 8px; }
-        .banner-item img { width: 200px; height: 80px; object-fit: cover; border-radius: 8px; }
-        .banner-item .info { flex: 1; }
-        .banner-item .info h4 { margin: 0 0 10px; display: flex; align-items: center; gap: 10px; }
-        .banner-item .info p { margin: 0 0 8px; color: #666; font-size: 14px; }
-        .banner-item .info .order { margin: 0; font-size: 13px; color: #999; }
-        .status-badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
-        .status-active { background: #4CAF50; color: white; }
-        .status-inactive { background: #999; color: white; }
+        #banner-form {
+            display: none;
+            background: #f9f9f9;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        #banner-form .form-group {
+            margin-bottom: 15px;
+        }
+
+        #banner-form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        #banner-form textarea:focus {
+            outline: none;
+            border-color: #e74c3c;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .banner-item {
+            display: flex;
+            gap: 15px;
+            align-items: start;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .banner-item img {
+            width: 200px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .banner-item .info {
+            flex: 1;
+        }
+
+        .banner-item .info h4 {
+            margin: 0 0 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .banner-item .info p {
+            margin: 0 0 8px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .banner-item .info .order {
+            margin: 0;
+            font-size: 13px;
+            color: #999;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .status-inactive {
+            background: #999;
+            color: white;
+        }
 
         /* 👥 MEMBERS MANAGEMENT */
-        #member-form { display: none; background: #f9f9f9; padding: 20px; margin-bottom: 20px; border-radius: 8px; }
-        #member-form .form-group { margin-bottom: 15px; }
-        .member-item { display: flex; gap: 15px; align-items: start; background: #f9f9f9; padding: 15px; border-radius: 8px; }
-        .member-item img { width: 90px; height: 90px; object-fit: cover; border-radius: 50%; border: 2px solid #eee; }
-        .member-item .info { flex: 1; }
-        .member-item .info h4 { margin: 0 0 8px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .member-item .info p { margin: 0 0 8px; color: #666; font-size: 14px; }
-        
-        .loading { text-align: center; padding: 40px; color: #666; }
-        .empty { text-align: center; padding: 40px; color: #999; font-style: italic; }
-        
+        #member-form {
+            display: none;
+            background: #f9f9f9;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        #member-form .form-group {
+            margin-bottom: 15px;
+        }
+
+        .member-item {
+            display: flex;
+            gap: 15px;
+            align-items: start;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .member-item img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #eee;
+        }
+
+        .member-item .info {
+            flex: 1;
+        }
+
+        .member-item .info h4 {
+            margin: 0 0 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .member-item .info p {
+            margin: 0 0 8px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-style: italic;
+        }
+
         /* ===== NOTIFICATIONS ===== */
-        .notification { position: fixed; top: 20px; right: 20px; padding: 15px 25px; border-radius: 8px; color: white; font-weight: 600; z-index: 10000; animation: slideIn 0.3s ease; }
-        .notification.success { background: #4CAF50; }
-        .notification.error { background: #e74c3c; }
-        .notification.info { background: #2196F3; }
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.success {
+            background: #4CAF50;
+        }
+
+        .notification.error {
+            background: #e74c3c;
+        }
+
+        .notification.info {
+            background: #2196F3;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+
+        /* 📖 JOURNEY MANAGEMENT */
+        #journey-form {
+            display: none;
+            background: #f9f9f9;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        #journey-form .form-group {
+            margin-bottom: 15px;
+        }
+
+        /* 🏷️ TAGS MANAGEMENT */
+        #tag-form {
+            display: none;
+            background: #f9f9f9;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        #tag-form .form-group {
+            margin-bottom: 15px;
+        }
+
+        .tag-item {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .tag-swatch {
+            width: 18px;
+            height: 18px;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            flex: 0 0 auto;
+        }
+
+        .tag-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            font-weight: 700;
+            font-size: 12px;
+            background: #fff;
+        }
+
+        /* 🏷️ Member tag picker */
+        .tag-picker {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .tag-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 999px;
+            border: 1px solid #e6e6e6;
+            background: #fff;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .tag-check input {
+            width: 16px;
+            height: 16px;
+        }
+
+        .tag-check:hover {
+            border-color: rgba(231, 76, 60, .45);
+        }
+
+        .tag-check .tag-text {
+            font-weight: 700;
+            font-size: 13px;
+            color: #333;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- 🔐 LOGIN SECTION -->
         <div id="login-section">
             <h2>🔐 Admin Dashboard</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 30px;">Quản lý lời nhắn, gallery, banner & thành viên</p>
-            <div class="form-group"><label>Email</label><input type="email" id="admin-email" placeholder="admin@loiythuong.com"></div>
-            <div class="form-group"><label>Mật khẩu</label><input type="password" id="admin-password" placeholder="••••••••"></div>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">Quản lý lời nhắn, gallery, banner & thành
+                viên</p>
+            <div class="form-group"><label>Email</label><input type="email" id="admin-email"
+                    placeholder="admin@loiythuong.com"></div>
+            <div class="form-group"><label>Mật khẩu</label><input type="password" id="admin-password"
+                    placeholder="••••••••"></div>
             <button class="btn btn-primary" onclick="handleLogin()">Đăng nhập</button>
-            <p style="text-align: center; margin-top: 20px; font-size: 13px; color: #999;">Email: admin@loiythuong.com<br>Mật khẩu: LoiYeuThuong123!</p>
+            <p style="text-align: center; margin-top: 20px; font-size: 13px; color: #999;">Email:
+                admin@loiythuong.com<br>Mật khẩu: LoiYeuThuong123!</p>
         </div>
 
         <!-- 📊 DASHBOARD SECTION -->
@@ -173,6 +744,11 @@
                 <button class="menu-item active" data-target="banner-section">🎨 Banner</button>
                 <button class="menu-item" data-target="gallery-section">🖼️ Gallery</button>
                 <button class="menu-item" data-target="members-section">👥 Thành viên</button>
+                <button class="menu-item" data-target="tags-section">🏷️ Tags</button>
+                <button class="menu-item" data-target="quotes-section">💬 Quotes</button>
+                <button class="menu-item" data-target="stats-section">📊 Stats Bar</button>
+                <button class="menu-item" data-target="journey-section">📖 Hành trình</button>
+                <button class="menu-item" data-target="newsletter-section">📧 Newsletter</button>
                 <button class="menu-item" data-target="messages-section">✉️ Messages</button>
             </div>
 
@@ -181,10 +757,22 @@
             <div id="banner-section" class="admin-section active">
                 <!-- 📈 STATS -->
                 <div class="stats-container">
-                    <div class="stat-card"><div class="stat-number" id="stat-total">0</div><div class="stat-label">Tổng lời nhắn</div></div>
-                    <div class="stat-card"><div class="stat-number" id="stat-pending" style="color: #ff9800;">0</div><div class="stat-label">Chờ duyệt</div></div>
-                    <div class="stat-card"><div class="stat-number" id="stat-approved" style="color: #4CAF50;">0</div><div class="stat-label">Đã duyệt</div></div>
-                    <div class="stat-card"><div class="stat-number" id="stat-total-likes" style="color: #e91e63;">0</div><div class="stat-label">Tổng lượt tim</div></div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="stat-total">0</div>
+                        <div class="stat-label">Tổng lời nhắn</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="stat-pending" style="color: #ff9800;">0</div>
+                        <div class="stat-label">Chờ duyệt</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="stat-approved" style="color: #4CAF50;">0</div>
+                        <div class="stat-label">Đã duyệt</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="stat-total-likes" style="color: #e91e63;">0</div>
+                        <div class="stat-label">Tổng lượt tim</div>
+                    </div>
                 </div>
 
                 <!-- 🎨 BANNER MANAGEMENT (NEW) -->
@@ -193,14 +781,18 @@
                         <span class="section-title">🎨 Quản lý Banner</span>
                         <button class="btn btn-success btn-small" onclick="showAddBannerForm()">+ Thêm banner</button>
                     </div>
-                    
+
                     <!-- Add/Edit Form -->
                     <div id="banner-form">
                         <h3 id="banner-form-title">Thêm banner mới</h3>
-                        <div class="form-group"><label>Link ảnh/URL *</label><input type="text" id="banner-image" placeholder="https://example.com/banner.jpg  "></div>
-                        <div class="form-group"><label>Tiêu đề (optional)</label><input type="text" id="banner-title" placeholder="Tiêu đề banner"></div>
-                        <div class="form-group"><label>Link khi click (optional)</label><input type="text" id="banner-link" placeholder="https://example.com  "></div>
-                        <div class="form-group"><label>Thứ tự hiển thị</label><input type="number" id="banner-order" value="1" min="1"></div>
+                        <div class="form-group"><label>Link ảnh/URL *</label><input type="text" id="banner-image"
+                                placeholder="https://example.com/banner.jpg  "></div>
+                        <div class="form-group"><label>Tiêu đề (optional)</label><input type="text" id="banner-title"
+                                placeholder="Tiêu đề banner"></div>
+                        <div class="form-group"><label>Link khi click (optional)</label><input type="text"
+                                id="banner-link" placeholder="https://example.com  "></div>
+                        <div class="form-group"><label>Thứ tự hiển thị</label><input type="number" id="banner-order"
+                                value="1" min="1"></div>
                         <div class="checkbox-group">
                             <input type="checkbox" id="banner-active" checked>
                             <label for="banner-active">Hiển thị banner</label>
@@ -209,16 +801,19 @@
                         <button class="btn btn-primary" onclick="saveBanner()">💾 Lưu</button>
                         <button class="btn btn-warning" onclick="hideBannerForm()">❌ Hủy</button>
                     </div>
-                    
+
                     <!-- Banner List -->
-                    <div class="message-list" id="banner-list"><div class="loading">Đang tải banners...</div></div>
+                    <div class="message-list" id="banner-list">
+                        <div class="loading">Đang tải banners...</div>
+                    </div>
                 </div>
             </div>
 
             <!-- 🖼️ GALLERY SECTION -->
             <div id="gallery-section" class="admin-section">
                 <!-- 🔍 SEARCH -->
-                <input type="text" class="search-box" id="search-box" placeholder="🔍 Tìm kiếm lời nhắn..." oninput="filterMessages()">
+                <input type="text" class="search-box" id="search-box" placeholder="🔍 Tìm kiếm lời nhắn..."
+                    oninput="filterMessages()">
 
                 <!-- 🔥 GALLERY MANAGEMENT -->
                 <div class="messages-section">
@@ -226,21 +821,34 @@
                         <span class="section-title">🖼️ Quản lý Gallery</span>
                         <button class="btn btn-success btn-small" onclick="showAddGalleryForm()">+ Thêm ảnh</button>
                     </div>
-                    
+
                     <!-- Add/Edit Form -->
                     <div id="gallery-form">
                         <h3 id="gallery-form-title">Thêm ảnh mới</h3>
-                        <div class="form-group"><label>Link ảnh/URL</label><input type="text" id="gallery-image" placeholder="gallery/activity-1.jpg hoặc https://..."></div>
-                        <div class="form-group"><label>Tiêu đề</label><input type="text" id="gallery-title" placeholder="Tên hoạt động"></div>
-                        <div class="form-group"><label>Mô tả</label><textarea id="gallery-description" rows="3" placeholder="Mô tả ngắn"></textarea></div>
-                        <div class="form-group"><label>Thứ tự hiển thị</label><input type="number" id="gallery-order" value="1" min="1"></div>
+                        <div class="form-group"><label>Link ảnh/URL</label><input type="text" id="gallery-image"
+                                placeholder="gallery/activity-1.jpg hoặc https://..."></div>
+                        <div class="form-group"><label>Tiêu đề</label><input type="text" id="gallery-title"
+                                placeholder="Tên hoạt động"></div>
+                        <div class="form-group"><label>Mô tả ngắn</label><textarea id="gallery-description" rows="3"
+                                placeholder="Mô tả ngắn hiển thị bên ngoài ảnh"></textarea></div>
+                        <div class="form-group"><label>Nội dung bài viết (Nhật ký dài)</label><textarea
+                                id="gallery-content" rows="10"
+                                placeholder="Hỗ trợ văn bản và xuống dòng. Thậm chí dùng HTML cơ bản..."></textarea>
+                        </div>
+                        <div class="form-group"><label>Link ảnh thêm (Mỗi link 1 dòng)</label><textarea
+                                id="gallery-extra-images" rows="4" placeholder="https://...\nhttps://..."></textarea>
+                        </div>
+                        <div class="form-group"><label>Thứ tự hiển thị</label><input type="number" id="gallery-order"
+                                value="1" min="1"></div>
                         <input type="hidden" id="gallery-id">
                         <button class="btn btn-primary" onclick="saveGallery()">💾 Lưu</button>
                         <button class="btn btn-warning" onclick="hideGalleryForm()">❌ Hủy</button>
                     </div>
-                    
+
                     <!-- Gallery List -->
-                    <div class="message-list" id="gallery-list"><div class="loading">Đang tải gallery...</div></div>
+                    <div class="message-list" id="gallery-list">
+                        <div class="loading">Đang tải gallery...</div>
+                    </div>
                 </div>
             </div>
 
@@ -249,18 +857,43 @@
                 <div class="messages-section">
                     <div class="section-header">
                         <span class="section-title">👥 Quản lý thành viên dự án</span>
-                        <button class="btn btn-success btn-small" onclick="showAddMemberForm()">+ Thêm thành viên</button>
+                        <button class="btn btn-success btn-small" onclick="showAddMemberForm()">+ Thêm thành
+                            viên</button>
                     </div>
 
                     <div id="member-form">
                         <h3 id="member-form-title">Thêm thành viên mới</h3>
-                        <div class="form-group"><label>Họ tên *</label><input type="text" id="member-name" placeholder="Nguyễn Văn A"></div>
-                        <div class="form-group"><label>Vai trò *</label><input type="text" id="member-role" placeholder="Trưởng dự án"></div>
-                        <div class="form-group"><label>Ảnh đại diện (URL)</label><input type="text" id="member-avatar" placeholder="https://..."></div>
-                        <div class="form-group"><label>Giới thiệu ngắn</label><textarea id="member-bio" rows="3" placeholder="Mô tả ngắn về thành viên"></textarea></div>
-                        <div class="form-group"><label>Facebook (optional)</label><input type="text" id="member-facebook" placeholder="https://facebook.com/..."/></div>
-                        <div class="form-group"><label>Instagram (optional)</label><input type="text" id="member-instagram" placeholder="https://instagram.com/..."/></div>
-                        <div class="form-group"><label>Thứ tự hiển thị</label><input type="number" id="member-order" value="1" min="1"></div>
+                        <div class="form-group"><label>Họ tên *</label><input type="text" id="member-name"
+                                placeholder="Nguyễn Văn A"></div>
+                        <div class="form-group"><label>Vai trò *</label><input type="text" id="member-role"
+                                placeholder="Trưởng dự án"></div>
+                        <div class="form-group"><label>Ảnh đại diện (URL)</label><input type="text" id="member-avatar"
+                                placeholder="https://..."></div>
+                        <div class="form-group"><label>Giới thiệu ngắn</label><textarea id="member-bio" rows="3"
+                                placeholder="Mô tả ngắn về thành viên"></textarea></div>
+                        <div class="form-group"><label>Email (optional)</label><input type="email" id="member-email"
+                                placeholder="email@domain.com"></div>
+                        <div class="form-group"><label>Trường (optional)</label><input type="text" id="member-school"
+                                placeholder="Tên trường / khoa... "></div>
+                        <div class="form-group"><label>Thành tích</label><textarea id="member-achievements" rows="3"
+                                placeholder="Thành tích / ghi chú nổi bật (hiển thị trong profile)"></textarea></div>
+                        <div class="form-group"><label>Facebook (optional)</label><input type="text"
+                                id="member-facebook" placeholder="https://facebook.com/..." /></div>
+                        <div class="form-group"><label>Instagram (optional)</label><input type="text"
+                                id="member-instagram" placeholder="https://instagram.com/..." /></div>
+                        <div class="form-group"><label>Thời gian hoạt động (member)</label><input type="text"
+                                id="member-activeTime" placeholder="Ví dụ: 2024 – 2026"></div>
+                        <div class="form-group">
+                            <label>Tags (Role/Badge)</label>
+                            <div id="member-tags-wrap" class="tag-picker">
+                                <div class="loading" style="padding:0;">Đang tải tags...</div>
+                            </div>
+                            <div style="margin-top:8px; color:#999; font-size:12px;">Tạo / sửa tags ở tab <b>🏷️
+                                    Tags</b>.</div>
+                        </div>
+
+                        <div class="form-group"><label>Thứ tự hiển thị</label><input type="number" id="member-order"
+                                value="1" min="1"></div>
                         <div class="checkbox-group">
                             <input type="checkbox" id="member-active" checked>
                             <label for="member-active">Hiển thị trên trang thành viên</label>
@@ -270,7 +903,185 @@
                         <button class="btn btn-warning" onclick="hideMemberForm()">❌ Hủy</button>
                     </div>
 
-                    <div class="message-list" id="member-list"><div class="loading">Đang tải thành viên...</div></div>
+                    <div class="message-list" id="member-list">
+                        <div class="loading">Đang tải thành viên...</div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- 🏷️ TAGS SECTION -->
+            <div id="tags-section" class="admin-section">
+                <div class="messages-section">
+                    <div class="section-header">
+                        <span class="section-title">🏷️ Quản lý Tags</span>
+                        <button class="btn btn-success btn-small" onclick="showAddTagForm()">+ Thêm tag</button>
+                    </div>
+
+                    <div id="tag-form">
+                        <h3 id="tag-form-title">Thêm tag mới</h3>
+                        <div class="form-group"><label>Mã tag (key) (để trống = auto)</label><input type="text"
+                                id="tag-key" placeholder="vd: core-team (auto nếu bỏ trống)"></div>
+                        <div class="form-group"><label>Role/Text hiển thị *</label><input type="text" id="tag-role"
+                                placeholder="vd: Core / Leader / Media"></div>
+                        <div class="form-group">
+                            <label>Màu tag *</label>
+                            <div style="display:flex; gap:10px; align-items:center;">
+                                <input type="color" id="tag-color" value="#7C3AED"
+                                    style="width:54px; height:42px; border:none; background:transparent;">
+                                <input type="text" id="tag-color-text" placeholder="#7C3AED" style="flex:1;">
+                            </div>
+                        </div>
+                        <div class="form-group"><label>Thứ tự</label><input type="number" id="tag-order" value="1"
+                                min="1"></div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="tag-active" checked>
+                            <label for="tag-active">Đang dùng</label>
+                        </div>
+                        <input type="hidden" id="tag-id">
+                        <button class="btn btn-primary" onclick="saveTag()">💾 Lưu</button>
+                        <button class="btn btn-warning" onclick="hideTagForm()">❌ Hủy</button>
+                    </div>
+
+                    <div class="message-list" id="tag-list">
+                        <div class="loading">Đang tải tags...</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- 💬 QUOTES SECTION -->
+            <div id="quotes-section" class="admin-section">
+                <div class="messages-section">
+                    <div class="section-header">
+                        <span class="section-title">💬 Quotes (Members modal)</span>
+                    </div>
+
+                    <div id="quotes-form"
+                        style="background:#f9f9f9; padding:20px; margin-bottom:20px; border-radius:8px;">
+                        <h3 style="margin-bottom:10px;">Quote hiển thị trong profile member</h3>
+                        <p style="margin-bottom:12px; color:#666; font-size:13px; line-height:1.5;">
+                            Mỗi dòng = 1 quote. Khi mở modal member sẽ random 1 câu.
+                        </p>
+
+                        <div class="form-group">
+                            <label>Danh sách quotes</label>
+                            <textarea id="team-quotes" rows="6" placeholder="Ví dụ:
+Cảm ơn bạn đã ghé xem team tụi mình.
+Chúng mình chọn yêu thương."></textarea>
+                        </div>
+
+                        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                            <button class="btn btn-primary btn-small" onclick="saveTeamQuotes()">💾 Lưu</button>
+                            <span style="font-size:13px; color:#666;">Số quote: <b id="team-quotes-count">0</b></span>
+                            <span style="font-size:12px; color:#999;">Field: settings/ui.teamQuotes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 📊 STATS BAR CONFIG SECTION -->
+            <div id="stats-section" class="admin-section">
+                <div class="messages-section">
+                    <div class="section-header">
+                        <span class="section-title">📊 Cấu hình Bar Thống kê (Trang chủ)</span>
+                    </div>
+
+                    <div id="stats-form"
+                        style="background:#f9f9f9; padding:20px; margin-bottom:20px; border-radius:8px;">
+                        <h3 style="margin-bottom:10px;">Chỉnh sửa icon và nhãn của 4 thông số</h3>
+                        <p style="margin-bottom:15px; color:#666; font-size:13px; line-height:1.5;">
+                            Số lượng sẽ tự động đếm. Bạn có thể sửa icon (emoji) và chữ hiển thị bên cạnh con số.
+                        </p>
+
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom: 20px;">
+                            <!-- Stat 1: Lời nhắn -->
+                            <div style="background:#fff; padding:15px; border-radius:8px; border:1px solid #ddd;">
+                                <h4 style="margin-bottom:10px; color:#e74c3c;">1. Lời nhắn</h4>
+                                <div class="form-group"><label>Icon (Emoji)</label><input type="text" id="stat-1-icon"
+                                        placeholder="💌"></div>
+                                <div class="form-group"><label>Nhãn hiển thị</label><input type="text" id="stat-1-label"
+                                        placeholder="Lời nhắn"></div>
+                                <div class="form-group" style="margin-bottom:0;"><label>Số hiển thị</label><input
+                                        type="number" id="stat-1-count" placeholder="Ví dụ: 99"></div>
+                            </div>
+
+                            <!-- Stat 2: Lượt tim -->
+                            <div style="background:#fff; padding:15px; border-radius:8px; border:1px solid #ddd;">
+                                <h4 style="margin-bottom:10px; color:#e91e63;">2. Lượt thả tim</h4>
+                                <div class="form-group"><label>Icon (Emoji)</label><input type="text" id="stat-2-icon"
+                                        placeholder="❤️"></div>
+                                <div class="form-group"><label>Nhãn hiển thị</label><input type="text" id="stat-2-label"
+                                        placeholder="Lượt thả tim"></div>
+                                <div class="form-group" style="margin-bottom:0;"><label>Số hiển thị</label><input
+                                        type="number" id="stat-2-count" placeholder="Ví dụ: 9999"></div>
+                            </div>
+
+                            <!-- Stat 3: Gallery -->
+                            <div style="background:#fff; padding:15px; border-radius:8px; border:1px solid #ddd;">
+                                <h4 style="margin-bottom:10px; color:#4CAF50;">3. Gallery / Hoạt động</h4>
+                                <div class="form-group"><label>Icon (Emoji)</label><input type="text" id="stat-3-icon"
+                                        placeholder="📸"></div>
+                                <div class="form-group"><label>Nhãn hiển thị</label><input type="text" id="stat-3-label"
+                                        placeholder="Hoạt động"></div>
+                                <div class="form-group" style="margin-bottom:0;"><label>Số hiển thị</label><input
+                                        type="number" id="stat-3-count" placeholder="Ví dụ: 10"></div>
+                            </div>
+
+                            <!-- Stat 4: Members -->
+                            <div style="background:#fff; padding:15px; border-radius:8px; border:1px solid #ddd;">
+                                <h4 style="margin-bottom:10px; color:#2196F3;">4. Thành viên</h4>
+                                <div class="form-group"><label>Icon (Emoji)</label><input type="text" id="stat-4-icon"
+                                        placeholder="👥"></div>
+                                <div class="form-group"><label>Nhãn hiển thị</label><input type="text" id="stat-4-label"
+                                        placeholder="Thành viên"></div>
+                                <div class="form-group" style="margin-bottom:0;"><label>Số hiển thị</label><input
+                                        type="number" id="stat-4-count" placeholder="Ví dụ: 50"></div>
+                            </div>
+                        </div>
+
+                        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                            <button class="btn btn-primary btn-small" onclick="saveStatsConfig()">💾 Lưu cấu hình
+                                Bar</button>
+                            <span style="font-size:12px; color:#999;">Field: settings/ui.statsConfig</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 📖 JOURNEY SECTION -->
+            <div id="journey-section" class="admin-section">
+                <div class="messages-section">
+                    <div class="section-header">
+                        <span class="section-title">📖 Quản lý Hành trình (Origin)</span>
+                        <button class="btn btn-success btn-small" onclick="showAddJourneyForm()">+ Thêm Slide</button>
+                    </div>
+
+                    <div id="journey-form">
+                        <h3 id="journey-form-title">Thêm slide mới</h3>
+                        <div class="form-group"><label>Năm (hoặc Thời gian) *</label><input type="text"
+                                id="journey-year" placeholder="VD: 2022"></div>
+                        <div class="form-group"><label>Tên chương (Chapter)</label><input type="text"
+                                id="journey-chapter" placeholder="VD: Ý Tưởng Nhen Nhóm"></div>
+                        <div class="form-group"><label>Tiêu đề chính (Title)</label><input type="text"
+                                id="journey-title" placeholder="Tiêu đề to"></div>
+                        <div class="form-group"><label>Link ảnh nền *</label><input type="text" id="journey-image"
+                                placeholder="https://example.com/banner.jpg"></div>
+                        <div class="form-group"><label>Nội dung chi tiết (HTML &lt;br&gt; &lt;strong&gt;
+                                allow)</label><textarea id="journey-desc" rows="4"
+                                placeholder="Viết mô tả ở đây..."></textarea></div>
+                        <div class="form-group"><label>Thứ tự xuất hiện</label><input type="number" id="journey-order"
+                                value="1" min="1"></div>
+
+                        <input type="hidden" id="journey-id">
+                        <button class="btn btn-primary" onclick="saveJourney()">💾 Lưu</button>
+                        <button class="btn btn-warning" onclick="hideJourneyForm()">❌ Hủy</button>
+                    </div>
+
+                    <div class="message-list" id="journey-list">
+                        <div class="loading">Đang tải slides...</div>
+                    </div>
                 </div>
             </div>
 
@@ -278,14 +1089,61 @@
             <div id="messages-section" class="admin-section">
                 <!-- ⏳ PENDING MESSAGES -->
                 <div class="messages-section">
-                    <div class="section-header"><span class="section-title">⏳ Lời nhắn chờ duyệt</span><span class="message-count" id="pending-count">0</span></div>
-                    <div class="message-list" id="pending-list"><div class="loading">Đang tải...</div></div>
+                    <div class="section-header"><span class="section-title">⏳ Lời nhắn chờ duyệt</span><span
+                            class="message-count" id="pending-count">0</span></div>
+                    <div class="message-list" id="pending-list">
+                        <div class="loading">Đang tải...</div>
+                    </div>
                 </div>
 
                 <!-- ✅ APPROVED MESSAGES -->
                 <div class="messages-section">
-                    <div class="section-header"><span class="section-title">✅ Lời nhắn đã duyệt</span><span class="message-count" id="approved-count">0</span></div>
-                    <div class="message-list" id="approved-list"><div class="loading">Đang tải...</div></div>
+                    <div class="section-header"><span class="section-title">✅ Lời nhắn đã duyệt</span><span
+                            class="message-count" id="approved-count">0</span></div>
+                    <div class="message-list" id="approved-list">
+                        <div class="loading">Đang tải...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 📧 NEWSLETTER SECTION -->
+            <div id="newsletter-section" class="admin-section">
+                <div class="messages-section">
+                    <div class="section-header">
+                        <span class="section-title">📧 Đăng ký nhận tin (Newsletter)</span>
+                        <div style="display:flex; gap:10px;">
+                            <span class="message-count" id="newsletter-count">0</span>
+                            <button class="btn btn-success btn-small" onclick="exportNewsletterCSV()">📥 Xuất
+                                CSV</button>
+                        </div>
+                    </div>
+
+                    <div style="overflow-x:auto;">
+                        <table
+                            style="width:100%; border-collapse:collapse; background:#fff; border-radius:8px; overflow:hidden; box-shadow:0 2px 4px rgba(0,0,0,0.05); margin-top:20px;">
+                            <thead>
+                                <tr style="background:#f1f5f9; text-align:left;">
+                                    <th
+                                        style="padding:12px 15px; border-bottom:1px solid #e2e8f0; font-size:14px; color:#475569;">
+                                        Thời gian</th>
+                                    <th
+                                        style="padding:12px 15px; border-bottom:1px solid #e2e8f0; font-size:14px; color:#475569;">
+                                        Họ Tên</th>
+                                    <th
+                                        style="padding:12px 15px; border-bottom:1px solid #e2e8f0; font-size:14px; color:#475569;">
+                                        Email</th>
+                                    <th
+                                        style="padding:12px 15px; border-bottom:1px solid #e2e8f0; font-size:14px; color:#475569;">
+                                        Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="newsletter-list">
+                                <tr>
+                                    <td colspan="4" style="text-align:center; padding:20px;">Đang tải...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -313,6 +1171,9 @@
         let editingGalleryId = null;
         let editingBannerId = null;
         let editingMemberId = null;
+        let allTags = [];
+        let editingTagId = null;
+        let uiSettingsLoaded = false;
 
         auth.onAuthStateChanged(user => {
             if (user) {
@@ -323,6 +1184,12 @@
                 loadAdminGallery();
                 loadBanners();
                 loadMembers();
+                loadMembers();
+                loadTags();
+                loadTeamQuotes();
+                loadStatsConfig();
+                loadJourney();
+                loadNewsletter();
             } else {
                 document.getElementById('login-section').style.display = 'block';
                 document.getElementById('dashboard-section').style.display = 'none';
@@ -330,17 +1197,17 @@
         });
 
         // Xử lý menu điều hướng
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const menuItems = document.querySelectorAll('.menu-item');
             menuItems.forEach(item => {
-                item.addEventListener('click', function() {
+                item.addEventListener('click', function () {
                     // Xóa active ở tất cả menu item và section
                     menuItems.forEach(i => i.classList.remove('active'));
                     document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
-                    
+
                     // Thêm active vào item được click
                     this.classList.add('active');
-                    
+
                     // Hiển thị section tương ứng
                     const target = document.getElementById(this.getAttribute('data-target'));
                     if (target) {
@@ -442,10 +1309,12 @@
         // 🔥 GALLERY FUNCTIONS
         function showAddGalleryForm() {
             document.getElementById('gallery-form').style.display = 'block';
-            document.getElementById('gallery-form-title').textContent = 'Thêm ảnh mới';
+            document.getElementById('gallery-form-title').textContent = 'Thêm ảnh / Hoạt động mới';
             document.getElementById('gallery-image').value = '';
             document.getElementById('gallery-title').value = '';
             document.getElementById('gallery-description').value = '';
+            document.getElementById('gallery-content').value = '';
+            document.getElementById('gallery-extra-images').value = '';
             document.getElementById('gallery-order').value = '1';
             document.getElementById('gallery-id').value = '';
             editingGalleryId = null;
@@ -456,9 +1325,12 @@
             const image = document.getElementById('gallery-image').value.trim();
             const title = document.getElementById('gallery-title').value.trim();
             const description = document.getElementById('gallery-description').value.trim();
+            const content = document.getElementById('gallery-content').value.trim();
+            const extraImagesRaw = document.getElementById('gallery-extra-images').value.trim();
+            const extraImages = extraImagesRaw ? extraImagesRaw.split('\n').map(x => x.trim()).filter(Boolean) : [];
             const order = parseInt(document.getElementById('gallery-order').value) || 1;
             if (!image || !title) { showNotification('Vui lòng nhập ít nhất link ảnh và tiêu đề!', 'error'); return; }
-            const galleryData = { image, title, description, order, updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
+            const galleryData = { image, title, description, content, extraImages, order, updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
             try {
                 if (editingGalleryId) {
                     await db.collection('gallery').doc(editingGalleryId).update(galleryData);
@@ -477,10 +1349,12 @@
             if (doc.exists) {
                 const data = doc.data();
                 document.getElementById('gallery-form').style.display = 'block';
-                document.getElementById('gallery-form-title').textContent = 'Chỉnh sửa ảnh';
+                document.getElementById('gallery-form-title').textContent = 'Chỉnh sửa hoạt động';
                 document.getElementById('gallery-image').value = data.image || '';
                 document.getElementById('gallery-title').value = data.title || '';
                 document.getElementById('gallery-description').value = data.description || '';
+                document.getElementById('gallery-content').value = data.content || '';
+                document.getElementById('gallery-extra-images').value = (data.extraImages || []).join('\n');
                 document.getElementById('gallery-order').value = data.order || 1;
                 document.getElementById('gallery-id').value = id;
                 editingGalleryId = id;
@@ -524,11 +1398,11 @@
             const link = document.getElementById('banner-link').value.trim();
             const order = parseInt(document.getElementById('banner-order').value) || 1;
             const active = document.getElementById('banner-active').checked;
-            
+
             if (!image) { showNotification('Vui lòng nhập link ảnh banner!', 'error'); return; }
-            
+
             const bannerData = { image, title, link, order, active, updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
-            
+
             try {
                 if (editingBannerId) {
                     await db.collection('banners').doc(editingBannerId).update(bannerData);
@@ -577,7 +1451,7 @@
                             <div class="info">
                                 <h4>${data.title || 'Không có tiêu đề'} ${statusBadge}</h4>
                                 <p><strong>Thứ tự:</strong> ${data.order}</p>
-                                ${data.link ? `<p><strong>Link:</strong> <a href="${data.link}" target="_blank" style="color:#2196F3;">${data.link.substring(0,40)}${data.link.length>40?'...':''}</a></p>` : ''}
+                                ${data.link ? `<p><strong>Link:</strong> <a href="${data.link}" target="_blank" style="color:#2196F3;">${data.link.substring(0, 40)}${data.link.length > 40 ? '...' : ''}</a></p>` : ''}
                             </div>
                             <div style="display:flex; gap:10px; align-items:center;">
                                 <button class="btn btn-warning btn-small" onclick="editBanner('${doc.id}')">✏️ Sửa</button>
@@ -588,6 +1462,309 @@
             });
         }
 
+
+
+        // ===== TAGS (Role/Badge) =====
+        function slugify(str) {
+            try {
+                return (str || '')
+                    .toString()
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .toLowerCase()
+                    .trim()
+                    .replace(/[^a-z0-9\s-]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-');
+            } catch (e) {
+                return (str || '').toString().toLowerCase().trim().replace(/\s+/g, '-');
+            }
+        }
+
+        function normalizeHexColor(value) {
+            const v = (value || '').toString().trim();
+            if (!v) return '';
+            const m = v.match(/^#?[0-9a-fA-F]{6}$/);
+            if (!m) return '';
+            return (v.startsWith('#') ? v : ('#' + v)).toUpperCase();
+        }
+
+        function syncColorInputs() {
+            const c = document.getElementById('tag-color');
+            const t = document.getElementById('tag-color-text');
+            if (!c || !t) return;
+            t.value = (c.value || '').toUpperCase();
+        }
+
+        function showAddTagForm() {
+            document.getElementById('tag-form').style.display = 'block';
+            document.getElementById('tag-form-title').textContent = 'Thêm tag mới';
+            document.getElementById('tag-id').value = '';
+            document.getElementById('tag-key').value = '';
+            document.getElementById('tag-key').removeAttribute('readonly');
+            document.getElementById('tag-role').value = '';
+            document.getElementById('tag-order').value = '1';
+            document.getElementById('tag-active').checked = true;
+            document.getElementById('tag-color').value = '#7C3AED';
+            syncColorInputs();
+            editingTagId = null;
+        }
+        function hideTagForm() { document.getElementById('tag-form').style.display = 'none'; }
+
+        async function saveTag() {
+            const keyEl = document.getElementById('tag-key');
+            const role = (document.getElementById('tag-role').value || '').trim();
+            const order = parseInt(document.getElementById('tag-order').value, 10) || 1;
+            const active = document.getElementById('tag-active').checked;
+            const color = normalizeHexColor(document.getElementById('tag-color-text').value) || normalizeHexColor(document.getElementById('tag-color').value) || '#7C3AED';
+
+            if (!role) { showNotification('Vui lòng nhập Role/Text hiển thị!', 'error'); return; }
+
+            let key = (keyEl.value || '').trim();
+            if (!key) key = slugify(role);
+            if (!key) { showNotification('Không tạo được mã tag (key).', 'error'); return; }
+
+            const tagData = { role, color, order, active, updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
+
+            try {
+                if (editingTagId) {
+                    await db.collection('tags').doc(editingTagId).update(tagData);
+                    showNotification('Đã cập nhật tag!', 'success');
+                } else {
+                    tagData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                    await db.collection('tags').doc(key).set(tagData);
+                    showNotification('Đã thêm tag mới!', 'success');
+                }
+                hideTagForm();
+            } catch (e) {
+                showNotification('Lỗi: ' + e.message, 'error');
+            }
+        }
+
+        async function editTag(id) {
+            const doc = await db.collection('tags').doc(id).get();
+            if (!doc.exists) return;
+            const data = doc.data() || {};
+            document.getElementById('tag-form').style.display = 'block';
+            document.getElementById('tag-form-title').textContent = 'Chỉnh sửa tag';
+            document.getElementById('tag-id').value = id;
+            document.getElementById('tag-key').value = id;
+            document.getElementById('tag-key').setAttribute('readonly', 'readonly');
+            document.getElementById('tag-role').value = data.role || '';
+            document.getElementById('tag-order').value = data.order || 1;
+            document.getElementById('tag-active').checked = data.active !== false;
+            document.getElementById('tag-color').value = normalizeHexColor(data.color) || '#7C3AED';
+            syncColorInputs();
+            editingTagId = id;
+        }
+
+        async function deleteTag(id) {
+            if (!confirm('Bạn có chắc muốn xóa tag này?')) return;
+            try {
+                await db.collection('tags').doc(id).delete();
+                showNotification('Đã xóa tag!', 'success');
+            } catch (e) {
+                showNotification('Lỗi: ' + e.message, 'error');
+            }
+        }
+
+        function renderTagList() {
+            const container = document.getElementById('tag-list');
+            if (!container) return;
+            if (!allTags.length) {
+                container.innerHTML = '<div class="empty">Chưa có tag nào</div>';
+                return;
+            }
+            container.innerHTML = allTags.map(t => {
+                const sw = `<span class="tag-swatch" style="background:${escapeHtml(t.color || '#7C3AED')}"></span>`;
+                const pill = `<span class="tag-pill">${sw}<span>${escapeHtml(t.role || t.id)}</span></span>`;
+                const status = (t.active !== false) ? '<span class="status-badge status-active">● Đang dùng</span>' : '<span class="status-badge status-inactive">● Tắt</span>';
+                return `
+                    <div class="tag-item">
+                        <div style="flex:1;">
+                            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">${pill} ${status}</div>
+                            <div style="margin-top:8px; color:#666; font-size:13px;">
+                                <b>Key:</b> <code>${escapeHtml(t.id)}</code> • <b>Order:</b> ${t.order || 1} • <b>Color:</b> ${escapeHtml((t.color || '').toString())}
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <button class="btn btn-warning btn-small" onclick="editTag('${t.id}')">✏️ Sửa</button>
+                            <button class="btn btn-danger btn-small" onclick="deleteTag('${t.id}')">🗑️ Xóa</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderMemberTagOptions(selected) {
+            const wrap = document.getElementById('member-tags-wrap');
+            if (!wrap) return;
+            const sel = new Set(Array.isArray(selected) ? selected : []);
+
+            if (!allTags || !allTags.length) {
+                wrap.innerHTML = '<div class="empty" style="padding:0;">Chưa có tag nào (tạo ở tab Tags)</div>';
+                return;
+            }
+
+            const list = [...allTags].sort((a, b) => {
+                const aa = (a.active !== false) ? 1 : 0;
+                const bb = (b.active !== false) ? 1 : 0;
+                if (bb != aa) return bb - aa;
+                return (a.order || 9999) - (b.order || 9999);
+            });
+
+            wrap.innerHTML = list.map(t => {
+                const checked = sel.has(t.id) ? 'checked' : '';
+                const color = escapeHtml(t.color || '#7C3AED');
+                const label = escapeHtml(t.role || t.id);
+                return `
+                    <label class="tag-check" title="${escapeHtml(t.id)}">
+                        <input type="checkbox" value="${escapeHtml(t.id)}" ${checked}>
+                        <span class="tag-swatch" style="background:${color}"></span>
+                        <span class="tag-text">${label}</span>
+                    </label>
+                `;
+            }).join('');
+        }
+
+        function getSelectedMemberTags() {
+            const wrap = document.getElementById('member-tags-wrap');
+            if (!wrap) return [];
+            return Array.from(wrap.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+        }
+
+        function loadTags() {
+            db.collection('tags').orderBy('order', 'asc').onSnapshot(snapshot => {
+                allTags = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderTagList();
+                renderMemberTagOptions(getSelectedMemberTags());
+            }, error => {
+                const container = document.getElementById('tag-list');
+                if (container) container.innerHTML = '<div class="empty">Lỗi tải tags: ' + escapeHtml(error.message || '') + '</div>';
+            });
+
+            const c = document.getElementById('tag-color');
+            const t = document.getElementById('tag-color-text');
+            if (c && t) {
+                c.addEventListener('input', syncColorInputs);
+                t.addEventListener('input', () => {
+                    const v = normalizeHexColor(t.value);
+                    if (v) c.value = v;
+                });
+                syncColorInputs();
+            }
+        }
+
+
+        // ===== TEAM QUOTES (settings/ui.teamQuotes) =====
+        function loadTeamQuotes() {
+            const textarea = document.getElementById('team-quotes');
+            const countEl = document.getElementById('team-quotes-count');
+            if (!textarea) return;
+
+            db.collection('settings').doc('ui').onSnapshot(doc => {
+                const data = doc.exists ? (doc.data() || {}) : {};
+                let raw = data.teamQuotes ?? data.memberQuotes ?? data.teamQuote ?? data.memberQuote ?? data.quote;
+                if (typeof raw === 'string') raw = [raw];
+                const cleaned = Array.isArray(raw)
+                    ? raw.map(x => (x || '').toString().trim()).filter(Boolean)
+                    : [];
+
+                textarea.value = cleaned.join('\n');
+                if (countEl) countEl.textContent = String(cleaned.length);
+                uiSettingsLoaded = true;
+            }, err => {
+                showNotification('Lỗi tải quotes: ' + (err.message || err), 'error');
+            });
+        }
+
+        // ===== STATS BAR CONFIG (settings/ui.statsConfig) =====
+        function loadStatsConfig() {
+            db.collection('settings').doc('ui').onSnapshot(doc => {
+                if (!doc.exists) return;
+                const data = doc.data();
+                if (data.statsConfig) {
+                    const sc = data.statsConfig;
+                    if (sc.stat1) {
+                        document.getElementById('stat-1-icon').value = sc.stat1.icon || '💌';
+                        document.getElementById('stat-1-label').value = sc.stat1.label || 'Lời nhắn';
+                        document.getElementById('stat-1-count').value = sc.stat1.count || '';
+                    }
+
+                    if (sc.stat2) {
+                        document.getElementById('stat-2-icon').value = sc.stat2.icon || '❤️';
+                        document.getElementById('stat-2-label').value = sc.stat2.label || 'Lượt thả tim';
+                        document.getElementById('stat-2-count').value = sc.stat2.count || '';
+                    }
+
+                    if (sc.stat3) {
+                        document.getElementById('stat-3-icon').value = sc.stat3.icon || '📸';
+                        document.getElementById('stat-3-label').value = sc.stat3.label || 'Hoạt động';
+                        document.getElementById('stat-3-count').value = sc.stat3.count || '';
+                    }
+
+                    if (sc.stat4) {
+                        document.getElementById('stat-4-icon').value = sc.stat4.icon || '👥';
+                        document.getElementById('stat-4-label').value = sc.stat4.label || 'Thành viên';
+                        document.getElementById('stat-4-count').value = sc.stat4.count || '';
+                    }
+                }
+            });
+        }
+
+        async function saveStatsConfig() {
+            const config = {
+                stat1: {
+                    icon: document.getElementById('stat-1-icon').value.trim() || '💌',
+                    label: document.getElementById('stat-1-label').value.trim() || 'Lời nhắn',
+                    count: parseInt(document.getElementById('stat-1-count').value.trim()) || 0
+                },
+                stat2: {
+                    icon: document.getElementById('stat-2-icon').value.trim() || '❤️',
+                    label: document.getElementById('stat-2-label').value.trim() || 'Lượt thả tim',
+                    count: parseInt(document.getElementById('stat-2-count').value.trim()) || 0
+                },
+                stat3: {
+                    icon: document.getElementById('stat-3-icon').value.trim() || '📸',
+                    label: document.getElementById('stat-3-label').value.trim() || 'Hoạt động',
+                    count: parseInt(document.getElementById('stat-3-count').value.trim()) || 0
+                },
+                stat4: {
+                    icon: document.getElementById('stat-4-icon').value.trim() || '👥',
+                    label: document.getElementById('stat-4-label').value.trim() || 'Thành viên',
+                    count: parseInt(document.getElementById('stat-4-count').value.trim()) || 0
+                }
+            };
+            try {
+                await db.collection('settings').doc('ui').set({
+                    statsConfig: config,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                showNotification('Đã lưu cấu hình Bar thống kê!', 'success');
+            } catch (e) {
+                showNotification('Lỗi lưu cấu hình: ' + (e.message || e), 'error');
+            }
+        }
+
+        async function saveTeamQuotes() {
+            const textarea = document.getElementById('team-quotes');
+            const countEl = document.getElementById('team-quotes-count');
+            if (!textarea) return;
+
+            const lines = textarea.value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+            try {
+                await db.collection('settings').doc('ui').set({
+                    teamQuotes: lines,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+
+                if (countEl) countEl.textContent = String(lines.length);
+                showNotification('Đã lưu quotes!', 'success');
+            } catch (e) {
+                showNotification('Lỗi lưu quotes: ' + (e.message || e), 'error');
+            }
+        }
+
         function showAddMemberForm() {
             document.getElementById('member-form').style.display = 'block';
             document.getElementById('member-form-title').textContent = 'Thêm thành viên mới';
@@ -595,8 +1772,13 @@
             document.getElementById('member-role').value = '';
             document.getElementById('member-avatar').value = '';
             document.getElementById('member-bio').value = '';
+            const em = document.getElementById('member-email'); if (em) em.value = '';
+            const sch = document.getElementById('member-school'); if (sch) sch.value = '';
+            const ach = document.getElementById('member-achievements'); if (ach) ach.value = '';
             document.getElementById('member-facebook').value = '';
             document.getElementById('member-instagram').value = '';
+            const at = document.getElementById('member-activeTime'); if (at) at.value = '';
+            renderMemberTagOptions([]);
             document.getElementById('member-order').value = '1';
             document.getElementById('member-active').checked = true;
             document.getElementById('member-id').value = '';
@@ -612,8 +1794,13 @@
             const role = document.getElementById('member-role').value.trim();
             const avatar = document.getElementById('member-avatar').value.trim();
             const bio = document.getElementById('member-bio').value.trim();
+            const email = (document.getElementById('member-email')?.value || '').trim();
+            const school = (document.getElementById('member-school')?.value || '').trim();
+            const achievements = (document.getElementById('member-achievements')?.value || '').trim();
             const facebook = document.getElementById('member-facebook').value.trim();
             const instagram = document.getElementById('member-instagram').value.trim();
+            const activeTime = (document.getElementById('member-activeTime')?.value || '').trim();
+            const tags = getSelectedMemberTags();
             const order = parseInt(document.getElementById('member-order').value) || 1;
             const active = document.getElementById('member-active').checked;
 
@@ -622,7 +1809,7 @@
                 return;
             }
 
-            const memberData = { name, role, avatar, bio, facebook, instagram, order, active, updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
+            const memberData = { name, role, avatar, bio, email, school, achievements, facebook, instagram, order, active, tags, activeTime, updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
 
             try {
                 if (editingMemberId) {
@@ -650,8 +1837,13 @@
                 document.getElementById('member-role').value = data.role || '';
                 document.getElementById('member-avatar').value = data.avatar || '';
                 document.getElementById('member-bio').value = data.bio || '';
+                const em = document.getElementById('member-email'); if (em) em.value = data.email || '';
+                const sch = document.getElementById('member-school'); if (sch) sch.value = data.school || '';
+                const ach = document.getElementById('member-achievements'); if (ach) ach.value = data.achievements || '';
                 document.getElementById('member-facebook').value = data.facebook || '';
                 document.getElementById('member-instagram').value = data.instagram || '';
+                const at = document.getElementById('member-activeTime'); if (at) at.value = data.activeTime || '';
+                renderMemberTagOptions(Array.isArray(data.tags) ? data.tags : []);
                 document.getElementById('member-order').value = data.order || 1;
                 document.getElementById('member-active').checked = data.active !== false;
                 document.getElementById('member-id').value = id;
@@ -700,6 +1892,188 @@
             });
         }
 
+        // ===== JOURNEY (ORIGIN) =====
+        let editingJourneyId = null;
+
+        function showAddJourneyForm() {
+            document.getElementById('journey-form').style.display = 'block';
+            document.getElementById('journey-form-title').textContent = 'Thêm slide hành trình mới';
+            document.getElementById('journey-year').value = '';
+            document.getElementById('journey-chapter').value = '';
+            document.getElementById('journey-title').value = '';
+            document.getElementById('journey-image').value = '';
+            document.getElementById('journey-desc').value = '';
+            document.getElementById('journey-order').value = '';
+            document.getElementById('journey-id').value = '';
+            editingJourneyId = null;
+        }
+
+        function hideJourneyForm() {
+            document.getElementById('journey-form').style.display = 'none';
+        }
+
+        async function saveJourney() {
+            const year = document.getElementById('journey-year').value.trim();
+            const chapter = document.getElementById('journey-chapter').value.trim();
+            const title = document.getElementById('journey-title').value.trim();
+            const image = document.getElementById('journey-image').value.trim();
+            const desc = document.getElementById('journey-desc').value.trim();
+            const order = parseInt(document.getElementById('journey-order').value) || 1;
+
+            if (!year || !image) {
+                showNotification('Vui lòng nhập năm và link ảnh!', 'error');
+                return;
+            }
+
+            try {
+                if (editingJourneyId) {
+                    await db.collection('journey').doc(editingJourneyId).update({ year, chapter, title, image, desc, order });
+                    showNotification('Đã cập nhật slide!', 'success');
+                } else {
+                    await db.collection('journey').add({ year, chapter, title, image, desc, order });
+                    showNotification('Đã thêm slide mới!', 'success');
+                }
+                hideJourneyForm();
+            } catch (e) {
+                showNotification('Lỗi: ' + e.message, 'error');
+            }
+        }
+
+        async function editJourney(id) {
+            const doc = await db.collection('journey').doc(id).get();
+            if (doc.exists) {
+                const data = doc.data();
+                document.getElementById('journey-form').style.display = 'block';
+                document.getElementById('journey-form-title').textContent = 'Sửa slide hành trình';
+                document.getElementById('journey-year').value = data.year || '';
+                document.getElementById('journey-chapter').value = data.chapter || '';
+                document.getElementById('journey-title').value = data.title || '';
+                document.getElementById('journey-image').value = data.image || '';
+                document.getElementById('journey-desc').value = data.desc || '';
+                document.getElementById('journey-order').value = data.order || 1;
+                document.getElementById('journey-id').value = id;
+                editingJourneyId = id;
+            }
+        }
+
+        async function deleteJourney(id) {
+            if (!confirm('Bạn có chắc muốn xóa slide này?')) return;
+            try {
+                await db.collection('journey').doc(id).delete();
+                showNotification('Đã xóa slide!', 'success');
+            } catch (e) {
+                showNotification('Lỗi: ' + e.message, 'error');
+            }
+        }
+
+        function loadJourney() {
+            db.collection('journey').orderBy('order', 'asc').onSnapshot(snapshot => {
+                const container = document.getElementById('journey-list');
+                if (snapshot.empty) {
+                    container.innerHTML = '<div class="empty">Chưa có slide nào</div>';
+                    return;
+                }
+
+                container.innerHTML = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    return `
+                        <div class="gallery-item">
+                            <img src="${data.image}" alt="Slide">
+                            <div class="info">
+                                <h4>Mốc: ${data.year} - ${data.title}</h4>
+                                <p>${data.chapter}</p>
+                                <p class="order">Thứ tự: ${data.order || 1}</p>
+                            </div>
+                            <div style="display:flex; gap:10px; align-items:center;">
+                                <button class="btn btn-warning btn-small" onclick="editJourney('${doc.id}')">✏️ Sửa</button>
+                                <button class="btn btn-danger btn-small" onclick="deleteJourney('${doc.id}')">🗑️ Xóa</button>
+                            </div>
+                        </div>`;
+                }).join('');
+            });
+        }
+
+        // ===== NEWSLETTER =====
+        let allNewsletters = [];
+
+        function loadNewsletter() {
+            db.collection('newsletter').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+                const container = document.getElementById('newsletter-list');
+                const countBadge = document.getElementById('newsletter-count');
+
+                allNewsletters = [];
+                countBadge.textContent = snapshot.docs.length;
+
+                if (snapshot.empty) {
+                    container.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:#666;">Chưa có lượt đăng ký nào</td></tr>';
+                    return;
+                }
+
+                container.innerHTML = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    const timeStr = data.timestamp ? formatDate(data.timestamp.toDate()) : 'Không rõ';
+                    const name = data.name || 'N/A';
+                    const email = data.email || 'N/A';
+
+                    allNewsletters.push({
+                        time: timeStr,
+                        name: name,
+                        email: email
+                    });
+
+                    return `<tr style="border-bottom:1px solid #e2e8f0;">
+                        <td style="padding:12px 15px; font-size:13px; color:#64748b;">${timeStr}</td>
+                        <td style="padding:12px 15px; font-size:14px; font-weight:500;">${escapeHtml(name)}</td>
+                        <td style="padding:12px 15px; font-size:14px; color:#1e293b;"><a href="mailto:${escapeHtml(email)}" target="_blank" style="color:#7c3aed; text-decoration:none;">${escapeHtml(email)}</a></td>
+                        <td style="padding:12px 15px;">
+                            <button class="btn btn-danger btn-small" onclick="deleteNewsletter('${doc.id}')" style="padding: 4px 8px; font-size: 11px;">🗑️ Xóa</button>
+                        </td>
+                    </tr>`;
+                }).join('');
+            });
+        }
+
+        async function deleteNewsletter(id) {
+            if (!confirm('Bạn có chắc muốn xóa email đăng ký này?')) return;
+            try {
+                await db.collection('newsletter').doc(id).delete();
+                showNotification('Đã xóa dữ liệu', 'success');
+            } catch (e) {
+                showNotification('Lỗi: ' + e.message, 'error');
+            }
+        }
+
+        function exportNewsletterCSV() {
+            if (allNewsletters.length === 0) {
+                showNotification('Không có dữ liệu để tải về', 'warning');
+                return;
+            }
+
+            // CSV BOM for UTF-8 Excel support
+            let csvContent = "t_EF_BB_BF";
+            csvContent += "Thời gian,Họ Tên,Email\n";
+
+            allNewsletters.forEach(item => {
+                // Escape quotes
+                let row = [
+                    `"${item.time}"`,
+                    `"${item.name.replace(/"/g, '""')}"`,
+                    `"${item.email.replace(/"/g, '""')}"`
+                ].join(',');
+                csvContent += row + "\n";
+            });
+
+            // Convert t_EF_BB_BF prefix back to byte sequence
+            const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent.slice(10)], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `newsletter_export_${new Date().toISOString().slice(0, 10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
         function showNotification(message, type) {
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
@@ -713,4 +2087,5 @@
         document.addEventListener('keypress', e => { if (e.key === 'Enter' && e.target.tagName === 'INPUT') handleLogin(); });
     </script>
 </body>
+
 </html>

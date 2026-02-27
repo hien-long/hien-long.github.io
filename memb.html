@@ -1,55 +1,63 @@
 <!DOCTYPE html>
+
 <html lang="vi">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
   <title>Thành viên | The Blouse</title>
-
-  <link rel="icon" type="image/png" href="https://i.ibb.co/0jqsMq0Z/your-image.png">
-  <link rel="apple-touch-icon" href="https://i.ibb.co/0jqsMq0Z/your-image.png">
-
+  <link href="https://i.ibb.co/0jqsMq0Z/your-image.png" rel="icon" type="image/png" />
+  <link href="https://i.ibb.co/0jqsMq0Z/your-image.png" rel="apple-touch-icon" />
   <!-- Font (avoid @import delays) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap"
+    rel="stylesheet" />
   <!-- Use shared site styles (header/footer/theme tokens/etc.) -->
-  <link rel="stylesheet" href="./styles.css">
-
+  <link href="./styles.css" rel="stylesheet" />
   <style>
     /* ===== Team / Members Page (only page-specific styles) ===== */
-    .page-hero{ padding: 54px 0 18px; }
-    .page-hero h1{
+    .page-hero {
+      padding: 54px 0 18px;
+    }
+
+    .page-hero h1 {
       margin: 0 0 10px;
       font-size: clamp(28px, 4vw, 42px);
       letter-spacing: -0.03em;
     }
-    .page-hero p{
+
+    .page-hero p {
       margin: 0;
       color: var(--t-muted);
       font-weight: 600;
       max-width: 70ch;
     }
 
-    .team-controls{
+    .team-controls {
       margin-top: 22px;
-      display:flex;
+      display: flex;
       gap: 12px;
       flex-wrap: wrap;
       align-items: center;
     }
-    .search-wrap{
+
+    .search-wrap {
       flex: 1 1 260px;
-      display:flex;
-      align-items:center;
+      display: flex;
+      align-items: center;
       gap: 10px;
       padding: 10px 12px;
       border-radius: 14px;
       border: 1px solid var(--t-border);
       background: color-mix(in srgb, var(--t-panel2) 75%, transparent);
     }
-    .search-ico{ opacity:.75; }
-    #member-search{
+
+    .search-ico {
+      opacity: .75;
+    }
+
+    #member-search {
       width: 100%;
       border: none;
       outline: none;
@@ -57,8 +65,14 @@
       color: var(--t-text);
       font-weight: 700;
     }
-    .chips{ display:flex; gap: 10px; flex-wrap: wrap; }
-    .chip{
+
+    .chips {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
       border: 1px solid var(--t-border);
       background: transparent;
       color: var(--t-text);
@@ -68,138 +82,277 @@
       cursor: pointer;
       transition: transform .15s ease, background .15s ease, border-color .15s ease;
     }
-    .chip:hover{ transform: translateY(-1px); border-color: color-mix(in srgb, var(--accent) 55%, var(--t-border)); }
-    .chip.is-active{
+
+    .chip:hover {
+      transform: translateY(-1px);
+      border-color: color-mix(in srgb, var(--accent) 55%, var(--t-border));
+    }
+
+    .chip.is-active {
       background: linear-gradient(135deg,
-        color-mix(in srgb, var(--accent) 22%, transparent),
-        color-mix(in srgb, var(--accent2) 20%, transparent)
-      );
+          color-mix(in srgb, var(--accent) 22%, transparent),
+          color-mix(in srgb, var(--accent2) 20%, transparent));
       border-color: color-mix(in srgb, var(--accent2) 55%, var(--t-border));
     }
 
-    .team-grid{
+    .team-grid {
       margin: 18px 0 70px;
-      display:grid;
+      display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 16px;
     }
-    @media (max-width: 980px){ .team-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
-    @media (max-width: 560px){ .team-grid{ grid-template-columns: 1fr; } }
 
-    .profile-card{
+    @media (max-width: 980px) {
+      .team-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .team-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ===== Member Card (photo-first + hover overlay like sample #3) ===== */
+    .profile-card {
       position: relative;
-      border-radius: 18px;
+      border-radius: 22px;
       border: 1px solid var(--t-border);
-      background: color-mix(in srgb, var(--t-panel2) 85%, transparent);
+      background: color-mix(in srgb, var(--t-panel2) 88%, transparent);
       overflow: hidden;
       text-decoration: none;
       color: inherit;
+      box-shadow: 0 18px 44px rgba(0, 0, 0, .20);
       transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-      box-shadow: 0 14px 30px rgba(0,0,0,.18);
+      padding: 0;
+      /* keep stable, no layout jump */
+      height: 430px;
+      /* fixed height so full-card hover doesn't shrink */
+      display: flex;
+      flex-direction: column;
     }
-    body[data-theme="light"] .profile-card{ box-shadow: 0 12px 26px rgba(14,18,24,.12); }
 
-    .profile-card::before{
-      content:"";
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(800px 220px at 20% 0%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 60%),
-        radial-gradient(700px 200px at 90% 10%, color-mix(in srgb, var(--accent2) 18%, transparent), transparent 60%);
-      opacity: .9;
-      pointer-events:none;
+    body[data-theme="light"] .profile-card {
+      box-shadow: 0 14px 34px rgba(14, 18, 24, .10);
     }
-    .profile-card:hover{
+
+    .profile-card:hover {
       transform: translateY(-6px);
       border-color: color-mix(in srgb, var(--accent2) 55%, var(--t-border));
-      box-shadow: 0 22px 46px rgba(0,0,0,.28);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, .26);
     }
-    body[data-theme="light"] .profile-card:hover{ box-shadow: 0 20px 40px rgba(14,18,24,.18); }
 
-    .profile-top{
+    body[data-theme="light"] .profile-card:hover {
+      box-shadow: 0 22px 56px rgba(14, 18, 24, .16);
+    }
+
+    /* top photo */
+    .pc-media {
       position: relative;
-      padding: 16px 16px 10px;
-      display:flex;
-      align-items:center;
-      gap: 12px;
-    }
-    .avatar{
-      width: 56px; height: 56px;
-      border-radius: 16px;
-      object-fit: cover;
-      border: 1px solid color-mix(in srgb, var(--t-border) 70%, transparent);
+      border-radius: 18px;
+      overflow: hidden;
+      height: 62%;
+      margin: 14px 14px 0;
+      /* default inset like sample #1 */
       background: color-mix(in srgb, var(--t-panel) 85%, transparent);
+      border: 1px solid color-mix(in srgb, var(--t-border) 75%, transparent);
+      transition: border-radius .22s ease, transform .22s ease, margin .22s ease;
+      flex: 0 0 auto;
     }
-    .profile-name{
-      font-weight: 900;
+
+    .pc-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: scale(1);
+      transition: transform .65s cubic-bezier(.22, .61, .36, 1), filter .25s ease;
+    }
+
+    /* overlay (the “card #3” vibe) */
+    .pc-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 18px 18px 16px;
+      color: #fff;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity .22s ease, transform .22s ease;
+      /* glass + gradient */
+      background:
+        radial-gradient(900px 320px at 30% 10%, rgba(255, 255, 255, .14), transparent 55%),
+        linear-gradient(to top, rgba(10, 12, 16, .78), rgba(10, 12, 16, .32) 55%, rgba(10, 12, 16, 0) 78%);
+      backdrop-filter: blur(10px);
+    }
+
+    .pc-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 950;
       letter-spacing: -0.02em;
-      font-size: 16px;
-      margin: 0;
+      font-size: 22px;
+      line-height: 1.1;
+      margin: 0 0 6px;
+      text-shadow: 0 10px 30px rgba(0, 0, 0, .35);
     }
-    .profile-role{
-      margin: 2px 0 0;
+
+    .pc-verified {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .86);
+      color: rgba(14, 18, 24, .92);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 1000;
+      font-size: 14px;
+      flex: 0 0 auto;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, .25);
+    }
+
+    .pc-role {
+      margin: 0 0 10px;
+      font-weight: 850;
+      opacity: .92;
+      color: rgba(255, 255, 255, .88);
+    }
+
+    .pc-bio {
+      margin: 0 0 12px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, .88);
+      line-height: 1.45;
+      max-width: 44ch;
+    }
+
+    .pc-overlay-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .pc-cta {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, .18);
+      background: rgba(255, 255, 255, .14);
+      color: #fff;
+      font-weight: 950;
+      cursor: pointer;
+      user-select: none;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .pc-cta:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, .18);
+      border-color: rgba(255, 255, 255, .28);
+    }
+
+    /* base (default state) */
+    .pc-base {
+      padding: 14px 6px 4px;
+      max-height: 260px;
+      /* enough for name/role/bio/tags */
+      overflow: hidden;
+      transition: opacity .22s ease, transform .22s ease, max-height .22s ease, padding .22s ease;
+    }
+
+    .pc-base-name {
+      margin: 0 0 6px;
+      font-weight: 950;
+      letter-spacing: -0.02em;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pc-base-role {
+      margin: 0 0 10px;
       color: var(--t-muted);
-      font-weight: 800;
-      font-size: 13px;
+      font-weight: 850;
+      font-size: 13.5px;
     }
-    .profile-body{ position: relative; padding: 0 16px 16px; }
-    .profile-bio{
-      margin: 8px 0 12px;
+
+    .pc-base-bio {
+      margin: 0 0 12px;
       color: color-mix(in srgb, var(--t-text) 86%, var(--t-muted));
       font-weight: 650;
       line-height: 1.5;
       min-height: 3.1em;
     }
-    .badges{ display:flex; flex-wrap: wrap; gap: 8px; }
-    .badge{
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .badge {
       font-size: 12px;
-      font-weight: 850;
+      font-weight: 900;
       padding: 6px 10px;
       border-radius: 999px;
       border: 1px solid var(--t-border);
-      background: color-mix(in srgb, var(--t-panel) 70%, transparent);
+      background: color-mix(in srgb, var(--t-panel) 75%, transparent);
     }
 
-    .profile-actions{
-      position: relative;
-      padding: 0 16px 16px;
-      display:flex;
-      gap: 10px;
+    /* hover behavior */
+    .profile-card:hover .pc-overlay,
+    .profile-card:focus-within .pc-overlay {
+      opacity: 1;
+      transform: translateY(0);
     }
-    .icon-btn{
-      flex: 1;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap: 8px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid var(--t-border);
-      background: transparent;
-      color: var(--t-text);
-      font-weight: 900;
-      cursor: pointer;
-      transition: transform .15s ease, border-color .15s ease, background .15s ease;
-    }
-    .icon-btn:hover{
-      transform: translateY(-1px);
-      border-color: color-mix(in srgb, var(--accent2) 55%, var(--t-border));
-      background: linear-gradient(135deg,
-        color-mix(in srgb, var(--accent) 14%, transparent),
-        color-mix(in srgb, var(--accent2) 12%, transparent)
-      );
-    }
-    .icon-btn span{ opacity:.9; }
 
-    .empty-state{
-      margin: 14px 0 80px;
-      padding: 18px;
-      border: 1px dashed var(--t-border);
-      border-radius: 16px;
-      color: var(--t-muted);
-      font-weight: 800;
-      display:none;
+    .profile-card:hover .pc-img,
+    .profile-card:focus-within .pc-img {
+      transform: scale(1.06);
+      filter: saturate(1.08) contrast(1.02);
     }
-    .loading-state{
+
+    .profile-card:hover .pc-base,
+    .profile-card:focus-within .pc-base {
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+    }
+
+    /* hover: media expands to cover the whole card (like sample #3) */
+    .profile-card:hover .pc-media,
+    .profile-card:focus-within .pc-media {
+      position: absolute;
+      inset: 0;
+      height: 100%;
+      margin: 0;
+      border-radius: inherit;
+      border: none;
+    }
+
+    @media (max-width: 560px) {
+      .pc-media {
+        height: 220px;
+      }
+
+      .pc-name {
+        font-size: 20px;
+      }
+    }
+
+
+    .loading-state {
       margin: 14px 0 80px;
       padding: 18px;
       border: 1px dashed var(--t-border);
@@ -209,16 +362,18 @@
     }
 
     /* Modal (Full Profile Sheet) */
-    .modal-backdrop{
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,.60);
-      display:none;
-      align-items:center;
-      justify-content:center;
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .60);
+      display: none;
+      align-items: center;
+      justify-content: center;
       z-index: 20000;
       padding: 18px;
     }
-    .modal{
+
+    .modal {
       width: min(940px, 100%);
       border-radius: 26px;
       border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--t-border));
@@ -226,20 +381,26 @@
         radial-gradient(1200px 600px at 10% 0%, color-mix(in srgb, var(--accent2) 18%, transparent), transparent 55%),
         radial-gradient(900px 500px at 80% 30%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 55%),
         color-mix(in srgb, var(--t-bg) 92%, black);
-      box-shadow: 0 34px 110px rgba(0,0,0,.55);
-      overflow:hidden;
+      box-shadow: 0 34px 110px rgba(0, 0, 0, .55);
+      overflow: hidden;
     }
-    .modal-head{
+
+    .modal-head {
       padding: 12px 14px;
-      display:flex;
-      align-items:center;
+      display: flex;
+      align-items: center;
       justify-content: space-between;
       gap: 14px;
       border-bottom: 1px solid var(--t-border);
       background: color-mix(in srgb, var(--t-bg) 82%, black);
     }
-    .modal-title{ font-weight: 950; letter-spacing: -0.03em; }
-    .modal-close{
+
+    .modal-title {
+      font-weight: 950;
+      letter-spacing: -0.03em;
+    }
+
+    .modal-close {
       border: 1px solid var(--t-border);
       background: color-mix(in srgb, var(--t-bg) 80%, black);
       color: var(--t-text);
@@ -248,56 +409,83 @@
       font-weight: 950;
       cursor: pointer;
     }
-    .modal-close:hover{ border-color: color-mix(in srgb, var(--accent2) 55%, var(--t-border)); }
-    .modal-body{ padding: 18px; }
 
-    .profile-sheet{
-      display:grid;
+    .modal-close:hover {
+      border-color: color-mix(in srgb, var(--accent2) 55%, var(--t-border));
+    }
+
+    .modal-body {
+      padding: 18px;
+    }
+
+    .profile-sheet {
+      display: grid;
       grid-template-columns: 300px 1fr;
       gap: 18px;
       align-items: stretch;
     }
-    @media (max-width: 860px){ .profile-sheet{ grid-template-columns: 1fr; } }
 
-    .p-left{ display:flex; align-items:center; justify-content:center; padding: 18px 10px; }
-    .p-avatar-wrap{
-      width: 220px; height: 220px;
+    @media (max-width: 860px) {
+      .profile-sheet {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .p-left {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 10px;
+    }
+
+    .p-avatar-wrap {
+      width: 220px;
+      height: 220px;
       border-radius: 999px;
       position: relative;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .p-avatar-wrap::before{
-      content:"";
-      position:absolute; inset: -8px;
+
+    .p-avatar-wrap::before {
+      content: "";
+      position: absolute;
+      inset: -8px;
       border-radius: 999px;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       opacity: .85;
     }
-    .p-avatar-wrap::after{
-      content:"";
-      position:absolute; inset: -26px;
+
+    .p-avatar-wrap::after {
+      content: "";
+      position: absolute;
+      inset: -26px;
       border-radius: 999px;
       background: radial-gradient(circle at 30% 20%, color-mix(in srgb, var(--accent2) 40%, transparent), transparent 60%);
       filter: blur(8px);
       opacity: .9;
-      pointer-events:none;
+      pointer-events: none;
     }
-    .p-avatar{
+
+    .p-avatar {
       position: relative;
-      width: 206px; height: 206px;
+      width: 206px;
+      height: 206px;
       border-radius: 999px;
       object-fit: cover;
       border: 10px solid color-mix(in srgb, var(--t-panel2) 92%, transparent);
       background: color-mix(in srgb, var(--t-panel2) 85%, transparent);
     }
 
-    .p-right{ padding: 8px 8px 6px; }
-    .p-hello{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
+    .p-right {
+      padding: 8px 8px 6px;
+    }
+
+    .p-hello {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       padding: 6px 10px;
       border-radius: 6px;
       font-weight: 950;
@@ -307,127 +495,484 @@
       background: linear-gradient(135deg, var(--accent2), color-mix(in srgb, var(--accent) 92%, #000));
       width: fit-content;
     }
-    .p-name{
+
+    .p-name {
       margin: 10px 0 6px;
       font-size: 32px;
       line-height: 1.1;
       letter-spacing: -0.03em;
       font-weight: 950;
     }
-    .p-divider{ height: 1px; background: var(--t-border); margin: 14px 0; }
 
-    .p-info{
-      display:grid;
+    .p-divider {
+      height: 1px;
+      background: var(--t-border);
+      margin: 14px 0;
+    }
+
+    .p-info {
+      display: grid;
       grid-template-columns: 140px 1fr;
       gap: 10px 14px;
       font-weight: 800;
       font-size: 14px;
     }
-    @media (max-width: 520px){ .p-info{ grid-template-columns: 110px 1fr; } }
-    .p-label{ color: var(--t-muted); }
-    .p-value a{
+
+    @media (max-width: 520px) {
+      .p-info {
+        grid-template-columns: 110px 1fr;
+      }
+    }
+
+    .p-label {
+      color: var(--t-muted);
+    }
+
+    .p-value a {
       color: var(--accent2);
-      text-decoration:none;
+      text-decoration: none;
       font-weight: 900;
       word-break: break-word;
     }
-    .p-value a:hover{ text-decoration: underline; }
 
-    .p-quote{
+    .p-value a:hover {
+      text-decoration: underline;
+    }
+
+    .p-quote {
       margin-top: 16px;
       padding: 14px 14px;
       border-radius: 16px;
       border: 1px solid var(--t-border);
       background: color-mix(in srgb, var(--t-panel2) 70%, transparent);
-      text-align:center;
+      text-align: center;
       font-weight: 800;
       color: var(--t-text);
     }
 
-    .p-actions{
+    .p-actions {
       margin-top: 16px;
-      display:flex;
+      display: flex;
       gap: 12px;
       flex-wrap: wrap;
-      justify-content:center;
+      justify-content: center;
     }
-    .p-btn{
-      appearance:none;
+
+    .p-btn {
+      appearance: none;
       border: none;
-      cursor:pointer;
-      text-decoration:none;
+      cursor: pointer;
+      text-decoration: none;
       padding: 12px 18px;
       border-radius: 999px;
       font-weight: 950;
-      display:inline-flex;
-      align-items:center;
+      display: inline-flex;
+      align-items: center;
       gap: 10px;
-      box-shadow: 0 16px 34px rgba(0,0,0,.18);
+      box-shadow: 0 16px 34px rgba(0, 0, 0, .18);
     }
-    .p-btn.primary{ color: #fff; background: linear-gradient(135deg, #22c1f5, #2563eb); }
-    .p-btn.secondary{ color: #fff; background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 88%, #000), color-mix(in srgb, var(--accent2) 90%, #000)); }
-    .p-btn.ghost{
+
+    .p-btn.primary {
+      color: #fff;
+      background: linear-gradient(135deg, #22c1f5, #2563eb);
+    }
+
+    .p-btn.secondary {
+      color: #fff;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 88%, #000), color-mix(in srgb, var(--accent2) 90%, #000));
+    }
+
+    .p-btn.ghost {
       color: var(--t-text);
       border: 1px solid var(--t-border);
       background: color-mix(in srgb, var(--t-bg) 65%, transparent);
-      box-shadow:none;
+      box-shadow: none;
     }
-    .p-btn:hover{ transform: translateY(-1px); }
+
+    .p-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    /* ===== Member Cards (Core photo) ===== */
+    .mcard {
+      position: relative;
+      border-radius: 22px;
+      border: 1px solid var(--t-border);
+      background: color-mix(in srgb, var(--t-panel2) 92%, transparent);
+      overflow: hidden;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, .18);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body[data-theme="light"] .mcard {
+      box-shadow: 0 12px 26px rgba(14, 18, 24, .12);
+    }
+
+    .mcard:hover {
+      transform: translateY(-6px);
+      border-color: color-mix(in srgb, var(--accent2) 55%, var(--t-border));
+      box-shadow: 0 22px 46px rgba(0, 0, 0, .28);
+    }
+
+    body[data-theme="light"] .mcard:hover {
+      box-shadow: 0 20px 40px rgba(14, 18, 24, .18);
+    }
+
+    /* media: normal shows large rectangle photo */
+    .mcard-media {
+      position: relative;
+      height: 248px;
+      margin: 14px 14px 0;
+      border-radius: 18px;
+      overflow: hidden;
+      z-index: 1;
+      transition: all .35s cubic-bezier(.22, .61, .36, 1);
+    }
+
+    .mcard-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: scale(1);
+      transition: transform .45s cubic-bezier(.22, .61, .36, 1), filter .25s ease;
+    }
+
+    /* Hover shade: ONLY bottom part (under text), not full image */
+    .mcard-shade {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 56%;
+      opacity: 0;
+      transition: opacity .25s ease;
+      background: linear-gradient(to top,
+          rgba(0, 0, 0, .78),
+          rgba(0, 0, 0, .24) 55%,
+          rgba(0, 0, 0, 0) 100%);
+      pointer-events: none;
+    }
+
+    /* body */
+    .mcard-body {
+      position: relative;
+      z-index: 3;
+      padding: 14px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mcard-name-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mcard-name {
+      font-weight: 950;
+      letter-spacing: -0.02em;
+      font-size: 18px;
+    }
+
+    .mcard-verified {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 950;
+      font-size: 13px;
+      color: #0b0f14;
+      background: #fff;
+      border: 1px solid rgba(14, 18, 24, .12);
+    }
+
+    .mcard-pin {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 12px;
+      line-height: 1;
+      border: 1px solid rgba(255, 255, 255, .18);
+      background: rgba(124, 58, 237, .18);
+      color: #fff;
+    }
+
+    .mcard-role {
+      color: var(--t-muted);
+      font-weight: 850;
+      font-size: 13px;
+    }
+
+    /* Optional info lines (Email/School) */
+    .mcard-info {
+      margin-top: 8px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .mcard-info-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      /* keep label aligned with multi-line achievements */
+      font-size: 13px;
+      font-weight: 850;
+      color: color-mix(in srgb, var(--t-text) 70%, var(--t-muted));
+    }
+
+    .mcard-info-label {
+      flex: 0 0 auto;
+      opacity: .85;
+      min-width: 86px;
+      /* keep columns aligned (Email / Trường / Thành tích / Thời gian) */
+    }
+
+    .mcard-info-value {
+      flex: 1 1 auto;
+      min-width: 0;
+      color: var(--t-text);
+      font-weight: 950;
+      word-break: break-word;
+    }
+
+    .mcard-muted {
+      opacity: .72;
+      font-weight: 850;
+    }
+
+    .mcard-bio {
+      color: color-mix(in srgb, var(--t-text) 86%, var(--t-muted));
+      font-weight: 650;
+      line-height: 1.5;
+      min-height: 3.0em;
+    }
+
+    .mcard-achv {
+      color: color-mix(in srgb, var(--t-text) 90%, var(--t-muted));
+      font-weight: 750;
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+
+    /* Active time line under achievements */
+    .mcard-time {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--t-border);
+      font-weight: 900;
+      font-size: 13px;
+      color: var(--t-muted);
+    }
+
+    .mcard-time-label {
+      opacity: .9;
+    }
+
+    .mcard-time-value {
+      color: var(--t-text);
+    }
+
+    .mcard-time-empty {
+      opacity: .85;
+    }
+
+    /* Achievements: preserve newlines + auto bullets */
+    .achv-lines {
+      display: grid;
+      gap: 4px;
+    }
+
+    .achv-line {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .achv-dot {
+      flex: 0 0 auto;
+      line-height: 1.2;
+      opacity: .9;
+      transform: translateY(1px);
+    }
+
+    .achv-text {
+      flex: 1 1 auto;
+      min-width: 0;
+      word-break: break-word;
+    }
+
+    .p-value .achv-lines {
+      gap: 6px;
+    }
+
+
+    .mcard-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .mcard-tag {
+      --tag: var(--accent);
+      font-size: 12px;
+      font-weight: 850;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--tag) 32%, var(--t-border));
+      background: color-mix(in srgb, var(--tag) 12%, color-mix(in srgb, var(--t-panel) 65%, transparent));
+    }
+
+    /* actions */
+    .mcard-actions {
+      margin-top: auto;
+      display: flex;
+      gap: 12px;
+      padding-top: 6px;
+    }
+
+    .mcard-btn {
+      flex: 1;
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-weight: 950;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid var(--t-border);
+      background: transparent;
+      color: var(--t-text);
+      transition: transform .15s ease, border-color .15s ease, background .15s ease, color .15s ease;
+    }
+
+    .mcard-btn.is-disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .mcard-btn.is-disabled:hover {
+      transform: none;
+      background: transparent;
+    }
+
+    .mcard-btn:hover {
+      transform: translateY(-1px);
+      border-color: color-mix(in srgb, var(--accent2) 55%, var(--t-border));
+      background: linear-gradient(135deg,
+          color-mix(in srgb, var(--accent) 12%, transparent),
+          color-mix(in srgb, var(--accent2) 10%, transparent));
+    }
+
+    /* ===== Hover: photo expands to fit full card, but shade stays bottom-only ===== */
+    @media (hover:hover) {
+      .mcard:hover .mcard-media {
+        position: absolute;
+        inset: 0;
+        height: 100%;
+        margin: 0;
+        border-radius: 0;
+      }
+
+      .mcard:hover .mcard-img {
+        transform: scale(1.06);
+        filter: saturate(1.05) contrast(1.05);
+      }
+
+      .mcard:hover .mcard-shade {
+        opacity: 1;
+      }
+
+      /* Make body text readable on photo, but DO NOT darken whole image */
+      .mcard:hover .mcard-body {
+        margin-top: auto;
+        padding: 18px 18px 18px;
+        color: rgba(255, 255, 255, .92);
+      }
+
+      .mcard:hover .mcard-role {
+        color: rgba(255, 255, 255, .78);
+      }
+
+      .mcard:hover .mcard-bio,
+      .mcard:hover .mcard-achv {
+        color: rgba(255, 255, 255, .86);
+      }
+
+      .mcard:hover .mcard-info-row {
+        color: rgba(255, 255, 255, .80);
+      }
+
+      .mcard:hover .mcard-info-value {
+        color: rgba(255, 255, 255, .92);
+      }
+
+      .mcard:hover .mcard-time {
+        color: rgba(255, 255, 255, .82);
+        border-top-color: rgba(255, 255, 255, .18);
+      }
+
+      .mcard:hover .mcard-time-value {
+        color: rgba(255, 255, 255, .92);
+      }
+
+      .mcard:hover .mcard-tag {
+        background: color-mix(in srgb, var(--tag) 20%, rgba(255, 255, 255, .10));
+        border-color: color-mix(in srgb, var(--tag) 40%, rgba(255, 255, 255, .18));
+        color: rgba(255, 255, 255, .92);
+      }
+
+      .mcard:hover .mcard-btn {
+        background: rgba(255, 255, 255, .14);
+        border-color: rgba(255, 255, 255, .18);
+        color: rgba(255, 255, 255, .92);
+        backdrop-filter: blur(10px);
+      }
+
+      .mcard:hover .mcard-btn:hover {
+        background: rgba(255, 255, 255, .20);
+        border-color: rgba(255, 255, 255, .26);
+      }
+    }
   </style>
 </head>
 
 <body>
   <div id="loading-bar"></div>
-
-  <!-- Header: keep same ids so existing theme JS works -->
-  <header class="veo-header">
-    <div class="veo-top">
-      <div class="veo-inner">
-        <a class="veo-logo" href="index.html">
-          <span class="veo-mark">❤</span>
-          <span class="veo-logo-text">The Blouse</span>
-        </a>
-
-        <nav class="veo-nav" aria-label="Primary">
-          <a href="index.html">Home</a>
-          <a href="memb.html" aria-current="page" style="color: var(--purple2);">Team</a>
-        </nav>
-
-        <div class="veo-actions">
-          <button type="button" class="veo-theme-btn" id="ms-theme-btn" aria-label="Chuyển theme">Theme: Dark</button>
-          <a class="veo-cta-btn" href="admin.html" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">
-            <span class="veo-cta-ico">⚙</span>
-            Admin
-          </a>
-        </div>
-      </div>
-    </div>
-  </header>
-
+  <!-- Dynamic Header -->
+  <div id="site-header"></div>
   <main class="content-wrapper" style="position:relative; z-index:1;">
     <section class="page-hero">
       <h1>👥 Thành viên</h1>
-      <p>Trang giới thiệu team — dữ liệu load trực tiếp từ Firebase <code>members</code> (thêm/sửa/xóa bằng <code>admin.html</code>).</p>
-
+      <p>Trang giới thiệu team — dữ liệu load trực tiếp từ Firebase <code>members</code> (thêm/sửa/xóa bằng
+        <code>admin.html</code>).
+      </p>
       <div class="team-controls">
         <div class="search-wrap" role="search">
           <span class="search-ico">⌕</span>
-          <input id="member-search" type="search" placeholder="Tìm theo tên / role / bio…" autocomplete="off" />
+          <input autocomplete="off" id="member-search" placeholder="Tìm theo tên / role / bio…" type="search" />
         </div>
-
-        <div class="chips" id="team-chips" aria-label="Lọc theo role"></div>
+        <div aria-label="Lọc theo role" class="chips" id="team-chips"></div>
       </div>
     </section>
-
     <section aria-label="Danh sách thành viên">
       <div class="loading-state" id="loading-state">Đang tải thành viên…</div>
       <div class="team-grid" id="team-grid"></div>
       <div class="empty-state" id="empty-state">Không tìm thấy thành viên nào khớp bộ lọc hiện tại 😭</div>
     </section>
   </main>
-
   <!-- Modal -->
-  <div class="modal-backdrop" id="member-modal" role="dialog" aria-modal="true" aria-label="Chi tiết thành viên">
+  <div aria-label="Chi tiết thành viên" aria-modal="true" class="modal-backdrop" id="member-modal" role="dialog">
     <div class="modal">
       <div class="modal-head">
         <div class="modal-title" id="modal-title">Thành viên</div>
@@ -436,38 +981,31 @@
       <div class="modal-body" id="modal-body"></div>
     </div>
   </div>
-
-  <!-- Footer (same as index) -->
+  <!-- Footer -->
   <footer class="site-footer">
     <div class="footer-inner">
       <div class="footer-col footer-brand">
         <div class="footer-logo">To @TheBlouse <span aria-hidden="true">♡</span></div>
         <p class="footer-desc">Góc nhỏ để lưu lại hoạt động và những lời chúc gửi tới Viện Huyết học.</p>
-
-        <div class="footer-social" aria-label="Mạng xã hội">
-          <a class="social-btn" href="https://www.facebook.com/theblouse.prj" aria-label="Facebook">
-            <span class="social-ico">f</span><span class="social-text">FACEBOOK</span>
-          </a>
-          <a class="social-btn" href="https://www.instagram.com/blouse_thantien" aria-label="Instagram">
-            <span class="social-ico">◎</span><span class="social-text">INSTAGRAM</span>
-          </a>
+        <div aria-label="Mạng xã hội" class="footer-social">
+          <a aria-label="Facebook" class="social-btn" href="https://www.facebook.com/theblouse.prj"><span
+              class="social-ico">f</span><span class="social-text">FACEBOOK</span></a>
+          <a aria-label="Instagram" class="social-btn" href="https://www.instagram.com/blouse_thantien"><span
+              class="social-ico">◎</span><span class="social-text">INSTAGRAM</span></a>
         </div>
-
         <ul class="footer-contact">
           <li><span class="fc-ico">☎</span><span>037 501 3747</span></li>
           <li><span class="fc-ico">⌂</span><span>Hà Nội</span></li>
           <li><span class="fc-ico">✉</span><a href="mailto:hello@example.com">theblouse.prj@gmail.com</a></li>
         </ul>
       </div>
-
       <div class="footer-col">
         <div class="footer-title">Sản phẩm</div>
         <a class="footer-link" href="index.html#timeline-section">Timeline</a>
         <a class="footer-link" href="index.html#activities-section">Hoạt động</a>
         <a class="footer-link" href="index.html#messages-section">Lời chúc</a>
-        <a class="footer-link" href="memb.html">Thành viên</a>
+        <a class="footer-link" href="index.html#messages-section">Gửi lời nhắn</a>
       </div>
-
       <div class="footer-col">
         <div class="footer-title">Chính sách</div>
         <a class="footer-link" href="#">Hướng dẫn</a>
@@ -475,359 +1013,43 @@
         <a class="footer-link" href="#">Điều khoản sử dụng</a>
         <a class="footer-link" href="#">Liên hệ hỗ trợ</a>
       </div>
-
       <div class="footer-col footer-newsletter" id="newsletter">
         <div class="footer-title">Đăng kí nhận tin</div>
         <p class="footer-sub">Để lại thông tin, tụi mình sẽ cập nhật những tin tức quan trọng.</p>
-
         <form class="footer-form" onsubmit="return false;">
           <label class="footer-field">
             <span>Họ tên</span>
-            <input type="text" placeholder="Tên của bạn" autocomplete="name">
+            <input autocomplete="name" placeholder="Tên của bạn" type="text" />
           </label>
-
           <label class="footer-field">
             <span>Email</span>
-            <input type="email" placeholder="you@email.com" autocomplete="email">
+            <input autocomplete="email" placeholder="you@email.com" type="email" />
           </label>
-
           <button class="footer-submit" type="button">Đăng ký</button>
         </form>
       </div>
     </div>
-
     <div class="footer-bottom">
       <div class="footer-bottom-links">
         <a href="#">GIỚI THIỆU DỰ ÁN</a>
         <span class="dot">|</span>
         <a href="memb.html">THÀNH VIÊN THE BLOUSE</a>
         <span class="dot">|</span>
-        <a href="#">CHI TIẾT HOẠT ĐỘNG</a>
+        <a href="events.html">CHI TIẾT HOẠT ĐỘNG</a>
       </div>
-
       <div class="footer-copy">Copyright © 2023 - 2026 • All rights reserved</div>
-
-      <button class="footer-top" type="button" aria-label="Lên đầu trang">⌃</button>
+      <button aria-label="Lên đầu trang" class="footer-top" type="button">⌃</button>
     </div>
   </footer>
-
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
+  <script src="./members.js"></script>
+  <script src="./common-ui.js"></script>
   <script>
-    // ===== Firebase init (same as index/admin) =====
-    const firebaseConfig = {
-      apiKey: "AIzaSyCKysT8eZ3LJqyi7vCjoqQGIpjgTyt7HYg",
-      authDomain: "loiyeuthuong-5bfab.firebaseapp.com",
-      projectId: "loiyeuthuong-5bfab",
-      storageBucket: "loiyeuthuong-5bfab.firebasestorage.app",
-      messagingSenderId: "544284022045",
-      appId: "1:544284022045:web:22f2eef2ed918d93707df4"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
-    // ===== Utilities =====
-    function escapeHtml(text){
-      const div = document.createElement("div");
-      div.textContent = (text ?? "");
-      return div.innerHTML;
-    }
-
-    function avatarFallback(name){
-      const n = (name || "Member");
-      return "https://ui-avatars.com/api/?background=7C3AED&color=fff&name=" + encodeURIComponent(n);
-    }
-
-    // ===== Members state =====
-    let MEMBERS = [];            // normalized list
-    let q = "";
-    let activeRole = "ALL";
-
-    const grid = document.getElementById("team-grid");
-    const chips = document.getElementById("team-chips");
-    const empty = document.getElementById("empty-state");
-    const loading = document.getElementById("loading-state");
-    const search = document.getElementById("member-search");
-
-    function normalizeMember(doc){
-      const d = doc.data() || {};
-      const links = {
-        facebook: d.facebook || "",
-        instagram: d.instagram || ""
-      };
-
-      // tags optional: if admin doesn't set tags, we derive from role split by "/" or ","
-      let tags = Array.isArray(d.tags) ? d.tags : [];
-      if (!tags.length && typeof d.role === "string" && d.role.trim()){
-        tags = d.role.split(/[\/,|]/g).map(s => s.trim()).filter(Boolean).slice(0, 3);
-      }
-
-      return {
-        id: doc.id,
-        name: (d.name || "").trim() || "Chưa có tên",
-        role: (d.role || "").trim() || "Chưa cập nhật",
-        avatar: (d.avatar || "").trim() || avatarFallback(d.name),
-        bio: (d.bio || "").trim() || "Chưa có mô tả.",
-        active: (d.active !== false),
-        order: Number.isFinite(d.order) ? d.order : (parseInt(d.order, 10) || 9999),
-        links,
-        tags
-      };
-    }
-
-    // ===== Filter / render =====
-    function matches(member){
-      if (!member.active) return false;
-
-      const roleOk = (activeRole === "ALL") || (member.role === activeRole);
-      if (!roleOk) return false;
-
-      if (!q) return true;
-
-      const hay = (member.name + " " + member.role + " " + member.bio + " " + (member.tags || []).join(" "))
-        .toLowerCase();
-
-      return hay.includes(q);
-    }
-
-    function el(tag, attrs = {}, children = []){
-      const node = document.createElement(tag);
-      for (const [k, v] of Object.entries(attrs)){
-        if (k === "class") node.className = v;
-        else if (k === "html") node.innerHTML = v;
-        else if (k.startsWith("on") && typeof v === "function") node.addEventListener(k.slice(2), v);
-        else node.setAttribute(k, v);
-      }
-      children.forEach(c => node.appendChild(c));
-      return node;
-    }
-
-    function card(member){
-      const a = el("a", { class: "profile-card", href: "#", "data-id": member.id });
-      a.addEventListener("click", (e) => { e.preventDefault(); openModal(member); });
-
-      const top = el("div", { class: "profile-top" });
-      top.appendChild(el("img", { class: "avatar", src: member.avatar, alt: member.name, loading: "lazy" }));
-      const meta = el("div");
-      meta.appendChild(el("p", { class: "profile-name", html: escapeHtml(member.name) }));
-      meta.appendChild(el("p", { class: "profile-role", html: escapeHtml(member.role) }));
-      top.appendChild(meta);
-
-      const body = el("div", { class: "profile-body" });
-      body.appendChild(el("div", { class: "profile-bio", html: escapeHtml(member.bio) }));
-
-      const badges = el("div", { class: "badges" });
-      (member.tags || []).slice(0, 3).forEach(t => badges.appendChild(el("span", { class: "badge", html: escapeHtml(t) })));
-      body.appendChild(badges);
-
-      const actions = el("div", { class: "profile-actions" });
-
-      const btn1 = el("button", { class: "icon-btn", type: "button" });
-      btn1.innerHTML = "<span>👤</span> Xem";
-      btn1.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); openModal(member); });
-
-      const btn2 = el("button", { class: "icon-btn", type: "button" });
-      btn2.innerHTML = "<span>↗</span> Social";
-      btn2.addEventListener("click", (e) => {
-        e.preventDefault(); e.stopPropagation();
-        const link = (member.links && (member.links.instagram || member.links.facebook)) || "";
-        if (!link) return openModal(member);
-        window.open(link, "_blank", "noopener");
-      });
-
-      actions.appendChild(btn1);
-      actions.appendChild(btn2);
-
-      a.appendChild(top);
-      a.appendChild(body);
-      a.appendChild(actions);
-      return a;
-    }
-
-    function renderGrid(){
-      grid.innerHTML = "";
-      const list = MEMBERS.filter(matches);
-      if (!list.length){
-        empty.style.display = "block";
-      } else {
-        empty.style.display = "none";
-        list.forEach(m => grid.appendChild(card(m)));
-      }
-    }
-
-    function setActiveChip(key){
-      activeRole = key;
-      [...chips.querySelectorAll(".chip")].forEach(c => c.classList.toggle("is-active", c.dataset.key === key));
-      renderGrid();
-    }
-
-    function renderChips(){
-      chips.innerHTML = "";
-      const roles = [...new Set(MEMBERS.filter(m => m.active).map(m => m.role))].sort((a,b)=>a.localeCompare(b,'vi'));
-      const allBtn = el("button", { class: "chip is-active", type: "button", "data-key": "ALL" });
-      allBtn.textContent = "Tất cả";
-      allBtn.addEventListener("click", () => setActiveChip("ALL"));
-      chips.appendChild(allBtn);
-
-      roles.forEach(r => {
-        const b = el("button", { class: "chip", type: "button", "data-key": r });
-        b.textContent = r;
-        b.addEventListener("click", () => setActiveChip(r));
-        chips.appendChild(b);
-      });
-    }
-
-    // ===== Modal =====
-    function openModal(member){
-      const modal = document.getElementById("member-modal");
-      const title = document.getElementById("modal-title");
-      const body = document.getElementById("modal-body");
-
-      title.textContent = member.name;
-
-      const fb = member.links.facebook ? `<a href="${escapeHtml(member.links.facebook)}" target="_blank" rel="noopener">${escapeHtml(member.links.facebook)}</a>` : "<span style='opacity:.7'>(không có)</span>";
-      const ig = member.links.instagram ? `<a href="${escapeHtml(member.links.instagram)}" target="_blank" rel="noopener">${escapeHtml(member.links.instagram)}</a>` : "<span style='opacity:.7'>(không có)</span>";
-
-      body.innerHTML = `
-        <div class="profile-sheet">
-          <div class="p-left">
-            <div class="p-avatar-wrap">
-              <img class="p-avatar" src="${escapeHtml(member.avatar)}" alt="${escapeHtml(member.name)}" />
-            </div>
-          </div>
-
-          <div class="p-right">
-            <div class="p-hello">THE BLOUSE</div>
-            <div class="p-name">${escapeHtml(member.name)}</div>
-            <div style="font-weight:900; color: var(--t-muted);">${escapeHtml(member.role)}</div>
-
-            <div class="p-divider"></div>
-
-            <div class="p-info">
-              <div class="p-label">Bio</div>
-              <div class="p-value">${escapeHtml(member.bio)}</div>
-
-              <div class="p-label">Facebook</div>
-              <div class="p-value">${fb}</div>
-
-              <div class="p-label">Instagram</div>
-              <div class="p-value">${ig}</div>
-
-              <div class="p-label">Tags</div>
-              <div class="p-value">${(member.tags||[]).map(t => `<span class="badge" style="display:inline-flex;margin:0 6px 6px 0;">${escapeHtml(t)}</span>`).join("") || "<span style='opacity:.7'>(không có)</span>"}</div>
-            </div>
-
-            <div class="p-quote">“Cảm ơn bạn đã ghé xem team tụi mình.”</div>
-
-            <div class="p-actions">
-              ${member.links.instagram ? `<a class="p-btn primary" href="${escapeHtml(member.links.instagram)}" target="_blank" rel="noopener"><span>◎</span> Instagram</a>` : ""}
-              ${member.links.facebook ? `<a class="p-btn secondary" href="${escapeHtml(member.links.facebook)}" target="_blank" rel="noopener"><span>f</span> Facebook</a>` : ""}
-              <button class="p-btn ghost" type="button" onclick="(function(){document.getElementById('modal-close').click();})()">
-                <span>✕</span> Đóng
-              </button>
-            </div>
-          </div>
-        </div>
-      `;
-
-      modal.style.display = "flex";
-      document.body.style.overflow = "hidden";
-    }
-
-    function closeModal(){
-      const modal = document.getElementById("member-modal");
-      modal.style.display = "none";
-      document.body.style.overflow = "";
-    }
-
-    document.getElementById("modal-close").addEventListener("click", closeModal);
-    document.getElementById("member-modal").addEventListener("click", (e) => { if (e.target.id === "member-modal") closeModal(); });
-    window.addEventListener("keydown", (e) => {
-      const modal = document.getElementById("member-modal");
-      if (e.key === "Escape" && modal.style.display === "flex") closeModal();
-    });
-
-    // ===== Search =====
-    search.addEventListener("input", (e) => {
-      q = (e.target.value || "").trim().toLowerCase();
-      renderGrid();
-    });
-
-    // ===== Load from Firestore =====
-    function loadMembers(){
-      loading.style.display = "block";
-      db.collection("members")
-        .orderBy("order", "asc")
-        .onSnapshot((snapshot) => {
-          MEMBERS = snapshot.docs.map(normalizeMember);
-          loading.style.display = "none";
-          renderChips();
-          // keep currently selected chip if still exists; else reset
-          const roles = new Set(MEMBERS.map(m => m.role));
-          if (activeRole !== "ALL" && !roles.has(activeRole)) activeRole = "ALL";
-          setActiveChip(activeRole);
-        }, (err) => {
-          loading.style.display = "none";
-          empty.style.display = "block";
-          empty.textContent = "Lỗi tải dữ liệu members: " + (err && err.message ? err.message : err);
-        });
-    }
-
-    // ===== Theme + footer behaviors (copied from index to keep consistent) =====
-    (function(){
-      const THEMES = [
-        { key: "light", label: "Light" },
-        { key: "dim-dark", label: "Dark" }
-      ];
-      const STORAGE_KEY = "tb_theme";
-      function normalizeTheme(key){
-        if (!key) return "dim-dark";
-        if (key === "grey" || key === "dark") return "dim-dark";
-        if (key !== "light" && key !== "dim-dark") return "dim-dark";
-        return key;
-      }
-      function applyTheme(key){
-        const k = normalizeTheme(key);
-        document.body.setAttribute("data-theme", k);
-        const btn = document.getElementById("ms-theme-btn");
-        const t = THEMES.find(x => x.key === k) || THEMES[1];
-        if (btn) btn.textContent = "Theme: " + t.label;
-      }
-      function toggleTheme(){
-        const current = normalizeTheme(document.body.getAttribute("data-theme") || "dim-dark");
-        const next = (current === "dim-dark") ? "light" : "dim-dark";
-        localStorage.setItem(STORAGE_KEY, next);
-        applyTheme(next);
-      }
-      document.addEventListener("DOMContentLoaded", function(){
-        const saved = normalizeTheme(localStorage.getItem(STORAGE_KEY));
-        applyTheme(saved);
-        const btn = document.getElementById("ms-theme-btn");
-        if (btn) btn.addEventListener("click", toggleTheme);
-      });
-    })();
-
-    // Loading bar
-    window.addEventListener('load', () => {
-      const loadingBar = document.getElementById('loading-bar');
-      if (!loadingBar) return;
-      setTimeout(() => {
-        loadingBar.classList.add('loading-complete');
-        setTimeout(() => loadingBar.remove(), 500);
-      }, 400);
-    });
-
-    // Footer back-to-top
-    (function(){
-      const btn = document.querySelector('.footer-top');
-      if(!btn) return;
-      btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-    })();
-
     // Kick off
     loadMembers();
   </script>
 </body>
+
 </html>
