@@ -1,0 +1,138 @@
+543:         .member-item,
+561:             .member-item,
+569:         .member-item:hover,
+579:         .member-item img,
+595:             .member-item img,
+603:         /* Specific fix for member images if they are vertical portraits */
+604:         .member-item img.p-avatar {
+685:         #member-form,
+873:                 <button class="menu-item" data-target="members-section">👥 Thành viên</button>
+875:                 <button class="menu-item" data-target="quotes-section">💬 Quotes</button>
+1015:             <!-- 👥 MEMBERS SECTION -->
+1016:             <div id="members-section" class="admin-section">
+1020:                         <button class="btn btn-success btn-small" onclick="showAddMemberForm()">+ Thêm thành
+1024:                     <div id="member-form">
+1025:                         <h3 id="member-form-title">Thêm thành viên mới</h3>
+1026:                         <div class="form-group"><label>Họ tên *</label><input type="text" id="member-name"
+1028:                         <div class="form-group"><label>Vai trò *</label><input type="text" id="member-role"
+1030:                         <div class="form-group"><label>Ảnh đại diện (URL)</label><input type="text" id="member-avatar"
+1032:                         <div class="form-group"><label>Giới thiệu ngắn</label><textarea id="member-bio" rows="3"
+1034:                         <div class="form-group"><label>Email (optional)</label><input type="email" id="member-email"
+1036:                         <div class="form-group"><label>Trường (optional)</label><input type="text" id="member-school"
+1038:                         <div class="form-group"><label>Thành tích</label><textarea id="member-achievements" rows="3"
+1041:                                 id="member-facebook" placeholder="https://facebook.com/..." /></div>
+1043:                                 id="member-instagram" placeholder="https://instagram.com/..." /></div>
+1044:                         <div class="form-group"><label>Thời gian hoạt động (member)</label><input type="text"
+1045:                                 id="member-activeTime" placeholder="Ví dụ: 2024 – 2026"></div>
+1048:                             <div id="member-tags-wrap" class="tag-picker">
+1055:                         <div class="form-group"><label>Thứ tự hiển thị</label><input type="number" id="member-order"
+1058:                             <input type="checkbox" id="member-active" checked>
+1059:                             <label for="member-active">Hiển thị trên trang thành viên</label>
+1061:                         <input type="hidden" id="member-id">
+1062:                         <button class="btn btn-primary" onclick="saveMember()">💾 Lưu</button>
+1063:                         <button class="btn btn-warning" onclick="hideMemberForm()">❌ Hủy</button>
+1066:                     <div class="message-list" id="member-list">
+1110:             <!-- 💬 QUOTES SECTION -->
+1111:             <div id="quotes-section" class="admin-section">
+1114:                         <span class="section-title">💬 Quotes (Members modal)</span>
+1117:                     <div id="quotes-form"
+1119:                         <h3 style="margin-bottom:10px;">Quote hiển thị trong profile member</h3>
+1121:                             Mỗi dòng = 1 quote. Khi mở modal member sẽ random 1 câu.
+1125:                             <label>Danh sách quotes</label>
+1126:                             <textarea id="team-quotes" rows="6" placeholder="Ví dụ:
+1132:                             <button class="btn btn-primary btn-small" onclick="saveTeamQuotes()">💾 Lưu</button>
+1133:                             <span style="font-size:13px; color:#666;">Số quote: <b id="team-quotes-count">0</b></span>
+1134:                             <span style="font-size:12px; color:#999;">Field: settings/ui.teamQuotes</span>
+1188:                             <!-- Stat 4: Members -->
+1329:         let editingMemberId = null;
+1345:                 loadMembers();
+1346:                 loadMembers();
+1348:                 loadTeamQuotes();
+1822:         function renderMemberTagOptions(selected) {
+1823:             const wrap = document.getElementById('member-tags-wrap');
+1853:         function getSelectedMemberTags() {
+1854:             const wrap = document.getElementById('member-tags-wrap');
+1863:                 renderMemberTagOptions(getSelectedMemberTags());
+1880:         // ===== TEAM QUOTES (settings/ui.teamQuotes) =====
+1881:         function loadTeamQuotes() {
+1882:             const textarea = document.getElementById('team-quotes');
+1883:             const countEl = document.getElementById('team-quotes-count');
+1888:                 let raw = data.teamQuotes ?? data.memberQuotes ?? data.teamQuote ?? data.memberQuote ?? data.quote;
+1898:                 showNotification('Lỗi tải quotes: ' + (err.message || err), 'error');
+1970:         async function saveTeamQuotes() {
+1971:             const textarea = document.getElementById('team-quotes');
+1972:             const countEl = document.getElementById('team-quotes-count');
+1978:                     teamQuotes: lines,
+1983:                 showNotification('Đã lưu quotes!', 'success');
+1985:                 showNotification('Lỗi lưu quotes: ' + (e.message || e), 'error');
+1989:         function showAddMemberForm() {
+1990:             document.getElementById('member-form').style.display = 'block';
+1991:             document.getElementById('member-form-title').textContent = 'Thêm thành viên mới';
+1992:             document.getElementById('member-name').value = '';
+1993:             document.getElementById('member-role').value = '';
+1994:             document.getElementById('member-avatar').value = '';
+1995:             document.getElementById('member-bio').value = '';
+1996:             const em = document.getElementById('member-email'); if (em) em.value = '';
+1997:             const sch = document.getElementById('member-school'); if (sch) sch.value = '';
+1998:             const ach = document.getElementById('member-achievements'); if (ach) ach.value = '';
+1999:             document.getElementById('member-facebook').value = '';
+2000:             document.getElementById('member-instagram').value = '';
+2001:             const at = document.getElementById('member-activeTime'); if (at) at.value = '';
+2002:             renderMemberTagOptions([]);
+2003:             document.getElementById('member-order').value = '1';
+2004:             document.getElementById('member-active').checked = true;
+2005:             document.getElementById('member-id').value = '';
+2006:             editingMemberId = null;
+2009:         function hideMemberForm() {
+2010:             document.getElementById('member-form').style.display = 'none';
+2013:         async function saveMember() {
+2014:             const name = document.getElementById('member-name').value.trim();
+2015:             const role = document.getElementById('member-role').value.trim();
+2016:             const avatar = document.getElementById('member-avatar').value.trim();
+2017:             const bio = document.getElementById('member-bio').value.trim();
+2018:             const email = (document.getElementById('member-email')?.value || '').trim();
+2019:             const school = (document.getElementById('member-school')?.value || '').trim();
+2020:             const achievements = (document.getElementById('member-achievements')?.value || '').trim();
+2021:             const facebook = document.getElementById('member-facebook').value.trim();
+2022:             const instagram = document.getElementById('member-instagram').value.trim();
+2023:             const activeTime = (document.getElementById('member-activeTime')?.value || '').trim();
+2024:             const tags = getSelectedMemberTags();
+2025:             const order = parseInt(document.getElementById('member-order').value) || 1;
+2026:             const active = document.getElementById('member-active').checked;
+2033:             const memberData = { name, role, avatar, bio, email, school, achievements, facebook, instagram, order, active, tags, activeTime, updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
+2036:                 if (editingMemberId) {
+2037:                     await db.collection('members').doc(editingMemberId).update(memberData);
+2040:                     memberData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+2041:                     await db.collection('members').add(memberData);
+2044:                 hideMemberForm();
+2045:                 loadMembers();
+2051:         async function editMember(id) {
+2052:             const doc = await db.collection('members').doc(id).get();
+2055:                 document.getElementById('member-form').style.display = 'block';
+2056:                 document.getElementById('member-form-title').textContent = 'Chỉnh sửa thành viên';
+2057:                 document.getElementById('member-name').value = data.name || '';
+2058:                 document.getElementById('member-role').value = data.role || '';
+2059:                 document.getElementById('member-avatar').value = data.avatar || '';
+2060:                 document.getElementById('member-bio').value = data.bio || '';
+2061:                 const em = document.getElementById('member-email'); if (em) em.value = data.email || '';
+2062:                 const sch = document.getElementById('member-school'); if (sch) sch.value = data.school || '';
+2063:                 const ach = document.getElementById('member-achievements'); if (ach) ach.value = data.achievements || '';
+2064:                 document.getElementById('member-facebook').value = data.facebook || '';
+2065:                 document.getElementById('member-instagram').value = data.instagram || '';
+2066:                 const at = document.getElementById('member-activeTime'); if (at) at.value = data.activeTime || '';
+2067:                 renderMemberTagOptions(Array.isArray(data.tags) ? data.tags : []);
+2068:                 document.getElementById('member-order').value = data.order || 1;
+2069:                 document.getElementById('member-active').checked = data.active !== false;
+2070:                 document.getElementById('member-id').value = id;
+2071:                 editingMemberId = id;
+2075:         async function deleteMember(id) {
+2078:                 await db.collection('members').doc(id).delete();
+2080:                 loadMembers();
+2086:         function loadMembers() {
+2087:             db.collection('members').orderBy('order', 'asc').onSnapshot(snapshot => {
+2088:                 const container = document.getElementById('member-list');
+2098:                         <div class="member-item">
+2099:                             <img src="${data.avatar || 'https://ui-avatars.com/api/?background=e74c3c&color=fff&name=' + encodeURIComponent(data.name || 'Member')}" alt="${data.name || 'Member'}">
+2108:                                 <button class="btn btn-warning btn-small" onclick="editMember('${doc.id}')">✏️ Sửa</button>
+2109:                                 <button class="btn btn-danger btn-small" onclick="deleteMember('${doc.id}')">🗑️ Xóa</button>
+2278:                 // Escape quotes

@@ -15,13 +15,29 @@
 
   function applyTheme(key) {
     var k = normalizeTheme(key);
-    document.body.setAttribute("data-theme", k);
+    var isJourney = location.pathname.toLowerCase().indexOf("origin.html") !== -1;
+
+    // Page "Hành trình" is always Dark
+    if (isJourney) {
+      k = "dim-dark";
+    }
+
+    // Apply to html AND body for best compatibility
+    document.documentElement.setAttribute("data-theme", k);
+    if (document.body) {
+      document.body.setAttribute("data-theme", k);
+    }
+
+    // Update theme button text based on global saved preference
     var btn = document.getElementById("ms-theme-btn");
-    if (btn) btn.textContent = "Theme: " + (k === "light" ? "Light" : "Dark");
+    if (btn) {
+      var savedK = normalizeTheme(localStorage.getItem(STORAGE_KEY));
+      btn.textContent = "Theme: " + (savedK === "light" ? "Light" : "Dark");
+    }
   }
 
   function toggleTheme() {
-    var current = normalizeTheme(document.body.getAttribute("data-theme") || "dim-dark");
+    var current = normalizeTheme(localStorage.getItem(STORAGE_KEY));
     var next = (current === "dim-dark") ? "light" : "dim-dark";
     localStorage.setItem(STORAGE_KEY, next);
     applyTheme(next);
@@ -33,13 +49,6 @@
     if (btn.dataset.tbBound === "1") return;
     btn.dataset.tbBound = "1";
     btn.addEventListener("click", toggleTheme);
-
-    // Sync theme across tabs
-    window.addEventListener("storage", function (e) {
-      if (e.key === STORAGE_KEY) {
-        applyTheme(e.newValue);
-      }
-    });
   }
 
   function bindHeaderInteractions() {
@@ -156,7 +165,7 @@
     try { url = new URL(fileName, document.baseURI).toString(); }
     catch (e) { url = fileName; }
 
-    return fetch(url, { cache: "no-store" })
+    return fetch(url, { cache: "default" })
       .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.text(); })
       .then(function (html) {
         host.innerHTML = html;
@@ -239,9 +248,21 @@
     + '<div class="footer-copy">© The Blouse</div></div></footer>';
 
   function initAll() {
-    applyTheme(normalizeTheme(localStorage.getItem(STORAGE_KEY)));
+    // 1. Initial application (before partials) based on localStorage
+    var saved = normalizeTheme(localStorage.getItem(STORAGE_KEY));
+    applyTheme(saved);
 
-    // Inject partials if placeholders exist
+    // 2. Global Sync Listener (Crucial for other tabs)
+    window.removeEventListener("storage", handleStorageEvent);
+    window.addEventListener("storage", handleStorageEvent);
+
+    function handleStorageEvent(e) {
+      if (e.key === STORAGE_KEY) {
+        applyTheme(e.newValue);
+      }
+    }
+
+    // 3. Inject partials if placeholders exist
     Promise.all([
       injectPartial("site-header", "header.html", FALLBACK_HEADER),
       injectPartial("site-footer", "footer.html", FALLBACK_FOOTER)
@@ -251,11 +272,24 @@
       highlightActiveNav();
       initThemeChooser();
       bindNewsletter();
+
+      // Re-apply theme to ensure injected elements (like button text) are correct
+      applyTheme(localStorage.getItem(STORAGE_KEY));
+
       document.dispatchEvent(new CustomEvent("tb:partials:loaded"));
     });
   }
 
   onReady(initAll);
+
+  // Apply theme IMMEDIATELY (to documentElement) before even DOM is ready
+  // to avoid "flash" and ensure consistency.
+  try {
+    var saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      document.documentElement.setAttribute("data-theme", normalizeTheme(saved));
+    }
+  } catch (e) { /* ignore */ }
 
   // Expose
   window.TB = window.TB || {};

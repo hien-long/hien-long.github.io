@@ -1,0 +1,72 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===== MESSAGES COLLECTION =====
+    match /messages/{messageId} {
+      allow read: if true;
+      allow create: if true;
+      allow update: if request.resource.data.likes is number && 
+                    (request.resource.data.likes == resource.data.likes + 1 || 
+                     request.resource.data.likes == resource.data.likes - 1);
+      allow delete: if request.auth != null;
+      allow update: if request.auth != null && 
+                    request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'likes']);
+    }
+    
+    // ===== GALLERY COLLECTION =====
+    match /gallery/{galleryId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // ===== PROGRAMS COLLECTION =====
+    match /programs/{programId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // ===== BANNERS COLLECTION =====
+    match /banners/{bannerId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // ===== TIMELINE COLLECTION =====
+    match /timeline/{timelineId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ===== JOURNEY COLLECTION =====
+    match /journey/{journeyId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ===== TAGS COLLECTION =====
+    match /tags/{tagId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ===== SETTINGS (UI) =====
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ===== MEMBERS COLLECTION =====
+    match /members/{memberId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ===== NEWSLETTER COLLECTION =====
+    match /newsletter/{newsletterId} {
+      allow read: if request.auth != null;
+      allow create: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}

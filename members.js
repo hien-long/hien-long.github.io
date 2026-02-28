@@ -17,6 +17,7 @@
   const db = firebase.firestore();
 
   // ===== Utils =====
+
   function escapeHtml(text) {
     const div = document.createElement("div");
     div.textContent = (text ?? "");
@@ -69,9 +70,7 @@
   let q = "";
   let activeTag = "ALL";
 
-  // Quotes (global for member modal)
-  let TEAM_QUOTES = ["Cảm ơn bạn đã ghé xem team tụi mình."];
-
+  
   function normalizeMember(doc) {
     const d = doc.data() || {};
     const name = (d.name || "").trim() || "Chưa có tên";
@@ -79,6 +78,7 @@
     const avatar = (d.avatar || "").trim() || avatarFallback(name);
     const bio = (d.bio || "").trim() || "";
     const achievements = (d.achievements || d.achievement || "").trim() || "";
+    const quotes = (d.quotes || "").toString().trim();
     const email = (d.email || "").toString().trim();
     const school = (d.school || d.university || d.truong || "").toString().trim();
     const links = {
@@ -95,6 +95,7 @@
       avatar,
       bio,
       achievements,
+      quotes,
       email,
       school,
       links,
@@ -125,13 +126,13 @@
     return hay.includes(q);
   }
 
-  
-  function tagInfo(key){
+
+  function tagInfo(key) {
     const t = TAGS.get(key);
     if (t && (t.active !== false)) return t;
     return { role: key, color: '' };
   }
-// ===== Render chips =====
+  // ===== Render chips =====
   function setActiveChip(key) {
     activeTag = key;
     [...chips.querySelectorAll(".chip")].forEach(c => c.classList.toggle("is-active", c.dataset.key === key));
@@ -154,11 +155,11 @@
     allBtn.addEventListener("click", () => setActiveChip("ALL"));
     chips.appendChild(allBtn);
 
-    keys.sort((a,b)=>{
+    keys.sort((a, b) => {
       const ta = TAGS.get(a);
       const tb = TAGS.get(b);
-      const oa = ta ? (parseInt(ta.order,10) || 9999) : 9999;
-      const ob = tb ? (parseInt(tb.order,10) || 9999) : 9999;
+      const oa = ta ? (parseInt(ta.order, 10) || 9999) : 9999;
+      const ob = tb ? (parseInt(tb.order, 10) || 9999) : 9999;
       if (oa !== ob) return oa - ob;
       const la = (ta && ta.role) ? ta.role : a;
       const lb = (tb && tb.role) ? tb.role : b;
@@ -215,7 +216,7 @@
 
     // Active time under achievements (kept in the same info block so it doesn't look detached)
     const timeVal = member.activeTime
-      ? escapeHtml(member.activeTime)
+      ? member.activeTime
       : `<span class="mcard-muted">(chưa cập nhật)</span>`;
     rows.push(`<div class="mcard-info-row"><span class="mcard-info-label">Thời gian</span><div class="mcard-info-value">${timeVal}</div></div>`);
 
@@ -232,7 +233,7 @@
       ${infoBlock}
       ${(member.tags && member.tags.length) ? `
         <div class="mcard-tags">
-          ${member.tags.slice(0, 3).map(t => { const info = tagInfo(t); const style = info.color ? ` style=\"--tag:${escapeHtml(info.color)}\"` : ''; return `<span class=\"mcard-tag\"${style}>${escapeHtml(info.role)}</span>`; }).join("")}
+          ${member.tags.slice(0, 3).map(t => { const info = tagInfo(t); const style = info.color ? ` style=\"--tag:${info.color}\"` : ''; return `<span class=\"mcard-tag\"${style}>${escapeHtml(info.role)}</span>`; }).join("")}
         </div>` : ""}
       <div class="mcard-actions">
         <button type="button" class="mcard-btn ghost" data-act="view"><span>👤</span> Xem</button>
@@ -266,12 +267,12 @@
     if (!grid) return;
     grid.innerHTML = "";
 
-    const list = MEMBERS.filter(matches).sort((a,b)=>{
+    const list = MEMBERS.filter(matches).sort((a, b) => {
       const ap = a.pinned ? 1 : 0;
       const bp = b.pinned ? 1 : 0;
       if (bp !== ap) return bp - ap;
-      if ((a.order||0) !== (b.order||0)) return (a.order||0) - (b.order||0);
-      return (a.name||"").localeCompare(b.name||"", "vi");
+      if ((a.order || 0) !== (b.order || 0)) return (a.order || 0) - (b.order || 0);
+      return (a.name || "").localeCompare(b.name || "", "vi");
     });
     if (!list.length) {
       empty && (empty.style.display = "block");
@@ -281,11 +282,18 @@
     }
   }
 
+  
+  function pickMemberQuote(text) {
+    if (!text) return "";
+    const lines = text.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+    if (!lines.length) return "";
+    return lines[Math.floor(Math.random() * lines.length)];
+  }
   // ===== Modal =====
   function openModal(member) {
     if (!modal) return;
     modalTitle.textContent = member.name;
-    const quote = pickQuote();
+    const quote = pickMemberQuote(member.quotes);
 
     modalBody.innerHTML = `
       <div class="profile-sheet">
@@ -298,7 +306,7 @@
         <div class="p-right">
           <div class="p-hello">THE BLOUSE</div>
           <div class="p-name">${escapeHtml(member.name)}</div>
-          <div style="font-weight:900; color: var(--t-muted);">${escapeHtml(member.role)}</div>
+          <div style="font-weight:600; color: var(--t-muted);">${escapeHtml(member.role)}</div>
 
           <div class="p-divider"></div>
 
@@ -319,11 +327,10 @@
             <div class="p-label">Thành tích</div>
             <div class="p-value">${member.achievements ? formatAchievements(member.achievements) : "<span style='opacity:.7'>(chưa cập nhật)</span>"}</div>
             <div class="p-label">Tags</div>
-            <div class="p-value">${
-              (member.tags || []).length
-                ? (member.tags || []).map(t => { const info = tagInfo(t); const c = info.color || '#7C3AED'; return `<span class="badge" style="display:inline-flex;margin:0 6px 6px 0; border-color:${escapeHtml(c)}55; background: ${escapeHtml(c)}1A;">${escapeHtml(info.role)}</span>`; }).join("")
-                : "<span style='opacity:.7'>(không có)</span>"
-            }</div>
+            <div class="p-value">${(member.tags || []).length
+        ? (member.tags || []).map(t => { const info = tagInfo(t); const c = info.color || '#7C3AED'; return `<span class="badge" style="display:inline-flex;margin:0 6px 6px 0; border-color:${escapeHtml(c)}55; background: ${escapeHtml(c)}1A;">${escapeHtml(info.role)}</span>`; }).join("")
+        : "<span style='opacity:.7'>(không có)</span>"
+      }</div>
 
             <div class="p-label">Thời gian hoạt động</div>
             <div class="p-value">${member.activeTime ? escapeHtml(member.activeTime) : "<span style='opacity:.7'>(chưa cập nhật)</span>"}</div>
@@ -366,12 +373,10 @@
   }
 
 
-  
 
-  
   // ===== Quotes (settings/ui.teamQuotes) =====
-  function loadTeamQuotes(){
-    db.collection("settings").doc("ui").onSnapshot((doc)=>{
+  function loadTeamQuotes() {
+    db.collection("settings").doc("ui").onSnapshot((doc) => {
       if (!doc || !doc.exists) return;
       const d = doc.data() || {};
       let raw = (d.teamQuotes ?? d.memberQuotes ?? d.teamQuote ?? d.memberQuote ?? d.quote);
@@ -379,19 +384,19 @@
       if (!Array.isArray(raw)) return;
       const cleaned = raw.map(x => (x ?? "").toString().trim()).filter(Boolean);
       if (cleaned.length) TEAM_QUOTES = cleaned;
-    }, ()=>{/* ignore */});
+    }, () => {/* ignore */ });
   }
 
-  function pickQuote(){
+  function pickQuote() {
     const list = Array.isArray(TEAM_QUOTES) ? TEAM_QUOTES.filter(Boolean) : [];
     if (!list.length) return "";
     return list[Math.floor(Math.random() * list.length)];
   }
 
-// ===== Load tags (role badges) =====
-  function loadTags(){
+  // ===== Load tags (role badges) =====
+  function loadTags() {
     db.collection("tags").orderBy("order", "asc")
-      .onSnapshot((snap)=>{
+      .onSnapshot((snap) => {
         const m = new Map();
         snap.forEach(doc => {
           const d = doc.data() || {};
@@ -406,7 +411,7 @@
         // keep activeTag if still exists
         renderChips();
         renderGrid();
-      }, ()=>{/* ignore */});
+      }, () => {/* ignore */ });
   }
 
   // ===== Load from Firestore =====
@@ -434,5 +439,5 @@
       });
   }
 
-  document.addEventListener("DOMContentLoaded", () => { loadTeamQuotes(); loadTags(); loadMembers(); });
+  document.addEventListener("DOMContentLoaded", () => { loadTags(); loadMembers(); });
 })();

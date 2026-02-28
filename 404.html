@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Không tìm thấy trang | The Blouse</title>
+    <!-- Phông chữ Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            color: #1e293b;
+        }
+
+        /* ===== BACKGROUND ẢO DIỆU ===== */
+        .bg-shape {
+            position: absolute;
+            filter: blur(80px);
+            z-index: -1;
+            animation: float 10s infinite ease-in-out alternate;
+            opacity: 0.6;
+        }
+
+        .shape-1 {
+            width: 450px;
+            height: 450px;
+            background: #fecdd3;
+            /* Soft Pink / Red */
+            top: -100px;
+            left: -150px;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+        }
+
+        .shape-2 {
+            width: 500px;
+            height: 500px;
+            background: #bfdbfe;
+            /* Soft Blue */
+            bottom: -150px;
+            right: -100px;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            100% {
+                transform: translateY(50px) rotate(20deg);
+            }
+        }
+
+        /* ===== CARD KÍNH MỜ (GLASSMORPHISM) ===== */
+        .container {
+            text-align: center;
+            padding: 50px 40px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 36px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* ===== BIG 404 NUMBER ===== */
+        .error-code {
+            font-size: 14rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin: 0;
+            background: linear-gradient(135deg, #e74c3c, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            display: inline-block;
+            letter-spacing: -0.05em;
+        }
+
+        .error-code-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        /* Hình quả tim đập ở giữa thay cho số 0 */
+        .heart-beat {
+            font-size: 5rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -webkit-text-fill-color: initial;
+            animation: heartbeat 1.5s infinite;
+            filter: drop-shadow(0 10px 10px rgba(231, 76, 60, 0.3));
+        }
+
+        @keyframes heartbeat {
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            10%,
+            25% {
+                transform: translate(-50%, -50%) scale(1.15);
+            }
+
+            15% {
+                transform: translate(-50%, -50%) scale(0.95);
+            }
+        }
+
+        /* ===== TYPOGRAPHY ===== */
+        .title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: #0f172a;
+            letter-spacing: -0.02em;
+        }
+
+        .desc {
+            font-size: 1.1rem;
+            color: #64748b;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            font-weight: 500;
+            padding: 0 10px;
+        }
+
+        /* ===== GRADIENT BUTTON ===== */
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 40px;
+            background: linear-gradient(135deg, #e74c3c, #f43f5e);
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            box-shadow: 0 15px 30px -5px rgba(231, 76, 60, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-home::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: skewX(-20deg);
+            transition: all 0.6s ease;
+        }
+
+        .btn-home:hover::before {
+            left: 150%;
+        }
+
+        .btn-home:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 35px -5px rgba(231, 76, 60, 0.5);
+        }
+
+        .btn-home svg {
+            width: 22px;
+            height: 22px;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-home:hover svg {
+            transform: translateX(-4px);
+        }
+
+        /* ===== FLOATING ICONS (Y TẾ & TÌNH NGUYỆN) ===== */
+        .floater {
+            position: absolute;
+            font-size: 2.2rem;
+            animation: float-icon 4s infinite ease-in-out alternate;
+            opacity: 0.5;
+            z-index: -1;
+            user-select: none;
+            filter: grayscale(20%);
+        }
+
+        .f1 {
+            top: -25px;
+            left: 10px;
+            animation-delay: 0s;
+            transform: rotate(-15deg);
+        }
+
+        .f2 {
+            top: 40px;
+            right: -20px;
+            font-size: 1.6rem;
+            animation-delay: -1s;
+            transform: rotate(15deg);
+        }
+
+        .f3 {
+            bottom: 20px;
+            left: -20px;
+            font-size: 2rem;
+            animation-delay: -2s;
+            transform: rotate(-25deg);
+        }
+
+        .f4 {
+            bottom: -15px;
+            right: 20px;
+            animation-delay: -3s;
+            transform: rotate(10deg);
+        }
+
+        @keyframes float-icon {
+            0% {
+                transform: translateY(0) rotate(auto);
+            }
+
+            100% {
+                transform: translateY(-20px) rotate(auto);
+            }
+        }
+
+        /* ===== ĐÁP ỨNG DI ĐỘNG ===== */
+        @media (max-width: 600px) {
+            .error-code {
+                font-size: 9rem;
+            }
+
+            .heart-beat {
+                font-size: 3rem;
+            }
+
+            .title {
+                font-size: 1.6rem;
+            }
+
+            .desc {
+                font-size: 1rem;
+                margin-bottom: 30px;
+            }
+
+            .container {
+                padding: 40px 20px;
+                border-radius: 28px;
+            }
+
+            .btn-home {
+                width: 100%;
+                justify-content: center;
+                padding: 16px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background mờ mờ ảo ảo -->
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+
+    <!-- Hộp Card trung tâm -->
+    <div class="container">
+        <!-- Các icon y tế/tình nguyện lơ lửng xung quanh -->
+        <div class="floater f1">🩹</div>
+        <div class="floater f2">💊</div>
+        <div class="floater f3">💉</div>
+        <div class="floater f4">🩺</div>
+
+        <!-- Chỉ số 404, số 0 được thay bằng quả tim đang đập -->
+        <div class="error-code-wrapper">
+            <h1 class="error-code">4 4</h1>
+            <div class="heart-beat">🤕</div>
+        </div>
+
+        <h2 class="title">Ôi không! Đi lạc đường rồii!</h2>
+        <p class="desc">
+            Vùng đất này chưa được khai phá, hoặc "nhịp đập" bạn đang tìm đã bị ngắt kết nối khỏi quỹ đạo của The
+            Blouse. Đừng lo lắng, hãy để chúng mình dẫn bạn quay về nhà nhé!
+        </p>
+
+        <!-- Nút bấm quay về có mũi tên -->
+        <a href="index.html" class="btn-home">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Quay lại bến đỗ yêu thương
+        </a>
+    </div>
+</body>
+
+</html>

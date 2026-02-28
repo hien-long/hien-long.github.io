@@ -435,13 +435,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 18px 10px;
+      padding: 18px 20px;
     }
 
     .p-avatar-wrap {
-      width: 220px;
-      height: 220px;
-      border-radius: 999px;
+      width: 250px;
+      height: 320px;
+      border-radius: 24px;
       position: relative;
       display: flex;
       align-items: center;
@@ -451,8 +451,8 @@
     .p-avatar-wrap::before {
       content: "";
       position: absolute;
-      inset: -8px;
-      border-radius: 999px;
+      inset: -2px;
+      border-radius: 26px;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       opacity: .85;
     }
@@ -460,22 +460,23 @@
     .p-avatar-wrap::after {
       content: "";
       position: absolute;
-      inset: -26px;
-      border-radius: 999px;
+      inset: -10px;
+      border-radius: 30px;
       background: radial-gradient(circle at 30% 20%, color-mix(in srgb, var(--accent2) 40%, transparent), transparent 60%);
       filter: blur(8px);
-      opacity: .9;
+      opacity: .7;
       pointer-events: none;
     }
 
     .p-avatar {
       position: relative;
-      width: 206px;
-      height: 206px;
-      border-radius: 999px;
+      width: 100%;
+      height: 100%;
+      border-radius: 24px;
       object-fit: cover;
-      border: 10px solid color-mix(in srgb, var(--t-panel2) 92%, transparent);
-      background: color-mix(in srgb, var(--t-panel2) 85%, transparent);
+      box-sizing: border-box;
+      border: 2px solid color-mix(in srgb, var(--t-panel) 90%, transparent);
+      background: color-mix(in srgb, var(--t-panel) 85%, transparent);
     }
 
     .p-right {
@@ -514,7 +515,7 @@
       display: grid;
       grid-template-columns: 140px 1fr;
       gap: 10px 14px;
-      font-weight: 800;
+      font-weight: 600;
       font-size: 14px;
     }
 
@@ -531,7 +532,7 @@
     .p-value a {
       color: var(--accent2);
       text-decoration: none;
-      font-weight: 900;
+      font-weight: 600;
       word-break: break-word;
     }
 
@@ -546,7 +547,7 @@
       border: 1px solid var(--t-border);
       background: color-mix(in srgb, var(--t-panel2) 70%, transparent);
       text-align: center;
-      font-weight: 800;
+      font-weight: 600;
       color: var(--t-text);
     }
 
@@ -709,7 +710,7 @@
 
     .mcard-role {
       color: var(--t-muted);
-      font-weight: 850;
+      font-weight: 600;
       font-size: 13px;
     }
 
@@ -726,7 +727,7 @@
       align-items: flex-start;
       /* keep label aligned with multi-line achievements */
       font-size: 13px;
-      font-weight: 850;
+      font-weight: 600;
       color: color-mix(in srgb, var(--t-text) 70%, var(--t-muted));
     }
 
@@ -741,25 +742,25 @@
       flex: 1 1 auto;
       min-width: 0;
       color: var(--t-text);
-      font-weight: 950;
+      font-weight: 600;
       word-break: break-word;
     }
 
     .mcard-muted {
       opacity: .72;
-      font-weight: 850;
+      font-weight: 600;
     }
 
     .mcard-bio {
       color: color-mix(in srgb, var(--t-text) 86%, var(--t-muted));
-      font-weight: 650;
+      font-weight: 500;
       line-height: 1.5;
       min-height: 3.0em;
     }
 
     .mcard-achv {
       color: color-mix(in srgb, var(--t-text) 90%, var(--t-muted));
-      font-weight: 750;
+      font-weight: 600;
       font-size: 13.5px;
       line-height: 1.5;
     }
@@ -769,7 +770,7 @@
       margin-top: 10px;
       padding-top: 10px;
       border-top: 1px dashed var(--t-border);
-      font-weight: 900;
+      font-weight: 600;
       font-size: 13px;
       color: var(--t-muted);
     }
@@ -825,7 +826,7 @@
     .mcard-tag {
       --tag: var(--accent);
       font-size: 12px;
-      font-weight: 850;
+      font-weight: 600;
       padding: 6px 10px;
       border-radius: 999px;
       border: 1px solid color-mix(in srgb, var(--tag) 32%, var(--t-border));
@@ -1001,10 +1002,10 @@
       </div>
       <div class="footer-col">
         <div class="footer-title">Sản phẩm</div>
-        <a class="footer-link" href="index.html#timeline-section">Timeline</a>
-        <a class="footer-link" href="index.html#activities-section">Hoạt động</a>
-        <a class="footer-link" href="index.html#messages-section">Lời chúc</a>
-        <a class="footer-link" href="index.html#messages-section">Gửi lời nhắn</a>
+        <a class="footer-link" href="origin.html">Hành trình</a>
+        <a class="footer-link" href="events.html">Hoạt động</a>
+        <a class="footer-link" href="memb.html">Thành viên</a>
+        <a class="footer-link" href="messages.html">Lời nhắn</a>
       </div>
       <div class="footer-col">
         <div class="footer-title">Chính sách</div>

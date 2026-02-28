@@ -1,0 +1,32 @@
+--- GHI CHÚ QUAN TRỌNG KHI TRIỂN KHAI DỰ ÁN LÊN FIREBASE HOSTING ---
+
+Khi bạn đưa dự án website (The Blouse - Nhắn gửi lời yêu thương) lên Firebase Hosting, để tính năng trang báo lỗi 404 (404.html) hoạt động tự động khi người dùng truy cập một đường link không tồn tại (link bậy bạ), bạn cần cấu hình lại file `firebase.json` nằm ở thư mục gốc của dự án.
+
+Bạn mở file `firebase.json` ra và thêm/sửa block "rewrites" bên trong phần "hosting" theo cấu trúc sau:
+
+```json
+{
+  "hosting": {
+    "public": ".",          // Hoặc tên thư mục chứa mã nguồn (vd: "public")
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "cleanUrls": true,      // Tùy chọn: giúp hiển thị đường link đẹp hơn (bỏ đuôi .html)
+    
+    // --- DÒNG CẤU HÌNH QUAN TRỌNG CHO TRANG 404 ---
+    "rewrites": [
+      {
+         "source": "**",
+         "destination": "/404.html"
+      }
+    ]
+    // ----------------------------------------------
+  }
+}
+```
+
+LƯU Ý THÊM:
+- Chú ý đường dẫn của file 404.html (trên cấu hình là "/404.html", đồng nghĩa file `404.html` phải nằm ngang hàng với file `index.html`).
+- Nếu sau này bạn xây dựng kiến trúc dạng Single Page Application (React/Vue/...) và muốn route toàn bộ về `index.html` thì cấu hình trên có thể cần tinh chỉnh lại một chút, nhưng với mô hình các trang HTML rời rạc như hiện tại thì cấu hình này là chuẩn xác!

@@ -73,7 +73,7 @@
     }
 
     /* theme tokens */
-    body[data-theme="dim-dark"] {
+    [data-theme="dim-dark"] {
       --t-bg: var(--bg-dark);
       --t-text: var(--text-dark);
       --t-muted: var(--muted-dark);
@@ -82,7 +82,7 @@
       --t-border: var(--border-dark);
     }
 
-    body[data-theme="light"] {
+    [data-theme="light"] {
       --t-bg: var(--bg-light);
       --t-text: var(--text-light);
       --t-muted: var(--muted-light);
@@ -91,7 +91,8 @@
       --t-border: var(--border-light);
     }
 
-    body:not([data-theme]) {
+    body:not([data-theme]),
+    html:not([data-theme]) {
       --t-bg: var(--bg-dark);
       --t-text: var(--text-dark);
       --t-muted: var(--muted-dark);
@@ -171,9 +172,9 @@
 
     /* ===== Layout wrapper ===== */
     .content-wrapper {
-      max-width: 1100px;
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 0 20px;
+      padding: 0 24px;
       box-sizing: border-box;
     }
 
@@ -186,15 +187,19 @@
     }
 
     .veo-top {
-      background: #fff;
-      border-bottom: 1px solid rgba(14, 18, 24, .08);
-      box-shadow: 0 10px 22px rgba(14, 18, 24, .10);
+      background: var(--t-panel2);
+      border-bottom: 1px solid var(--t-border);
+      box-shadow: 0 10px 22px rgba(114, 44, 191, .10);
+    }
+
+    body[data-theme="dim-dark"] .veo-top {
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .35);
     }
 
     .veo-inner {
-      max-width: 1180px;
+      max-width: 1480px;
       margin: 0 auto;
-      padding: 12px 18px;
+      padding: 12px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -320,9 +325,9 @@
       font-weight: 900;
       padding: 8px 12px;
       border-radius: 999px;
-      border: 1px solid rgba(14, 18, 24, .14);
-      background: #fff;
-      color: rgba(14, 18, 24, .86);
+      border: 1px solid var(--t-border);
+      background: var(--t-panel2);
+      color: var(--t-text);
       cursor: pointer;
     }
 
@@ -332,9 +337,9 @@
       left: 50%;
       transform: translateX(-50%);
       width: min(520px, calc(100vw - 24px));
-      background: #fff;
-      border: 1px solid rgba(14, 18, 24, .10);
-      box-shadow: 0 18px 50px rgba(14, 18, 24, .14);
+      background: var(--t-panel2);
+      border: 1px solid var(--t-border);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, .15);
       border-radius: 14px;
       padding: 10px;
       margin-top: 8px;
@@ -364,9 +369,9 @@
     }
 
     .veo-stats-inner {
-      max-width: 1180px;
+      max-width: 1480px;
       margin: 0 auto;
-      padding: 10px 18px;
+      padding: 10px 24px;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
@@ -608,9 +613,9 @@
 
     /* CTA under banner */
     .ms-cta-wrap {
-      max-width: 1100px;
+      max-width: 1400px;
       margin: 14px auto 0;
-      padding: 0 20px;
+      padding: 0 24px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -634,6 +639,7 @@
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       box-shadow: 0 16px 40px rgba(255, 59, 59, .18);
       transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+      text-decoration: none;
     }
 
     .ms-message-cta:hover {
@@ -743,6 +749,72 @@
       font-size: 13px;
       color: var(--t-muted);
       line-height: 1.5;
+    }
+
+    .program-card {
+      flex: 0 0 320px;
+      height: 420px;
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 16px 32px rgba(0, 0, 0, .25);
+      transition: transform .25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow .25s ease;
+      cursor: pointer;
+    }
+
+    body[data-theme="light"] .program-card {
+      box-shadow: 0 16px 32px rgba(14, 18, 24, .12);
+    }
+
+    .program-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .program-card:hover img {
+      transform: scale(1.08);
+    }
+
+    .program-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, .35);
+    }
+
+    body[data-theme="light"] .program-card:hover {
+      box-shadow: 0 24px 48px rgba(14, 18, 24, .18);
+    }
+
+    .program-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.6) 40%, transparent 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 24px;
+      pointer-events: none;
+    }
+
+    .program-card-title {
+      margin: 0 0 8px;
+      font-size: 22px;
+      color: #fff;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .program-card-desc {
+      margin: 0;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .gallery-nav {
@@ -1294,9 +1366,9 @@
     }
 
     .footer-inner {
-      max-width: 1200px;
+      max-width: 1500px;
       margin: 0 auto;
-      padding: 56px 22px 34px;
+      padding: 56px 28px 34px;
       display: grid;
       grid-template-columns: 1.3fr .9fr .9fr 1.1fr;
       gap: 34px;
@@ -1473,9 +1545,9 @@
     }
 
     .footer-bottom {
-      max-width: 1200px;
+      max-width: 1500px;
       margin: 0 auto;
-      padding: 16px 22px 18px;
+      padding: 16px 28px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1575,12 +1647,12 @@
 
     .theme-chooser {
       width: min(520px, calc(100vw - 28px));
-      background: #fff;
+      background: var(--t-panel2);
       border-radius: 16px;
       padding: 18px 18px 16px;
-      border: 1px solid rgba(14, 18, 24, .12);
-      box-shadow: 0 22px 70px rgba(14, 18, 24, .22);
-      color: rgba(14, 18, 24, .92);
+      border: 1px solid var(--t-border);
+      box-shadow: 0 22px 70px rgba(0, 0, 0, .22);
+      color: var(--t-text);
     }
 
     .theme-chooser h3 {
@@ -1588,14 +1660,14 @@
       font-size: 18px;
       font-weight: 900;
       letter-spacing: -0.02em;
-      color: rgba(14, 18, 24, .94);
+      color: var(--t-text);
     }
 
     .theme-chooser p {
       margin: 0 0 14px;
       font-size: 13.5px;
       line-height: 1.5;
-      color: rgba(14, 18, 24, .72);
+      color: var(--t-muted);
     }
 
     .theme-chooser-actions {
@@ -1913,7 +1985,7 @@
     }
 
     .psb-inner {
-      max-width: 1100px;
+      max-width: 1400px;
       margin: 0 auto;
       display: flex;
       align-items: center;
@@ -2063,6 +2135,74 @@
       </div>
     </div>
 
+    <!-- Program Popup -->
+    <div id="program-popup-overlay"
+      style="display: none; align-items: center; justify-content: center; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 10000; opacity: 1; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: opacity 0.3s ease;"
+      onclick="if(event.target === this) { document.getElementById('program-popup').style.transform='scale(0.95)'; document.getElementById('program-popup').style.opacity='0'; setTimeout(() => this.style.display='none', 300); }">
+      <div id="program-popup"
+        style="display: flex; flex-direction: row; width: 90vw; max-width: 1100px; height: 80vh; max-height: 600px; background: var(--bg-color, #ffffff); border-radius: 24px; overflow: hidden; position: relative; box-shadow: 0 40px 80px -20px rgba(0,0,0,0.7); transform: scale(0.95); opacity: 0; transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.3s ease;">
+        <span class="close-btn" onclick="document.getElementById('program-popup-overlay').click()"
+          style="position: absolute; right: 20px; top: 20px; z-index: 10; background: rgba(128,128,128,0.2); backdrop-filter: blur(4px); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-color, #000); font-size: 24px; transition: all 0.2s ease;"
+          onmouseover="this.style.background='var(--primary-color, #e33b5c)'; this.style.color='#fff'; this.style.transform='rotate(90deg)';"
+          onmouseout="this.style.background='rgba(128,128,128,0.2)'; this.style.color='var(--text-color, #000)'; this.style.transform='none';">&times;</span>
+
+        <div class="popup-left" style="flex: 1; position: relative; overflow: hidden; background: #111;">
+          <img id="program-popup-image" src="" alt="Chương trình"
+            style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;"
+            onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+          <div
+            style="position: absolute; inset: 0; background: linear-gradient(to right, transparent, rgba(0,0,0,0.1)); pointer-events: none;">
+          </div>
+        </div>
+
+        <div class="popup-right"
+          style="flex: 1.1; padding: 50px 40px; display: flex; flex-direction: column; overflow-y: auto;">
+          <h2 id="program-popup-title"
+            style="margin: 0 0 20px 0; font-size: 36px; font-weight: 900; line-height: 1.25; background: linear-gradient(135deg, var(--primary-color, #e33b5c), var(--purple, #722cbf)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+          </h2>
+          <div id="program-popup-content"
+            style="white-space: pre-wrap; line-height: 1.8; color: var(--text-color, #4a4a4a); font-size: 17px; flex-grow: 1; padding-right: 10px;">
+          </div>
+        </div>
+        <style>
+          @media (max-width: 850px) {
+            #program-popup {
+              flex-direction: column !important;
+              height: 90vh !important;
+              max-height: calc(100vh - 40px) !important;
+            }
+
+            .popup-left {
+              flex: none !important;
+              height: 35vh !important;
+            }
+
+            .popup-right {
+              padding: 30px 25px !important;
+            }
+
+            #program-popup-title {
+              font-size: 28px !important;
+            }
+          }
+        </style>
+      </div>
+    </div>
+
+    <!-- Programs Section -->
+    <section id="programs-section" class="gallery-section">
+      <div class="gallery-header">
+        <h2>🏥 Những hoạt động tại Viện Huyết học</h2>
+      </div>
+      <div class="gallery-container">
+        <button class="gallery-nav prev" onclick="scrollPrograms(-1)">❮</button>
+        <div class="gallery-scroll" id="programs-scroll">
+          <div class="loading">Đang tải chương trình...</div>
+        </div>
+        <button class="gallery-nav next" onclick="scrollPrograms(1)">❯</button>
+      </div>
+    </section>
+
     <!-- Gallery Section -->
     <section id="activities-section" class="gallery-section">
       <div class="gallery-header">
@@ -2166,10 +2306,10 @@
 
       <div class="footer-col">
         <div class="footer-title">Sản phẩm</div>
-        <a class="footer-link" href="#timeline">Timeline</a>
-        <a class="footer-link" href="#activities">Hoạt động</a>
-        <a class="footer-link" href="#messages">Lời chúc</a>
-        <a class="footer-link" href="#send-message">Gửi lời nhắn</a>
+        <a class="footer-link" href="origin.html">Hành trình</a>
+        <a class="footer-link" href="events.html">Hoạt động</a>
+        <a class="footer-link" href="memb.html">Thành viên</a>
+        <a class="footer-link" href="messages.html">Lời nhắn</a>
       </div>
 
       <div class="footer-col">
@@ -2330,6 +2470,7 @@
       for (let i = 0; i < 20; i++) setTimeout(createHeart, i * 300);
       loadBanners();
       loadGallery();
+      loadPrograms();
       loadTimeline(); // Load timeline data
       loadStatsConfigAndRender();
 
@@ -2625,8 +2766,8 @@
         const container = document.getElementById('messages-container');
         container.innerHTML = ''; displayedCount = 0;
         if (allMessages.length > 0) {
-          renderMessages(0, Math.min(6, allMessages.length));
-          displayedCount = Math.min(6, allMessages.length);
+          renderMessages(0, Math.min(8, allMessages.length));
+          displayedCount = Math.min(8, allMessages.length);
         }
         if (typeof updatePublicStats === 'function') updatePublicStats();
       });
@@ -2648,7 +2789,7 @@
           card.className = 'gallery-card';
           card.href = 'article.html?id=' + doc.id;
           card.style.textDecoration = 'none';
-          card.innerHTML = `<img src="${data.image}" alt="${data.title}" loading="lazy"><div class="card-content"><h3>${data.title}</h3><p>${data.description || ''}</p></div>`;
+          card.innerHTML = `<img src="${data.image}" alt="${data.title}" loading="lazy"><div class="card-content"><h3>${data.title}</h3><p>${escapeHtml(data.description || '')}</p></div>`;
           galleryScroll.appendChild(card);
         });
       });
@@ -2656,6 +2797,41 @@
 
     function scrollGallery(direction) {
       const scrollContainer = document.getElementById('gallery-scroll');
+      scrollContainer.scrollBy({ left: direction * 370, behavior: 'smooth' });
+    }
+
+    function loadPrograms() {
+      db.collection('programs').orderBy('order', 'asc').onSnapshot(snapshot => {
+        const programsScroll = document.getElementById('programs-scroll');
+        programsScroll.innerHTML = '';
+        if (snapshot.empty) { programsScroll.innerHTML = '<p style="color:#999;text-align:center;width:100%;">Chưa có chương trình nào</p>'; return; }
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const card = document.createElement('div');
+          card.className = 'program-card';
+          card.onclick = () => {
+            document.getElementById('program-popup-image').src = data.image || '';
+            document.getElementById('program-popup-title').textContent = data.title || '';
+            document.getElementById('program-popup-content').textContent = data.content || data.description || 'Không có chi tiết chương trình.';
+            const overlay = document.getElementById('program-popup-overlay');
+            const popup = document.getElementById('program-popup');
+            overlay.style.display = 'flex';
+            // Force reflow for animation
+            void popup.offsetWidth;
+            popup.style.transform = 'scale(1)';
+            popup.style.opacity = '1';
+          };
+          card.innerHTML = `<img src="${data.image}" alt="${data.title}" loading="lazy"><div class="program-card-overlay"><h3 class="program-card-title">${data.title}</h3><p class="program-card-desc">${escapeHtml(data.description || '')}</p></div>`;
+          programsScroll.appendChild(card);
+        });
+      }, error => {
+        console.error("Lỗi khi tải programs:", error);
+        document.getElementById('programs-scroll').innerHTML = `<p style="color:#ff6b6b;text-align:center;width:100%;">Lỗi tải dữ liệu (${error.code || error.message}). Hãy kiểm tra lại Firebase Rules!</p>`;
+      });
+    }
+
+    function scrollPrograms(direction) {
+      const scrollContainer = document.getElementById('programs-scroll');
       scrollContainer.scrollBy({ left: direction * 370, behavior: 'smooth' });
     }
 
@@ -2685,152 +2861,15 @@
   </script>
 
 
-  <script>
-    (function () {
-      const THEMES = [
-        { key: "light", label: "Light" },
-        { key: "dim-dark", label: "Dark" }
-      ];
-      const STORAGE_KEY = "tb_theme";
-
-      function normalizeTheme(key) {
-        // migrate old values (grey/dark) -> dim-dark
-        if (!key) return "dim-dark";
-        if (key === "grey" || key === "dark") return "dim-dark";
-        if (key !== "light" && key !== "dim-dark") return "dim-dark";
-        return key;
-      }
-
-      function applyTheme(key) {
-        const k = normalizeTheme(key);
-        document.body.setAttribute("data-theme", k);
-        const btn = document.getElementById("ms-theme-btn");
-        const t = THEMES.find(x => x.key === k) || THEMES[1];
-        if (btn) btn.textContent = "Theme: " + t.label;
-      }
-
-      function toggleTheme() {
-        const current = normalizeTheme(document.body.getAttribute("data-theme") || "dim-dark");
-        const next = (current === "dim-dark") ? "light" : "dim-dark";
-        localStorage.setItem(STORAGE_KEY, next);
-        applyTheme(next);
-      }
-
-      document.addEventListener("DOMContentLoaded", function () {
-        const saved = normalizeTheme(localStorage.getItem(STORAGE_KEY));
-        applyTheme(saved);
-        const btn = document.getElementById("ms-theme-btn");
-        if (btn) btn.addEventListener("click", toggleTheme);
-      });
-    })();
-  </script>
-
-  <script>
-    /* VEO header interactions: mobile dropdown + CTA open message popup */
-    (function () {
-      function openMessagePopup() {
-        const a = document.getElementById('open-message-popup');
-        if (a) { a.click(); return; }
-        const b1 = document.getElementById('ms-message-cta-top');
-        if (b1) { b1.click(); return; }
-      }
-
-      document.addEventListener('DOMContentLoaded', function () {
-        const cta = document.getElementById('veo-message-cta');
-        if (cta) cta.addEventListener('click', openMessagePopup);
-
-        const btn = document.getElementById('veo-menu-btn');
-        const menu = document.getElementById('veo-dropmenu');
-        if (!btn || !menu) return;
-
-        function close() {
-          menu.classList.remove('is-open');
-          btn.setAttribute('aria-expanded', 'false');
-        }
-        function toggle() {
-          const open = menu.classList.toggle('is-open');
-          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        }
-
-        btn.addEventListener('click', function (e) {
-          e.stopPropagation();
-          toggle();
-        });
-
-        document.addEventListener('click', function (e) {
-          if (menu.classList.contains('is-open')) close();
-        });
-
-        window.addEventListener('resize', function () {
-          if (window.innerWidth > 980) close();
-        });
-      });
-    })();
-  </script>
+  <!-- Global Theme handled by common-ui.js -->
 
 
-  <script>
-    /* Theme chooser popup: show on first visit, pick theme then auto-close */
-    (function () {
-      const STORAGE_KEY = "tb_theme";
-      const overlay = document.getElementById("theme-chooser-overlay");
-      const btnLight = document.getElementById("theme-choice-light");
-      const btnDark = document.getElementById("theme-choice-dark");
+  <!-- Header interactions handled by common-ui.js -->
 
-      function normalizeTheme(key) {
-        if (!key) return null;
-        if (key === "grey" || key === "dark") return "dim-dark";
-        if (key !== "light" && key !== "dim-dark") return null;
-        return key;
-      }
 
-      function applyTheme(key) {
-        const k = (key === "light") ? "light" : "dim-dark";
-        document.body.setAttribute("data-theme", k);
-        const btn = document.getElementById("ms-theme-btn");
-        if (btn) btn.textContent = "Theme: " + (k === "light" ? "Light" : "Dark");
-      }
 
-      function close() {
-        if (!overlay) return;
-        overlay.style.display = "none";
-      }
+  <!-- Local Theme Chooser logic removed - now handled globally by common-ui.js -->
 
-      function open() {
-        if (!overlay) return;
-        overlay.style.display = "flex";
-      }
-
-      function choose(k) {
-        localStorage.setItem(STORAGE_KEY, k);
-        applyTheme(k);
-        close();
-      }
-
-      document.addEventListener("DOMContentLoaded", function () {
-        // If user already has theme saved, don't show popup.
-        const saved = normalizeTheme(localStorage.getItem(STORAGE_KEY));
-        if (!saved) {
-          // Ensure a sane default behind the modal so text is readable
-          applyTheme("dim-dark");
-          open();
-        }
-      });
-
-      if (btnLight) btnLight.addEventListener("click", function () { choose("light"); });
-      if (btnDark) btnDark.addEventListener("click", function () { choose("dim-dark"); });
-
-      // Click outside closes ONLY if already chose before (avoid accidental close on first-time)
-      if (overlay) {
-        overlay.addEventListener("click", function (e) {
-          if (e.target === overlay) {
-            const saved = normalizeTheme(localStorage.getItem(STORAGE_KEY));
-            if (saved) { close(); }
-          }
-        });
-      }
-    })();
-  </script>
 
 
   <script>

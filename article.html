@@ -282,10 +282,10 @@
 
             <div class="footer-col">
                 <div class="footer-title">Sản phẩm</div>
-                <a class="footer-link" href="index.html#timeline-section">Timeline</a>
-                <a class="footer-link" href="index.html#activities-section">Hoạt động</a>
-                <a class="footer-link" href="index.html#messages-section">Lời chúc</a>
+                <a class="footer-link" href="origin.html">Hành trình</a>
+                <a class="footer-link" href="events.html">Hoạt động</a>
                 <a class="footer-link" href="memb.html">Thành viên</a>
+                <a class="footer-link" href="messages.html">Lời nhắn</a>
             </div>
 
             <div class="footer-col">
@@ -351,39 +351,8 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // Theming logic
-        (function () {
-            const THEMES = [
-                { key: "light", label: "Light" },
-                { key: "dim-dark", label: "Dark" }
-            ];
-            const STORAGE_KEY = "tb_theme";
-            function normalizeTheme(key) {
-                if (!key) return "dim-dark";
-                if (key === "grey" || key === "dark") return "dim-dark";
-                if (key !== "light" && key !== "dim-dark") return "dim-dark";
-                return key;
-            }
-            function applyTheme(key) {
-                const k = normalizeTheme(key);
-                document.body.setAttribute("data-theme", k);
-                const btn = document.getElementById("ms-theme-btn");
-                const t = THEMES.find(x => x.key === k) || THEMES[1];
-                if (btn) btn.textContent = "Theme: " + t.label;
-            }
-            function toggleTheme() {
-                const current = normalizeTheme(document.body.getAttribute("data-theme") || "dim-dark");
-                const next = (current === "dim-dark") ? "light" : "dim-dark";
-                localStorage.setItem(STORAGE_KEY, next);
-                applyTheme(next);
-            }
-            document.addEventListener("DOMContentLoaded", function () {
-                const saved = normalizeTheme(localStorage.getItem(STORAGE_KEY));
-                applyTheme(saved);
-                const btn = document.getElementById("ms-theme-btn");
-                if (btn) btn.addEventListener("click", toggleTheme);
-            });
-        })();
+        // Theme is now handled globally by common-ui.js
+
 
         // Loading bar and footer
         window.addEventListener('load', () => {
